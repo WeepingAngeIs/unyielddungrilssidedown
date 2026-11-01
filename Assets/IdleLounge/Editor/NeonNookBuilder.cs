@@ -94,6 +94,7 @@ public static class NeonNookBuilder {
   var so=new SerializedObject(desc);var cap=so.FindProperty("capacity");if(cap!=null)cap.intValue=16;so.ApplyModifiedPropertiesWithoutUndo();
   var camera=new GameObject("Preview Camera").AddComponent<Camera>();camera.transform.position=new Vector3(10.7f,8.2f,-10.4f);camera.transform.LookAt(new Vector3(-.8f,1.2f,2.2f));camera.fieldOfView=68;camera.backgroundColor=new Color(.07f,.11f,.17f);camera.clearFlags=CameraClearFlags.SolidColor;
   desc.ReferenceCamera=camera.gameObject; camera.enabled=false;
+  NeonNookPcUpgrade.FixSharedLayout();
   foreach(var u in Object.FindObjectsOfType<UdonSharpBehaviour>()) { UdonSharpEditorUtility.CopyProxyToUdon(u); var b=UdonSharpEditorUtility.GetBackingUdonBehaviour(u); if(b!=null) b.interactText=u is ArcadeAction?"Use arcade":u is LoungeSeat?"Sit down":u is BallReset?"Return ball":"Interact"; }
   UdonSharp.Compiler.UdonSharpCompilerV1.CompileSync();
   EditorSceneManager.SaveScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene(),Root+"/Scenes/NeonNook.unity");
@@ -134,7 +135,7 @@ public static class NeonNookBuilder {
   // Preserve the user's source asset and use selected mesh groups as lounge decor.
   foreach(var r in model.GetComponentsInChildren<Renderer>(true)){
    string n=r.name.ToLowerInvariant();if(r.sharedMaterials.Any(m=>m && m.name.StartsWith("Keyboard_")) && r.bounds.center.y>1.5f)continue;if(!(n=="table 1"||r.sharedMaterials.Any(m=>m && (m.name.StartsWith("Keyboard_")||m.name.StartsWith("Chiar_")||m.name.StartsWith("Mouse")||m.name.StartsWith("Monitor_Arm")))))continue;
-   Mesh mesh=null;var mf=r.GetComponent<MeshFilter>();if(mf)mesh=mf.sharedMesh;var skin=r as SkinnedMeshRenderer;if(skin){string mp=Root+"/Generated/SourceMesh_"+r.name+".asset";mesh=AssetDatabase.LoadAssetAtPath<Mesh>(mp);if(!mesh){mesh=new Mesh();skin.BakeMesh(mesh);AssetDatabase.CreateAsset(mesh,mp);}}if(!mesh)continue;
+   Mesh mesh=null;var mf=r.GetComponent<MeshFilter>();if(mf)mesh=mf.sharedMesh;var skin=r as SkinnedMeshRenderer;if(skin){string mp=Root+"/Generated/SourceMesh_"+r.name+".asset";mesh=AssetDatabase.LoadAssetAtPath<Mesh>(mp);if(!mesh){mesh=new Mesh();skin.BakeMesh(mesh);mesh.RecalculateBounds();AssetDatabase.CreateAsset(mesh,mp);}}if(!mesh)continue;
    var go=new GameObject("Gaming Room / "+r.name,typeof(MeshFilter),typeof(MeshRenderer));go.transform.SetParent(decor);go.transform.position=new Vector3(11,0,-4)+r.transform.position;go.transform.rotation=r.transform.rotation;go.transform.localScale=r.transform.lossyScale;go.GetComponent<MeshFilter>().sharedMesh=mesh;if(n=="table 1")go.AddComponent<BoxCollider>();
    go.GetComponent<MeshRenderer>().sharedMaterials=r.sharedMaterials.Select(ConvertMaterial).ToArray();go.GetComponent<MeshRenderer>().shadowCastingMode=ShadowCastingMode.Off;
   }

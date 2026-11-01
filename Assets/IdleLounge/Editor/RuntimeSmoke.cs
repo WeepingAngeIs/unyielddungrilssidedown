@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -13,7 +14,7 @@ public static class RuntimeSmoke
 {
     private const string Prefix = "NeonNook.RuntimeSmoke.";
     private const string ClientSimPrefs = "com.vrchat.clientsim.settings";
-    private static string ReportPath => Path.GetFullPath(Path.Combine(Application.dataPath, "../../runtime-smoke.txt"));
+    private static string ReportPath => Path.GetFullPath(Path.Combine(Application.dataPath, SessionState.GetBool(Prefix + "PC", false) ? "../../runtime-smoke-PC.txt" : "../../runtime-smoke.txt"));
 
     static RuntimeSmoke()
     {
@@ -23,10 +24,17 @@ public static class RuntimeSmoke
     }
 
     public static void Begin()
+    { BeginScene("Assets/IdleLounge/Scenes/NeonNook.unity", false); }
+
+    public static void BeginPC()
+    { BeginScene(NeonNookPcUpgrade.ScenePath, true); }
+
+    private static void BeginScene(string scenePath, bool pc)
     {
         if (EditorApplication.isPlayingOrWillChangePlaymode)
             throw new InvalidOperationException("RuntimeSmoke must begin in Edit Mode.");
         SessionState.SetBool(Prefix + "Active", true);
+        SessionState.SetBool(Prefix + "PC", pc);
         SessionState.SetInt(Prefix + "Phase", 0);
         SessionState.SetInt(Prefix + "ExitCode", 1);
         SessionState.SetString(Prefix + "Errors", "");
@@ -43,7 +51,8 @@ public static class RuntimeSmoke
             settings.displayLogs = false;
             settings.spawnPlayer = true;
             ClientSimSettings.SaveSettings(settings);
-            EditorSceneManager.OpenScene("Assets/IdleLounge/Scenes/NeonNook.unity");
+            EditorSceneManager.OpenScene(scenePath);
+            Append("Scene: " + scenePath);
             Append("Started UTC: " + DateTime.UtcNow.ToString("O"));
             EditorApplication.isPlaying = true;
         }
@@ -121,6 +130,16 @@ public static class RuntimeSmoke
                 Append("PASS continued upgraded idle accrual: +" + earned.ToString("F3", CultureInfo.InvariantCulture));
                 string errors = SessionState.GetString(Prefix + "Errors", "");
                 Require(string.IsNullOrEmpty(errors), "No lounge/Udon runtime errors: " + errors);
+                if(SessionState.GetBool(Prefix + "PC", false))
+                {
+                    var camera=UnityEngine.Object.FindObjectsOfType<Camera>().FirstOrDefault(c=>c.name=="PlayerCamera" && c.enabled);
+                    Require(camera!=null,"ClientSim player camera exists");
+                    Require(camera.allowHDR,"Player camera inherits HDR");
+                    Require(camera.GetComponent<UnityEngine.Rendering.PostProcessing.PostProcessLayer>()!=null,"Player camera inherits scene post-processing");
+                    Require(LightmapSettings.lightmaps.Length>0,"PC runtime has baked lightmaps");
+                    NeonNookPcUpgrade.CaptureRuntimeCamera(camera);
+                    Append("PASS PC player camera: HDR, post-processing and baked lighting; direct ClientSim capture saved.");
+                }
                 Finish(true, "RUNTIME_SMOKE_PASS: real Udon variable reads and events under ClientSim.\nNot covered: multiplayer networking, headset rendering/input, video playback or Android runtime.");
             }
         }

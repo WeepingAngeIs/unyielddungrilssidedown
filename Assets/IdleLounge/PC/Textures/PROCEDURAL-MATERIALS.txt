@@ -1,0 +1,30 @@
+NEON NOOK PC MATERIAL LIBRARY
+
+These are actual seamless scene texture maps, generated deterministically by
+Assets/IdleLounge/Editor/PcMaterialLibrary.cs. No source photography, AI images,
+world thumbnails, or external copyrighted textures are used.
+
+Map convention:
+- Albedo: sRGB, surface color only, no painted highlights or baked shadows.
+- Normal: tangent-space RGB, imported as Normal Map with sRGB disabled.
+- Surface: linear R = metallic, A = smoothness (1 - roughness).
+- Occlusion: linear grayscale, Unity Standard reads the green channel.
+
+All maps repeat in both axes and include mipmaps and anisotropic filtering.
+Mesh UV0 coordinates must be measured in metres. The material scale converts
+these coordinates to appropriate physical repeat sizes:
+- floor, walnut, plaster: 2 metres per texture repeat
+- upholstery: 0.45 metres
+- rug: 0.65 metres
+- brushed metal/brass: 0.6 metres
+
+The floor map contains two slate tiles per axis, or 1-metre tiles. The walnut
+map contains five planks across its two-metre repeat. Height-derived normals
+use physical surface-height differences, rather than arbitrary color contrast.
+
+Runtime render quality still depends on correct mesh tangents/normals,
+non-overlapping lightmap UV1/UV2 as appropriate, baked lighting, reflection
+probes, and exposure. This library does not alter Quest materials.
+
+Generated specifically for the user's Neon Nook project on November 1, 2026.
+No external attribution or texture download is required.
