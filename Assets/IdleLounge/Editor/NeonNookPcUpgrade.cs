@@ -34,9 +34,23 @@ public static class NeonNookPcUpgrade
 
     static void Assemble()
     {
+        UdonSharp.Compiler.UdonSharpCompilerV1.CompileSync();
+        int savedHold=-1;Vector3 savedBall=Vector3.zero;
+        if(File.Exists(ScenePath))
+        {
+            EditorSceneManager.OpenScene(ScenePath);
+            var pickup=Object.FindObjectsOfType<VRCPickup>().FirstOrDefault(p=>p.name.StartsWith("Corner ball"));
+            if(pickup){savedHold=new SerializedObject(pickup).FindProperty("AutoHold").intValue;savedBall=pickup.transform.position;}
+        }
         EditorSceneManager.OpenScene("Assets/IdleLounge/Scenes/NeonNook.unity");
+        if(savedHold>=0)
+        {
+            var pickup=Object.FindObjectsOfType<VRCPickup>().First(p=>p.name.StartsWith("Corner ball"));
+            var settings=new SerializedObject(pickup);settings.FindProperty("AutoHold").intValue=savedHold;settings.ApplyModifiedPropertiesWithoutUndo();pickup.transform.position=savedBall;
+        }
         PcMeshRepair.FixGeneratedSourceBounds();
         FixSharedLayout();
+        PerimeterLayoutAudit.Run();
         EditorSceneManager.SaveScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene());
         Directory.CreateDirectory(Root + "/Meshes");
         Directory.CreateDirectory(Root + "/Lighting");
@@ -47,6 +61,13 @@ public static class NeonNookPcUpgrade
         ReplaceSurfaces();
         Architecture();
         Furnishings();
+        var arcade=NeonNookPerimeterLayout.BuildArcade(true);
+        var housing=arcade.GetComponentInChildren<MeshRenderer>();
+        Vector3 housingSize=housing.transform.localScale;
+        housing.GetComponent<MeshFilter>().sharedMesh=RoundedBox(housingSize,.06f);
+        housing.transform.localScale=Vector3.one;housing.GetComponent<BoxCollider>().size=housingSize;
+        housing.sharedMaterial=PcMaterialLibrary.Get("metal");BakeStatic(housing.gameObject);
+        NeonNookPerimeterLayout.BuildPlants(architecture,true);
         Skyline();
         Lighting();
         ConfigureCamera();
@@ -58,6 +79,7 @@ public static class NeonNookPcUpgrade
     {
         EditorSceneManager.OpenScene(ScenePath);
         PcSceneAudit.Run();
+        PerimeterLayoutAudit.Run();
         Debug.Log("PC_BAKE_BEGIN");
         if (!Lightmapping.Bake()) throw new Exception("PC light bake failed.");
         if (LightmapSettings.lightmaps.Length == 0) throw new Exception("No baked lightmaps were produced.");
@@ -71,6 +93,7 @@ public static class NeonNookPcUpgrade
         Debug.Log("PC_BAKE_PASS: " + LightmapSettings.lightmaps.Length + " lightmaps");
         PcSceneAudit.Run();
         Render();
+        CleanupGeneratedAssets();
     }
 
     public static void RefineAndBake()
@@ -102,30 +125,16 @@ public static class NeonNookPcUpgrade
 
     public static void FixSharedLayout()
     {
-        foreach(var sofa in Object.FindObjectsOfType<Transform>().Where(t=>t.name=="Sofa with two VR seats" && t.position.z < -6))
-            foreach(var exit in sofa.GetComponentsInChildren<Transform>().Where(t=>t.name=="Stand here"))
-                exit.localPosition=new Vector3(exit.localPosition.x<0?-2.05f:2.05f,0,.5f);
-        foreach(var action in Object.FindObjectsOfType<ArcadeAction>())
-        {
-            Vector3 old=action.transform.position;
-            Vector3 target=new Vector3(-9.7f+(action.action%3)*2.7f,.92f,3.1f-(action.action/3)*2.1f);
-            Vector3 delta=target-old;
-            foreach(var pedestal in Object.FindObjectsOfType<Transform>().Where(t=>t.name=="Console pedestal" && (t.position-(old-Vector3.up*.43f)).sqrMagnitude<.01f))pedestal.position+=delta;
-            foreach(var label in Object.FindObjectsOfType<TextMesh>().Where(t=>t.name==action.name))label.transform.position+=delta;
-            action.transform.position=target;
-        }
-        foreach(var rug in Object.FindObjectsOfType<Transform>().Where(t=>t.name=="Inlaid rug" && t.position.x< -5))rug.localScale=new Vector3(8,.045f,12);
-        if(!GameObject.Find("East window boundary"))
-        {
-            var east=new GameObject("East window boundary");east.transform.position=new Vector3(12,3.4f,0);east.AddComponent<BoxCollider>().size=new Vector3(.18f,5,22);
-            var south=new GameObject("South window boundary");south.transform.position=new Vector3(0,3.4f,-11);south.AddComponent<BoxCollider>().size=new Vector3(24,5,.18f);
-        }
+        NeonNookPerimeterLayout.Apply();
     }
 
     static void ReplaceSurfaces()
     {
+        var arcade=GameObject.Find("Arcade - Wall Control Lounge").transform;
+        var botanicals=GameObject.Find("Lounge botanicals").transform;
         foreach (var r in Object.FindObjectsOfType<MeshRenderer>())
         {
+            if(r.transform.IsChildOf(arcade) || r.transform.IsChildOf(botanicals))continue;
             string n = r.name;
             if (n == "Floor seam" || n == "Window horizon" || n == "Window frame" || n == "East lintel" || n == "Distant skyline" || n == "Sculptural foliage")
             { Object.DestroyImmediate(r.gameObject); continue; }
@@ -146,7 +155,8 @@ public static class NeonNookPcUpgrade
             if (n == "Main floor") key = "floor";
             else if (n.Contains("Cushion") || n == "Backrest" || n == "Armrest")
                 key = old == "Mint" ? "fabricTeal" : old == "Coral" ? "fabricRose" : "fabricCream";
-            else if (n.Contains("Table") || n == "Coffee table" || n.Contains("Window") || n == "East lintel") key = "wood";
+            else if (n.Contains("Table") || n.StartsWith("Side table surface") || n == "Coffee table" || n.Contains("Window") || n == "East lintel") key = "wood";
+            else if (n.StartsWith("Side table base")) key = "metal";
             else if (n == "Inlaid rug") key = "rug";
             else if (n == "Rug edge") key = "brass";
             else if (n == "North crown" || n == "West crown" || n == "Cyan edge") key = "emitTeal";
@@ -172,9 +182,9 @@ public static class NeonNookPcUpgrade
         }
         // The source sign was hidden behind the top of the video frame.
         var living = GameObject.Find("THE LIVING ROOM");
-        if (living) living.transform.position = new Vector3(2.2f, 6.05f, 10.5f);
-        var brand=GameObject.Find("NEON NOOK");
-        if(brand)brand.transform.position=new Vector3(-6.2f,5.95f,10.65f);
+        if (living) living.transform.position = new Vector3(4, 6.05f, 10.5f);
+        var brand=Object.FindObjectsOfType<TextMesh>().FirstOrDefault(t=>t.name=="NEON NOOK");
+        if(brand){brand.transform.position=new Vector3(-6.2f,5.95f,10.65f);brand.GetComponent<Renderer>().enabled=true;}
         // Keep collision geometry stable; make the border beams visibly intentional.
         var foundation = GameObject.Find("Foundation");
         if (foundation) foundation.GetComponent<Renderer>().sharedMaterial = PcMaterialLibrary.Get("metal");
@@ -235,23 +245,18 @@ public static class NeonNookPcUpgrade
         Box("South window header",new Vector3(0,6.1f,-10.9f),new Vector3(24,.6f,.3f),"wood");
         Ring("Living room pendant",new Vector3(2,5.35f,3.5f),2.65f,.045f,"emitAmber");
         Ring("Living room pendant housing",new Vector3(2,5.43f,3.5f),2.68f,.08f,"metal");
-        Ring("Arcade pendant",new Vector3(-7,4.95f,2),1.85f,.035f,"emitTeal");
+        Ring("Arcade pendant",new Vector3(-7,5.3f,7),1.85f,.035f,"emitTeal");
         for(int i=0;i<3;i++)
         {
             float a=i*Mathf.PI*2/3;
             Box("Pendant suspension",new Vector3(2+Mathf.Cos(a)*2.6f,5.95f,3.5f+Mathf.Sin(a)*2.6f),new Vector3(.018f,1.1f,.018f),"metal",false);
-        }
-        foreach(var action in Object.FindObjectsOfType<ArcadeAction>())
-        {
-            Box("Console nameplate",action.transform.position+new Vector3(0,.27f,-.45f),new Vector3(1.65f,.35f,.07f),"metal",false);
-            Box("Console accent strip",action.transform.position+new Vector3(0,-.05f,-.49f),new Vector3(1.45f,.018f,.025f),"emitTeal",false);
         }
     }
 
     static void Furnishings()
     {
         // Split bench cushions and seams. Keep all existing station transforms.
-        foreach (var sofa in Object.FindObjectsOfType<Transform>().Where(t=>t.name=="Sofa with two VR seats").ToArray())
+        foreach (var sofa in Object.FindObjectsOfType<Transform>().Where(t=>t.name.StartsWith("Sofa with two VR seats")).ToArray())
         {
             var cushion=sofa.Find("Cushion");
             if (cushion)
@@ -272,28 +277,15 @@ public static class NeonNookPcUpgrade
             }
         }
         // Quiet, small props ground the room in a believable scale.
-        foreach(var table in Object.FindObjectsOfType<Transform>().Where(t=>t.name=="Coffee table").ToArray())
+        foreach(var table in Object.FindObjectsOfType<Transform>().Where(t=>t.name.StartsWith("Side table surface")).ToArray())
         {
             Vector3 p=table.position;
-            Box("Art book",p+new Vector3(-.45f,.11f,.05f),new Vector3(.36f,.04f,.25f),"fabricRose",false);
-            Box("Book pages",p+new Vector3(-.45f,.135f,.05f),new Vector3(.345f,.01f,.235f),"fabricCream",false);
-            Cylinder("Tea cup",p+new Vector3(.46f,.16f,.04f),.075f,.12f,"fabricCream");
-            Cylinder("Coffee surface",p+new Vector3(.46f,.225f,.04f),.064f,.003f,"wood");
+            var book=Box("Art book",p+table.right*-.20f+Vector3.up*.095f,new Vector3(.22f,.04f,.16f),"fabricRose",false);book.transform.rotation=table.rotation;
+            var pages=Box("Book pages",p+table.right*-.20f+Vector3.up*.120f,new Vector3(.21f,.01f,.15f),"fabricCream",false);pages.transform.rotation=table.rotation;
+            Cylinder("Tea cup",p+table.right*.30f+Vector3.up*.125f,.055f,.10f,"fabricCream");
+            Cylinder("Coffee surface",p+table.right*.30f+Vector3.up*.177f,.045f,.003f,"wood");
         }
-        // Replace the original glowing placeholder leaves with layered foliage.
-        foreach(var planter in Object.FindObjectsOfType<Transform>().Where(t=>t.name=="Planter").ToArray())
-        {
-            Vector3 p=planter.position-Vector3.up*.3f;
-            for(int i=0;i<9;i++)
-            {
-                float a=i*2.39996f;
-                var leaf=GameObject.CreatePrimitive(PrimitiveType.Sphere);leaf.name="Broad leaf";leaf.transform.SetParent(architecture);
-                leaf.transform.position=p+new Vector3(Mathf.Sin(a)*.28f,1.05f+i*.065f,Mathf.Cos(a)*.28f);
-                leaf.transform.localScale=new Vector3(.24f,.8f,.065f);leaf.transform.rotation=Quaternion.Euler(25+8*(i%3),i*137.5f,25);
-                leaf.GetComponent<Renderer>().sharedMaterial=PcMaterialLibrary.Get("fabricTeal");Object.DestroyImmediate(leaf.GetComponent<Collider>());BakeStatic(leaf);
-            }
-        }
-        foreach(var p in new[]{new Vector3(-10.5f,0,8),new Vector3(9.7f,0,8),new Vector3(3.5f,0,-8.7f)})
+        foreach(var p in new[]{new Vector3(11.4f,0,-1.9f),new Vector3(11.4f,0,1.9f),new Vector3(-2.7f,0,-10.5f)})
         {
             Cylinder("Floor lamp foot",p+Vector3.up*.055f,.24f,.11f,"metal");
             Cylinder("Floor lamp stem",p+Vector3.up*.9f,.022f,1.7f,"brass");
@@ -353,9 +345,9 @@ public static class NeonNookPcUpgrade
             Area("Warm ceiling wash",new Vector3(x,5.95f,z),new Color(1,.85f,.7f),14.8f,new Vector2(3,3),Quaternion.Euler(90,0,0));
         for(int z=-7;z<=8;z+=5)Area("Cool city fill",new Vector3(11.3f,3.5f,z),new Color(.45f,.68f,1),8,new Vector2(3,3),Quaternion.Euler(0,-90,0));
         for(int x=-9;x<=9;x+=6) Point("Amber cove bounce",new Vector3(x,5.15f,10),new Color(1,.64f,.35f),3,7);
-        Point("Arcade cyan bounce",new Vector3(-7,3.8f,2.5f),new Color(.25f,.82f,1),4,6);
-        Point("Cinema gentle fill",new Vector3(2,3,8),new Color(.5f,.7f,1),3,8);
-        foreach(var p in new[]{new Vector3(-10.5f,1.8f,8),new Vector3(9.7f,1.8f,8),new Vector3(3.5f,1.8f,-8.7f)})Point("Lamp light",p,new Color(1,.78f,.55f),4.5f,5);
+        Point("Arcade cyan bounce",new Vector3(-7,3.8f,8),new Color(.25f,.82f,1),4,6);
+        Point("Cinema gentle fill",new Vector3(4,3,8),new Color(.5f,.7f,1),3,8);
+        foreach(var p in new[]{new Vector3(11.4f,1.8f,-1.9f),new Vector3(11.4f,1.8f,1.9f),new Vector3(-2.7f,1.8f,-10.5f)})Point("Lamp light",p,new Color(1,.78f,.55f),4.5f,5);
         // One modest non-shadowed realtime key supports avatars alongside baked probes.
         var key=new GameObject("Avatar fill").AddComponent<Light>();key.type=LightType.Directional;key.color=new Color(.6f,.73f,1);key.intensity=.22f;key.shadows=LightShadows.None;key.transform.rotation=Quaternion.Euler(40,-60,0);
         QualitySettings.pixelLightCount=2;QualitySettings.antiAliasing=4;
@@ -459,11 +451,12 @@ public static class NeonNookPcUpgrade
     public static void Render()
     {
         var c=GameObject.Find("Preview Camera").GetComponent<Camera>();
-        Capture(c,"pc-entry",new Vector3(-6.7f,1.7f,-6.3f),new Vector3(2,2.2f,5));
-        Capture(c,"pc-lounge",new Vector3(-1.9f,1.65f,-2.8f),new Vector3(6,2.2f,6));
-        Capture(c,"pc-arcade",new Vector3(-3.7f,1.7f,-1.2f),new Vector3(-7.1f,1.7f,3.2f));
+        Capture(c,"pc-entry",new Vector3(-.5f,1.75f,-6.8f),new Vector3(1,2.4f,7));
+        Capture(c,"pc-lounge",new Vector3(-3.5f,1.7f,3.5f),new Vector3(9.8f,1.3f,1.5f));
+        Capture(c,"pc-arcade",new Vector3(-7,2.65f,6.5f),new Vector3(-7,2.8f,10.1f));
         Capture(c,"pc-desk",new Vector3(6.8f,1.7f,-4.7f),new Vector3(9.6f,1,-8));
-        Capture(c,"pc-material-detail",new Vector3(3.4f,1.05f,.2f),new Vector3(4.4f,.72f,2.2f));
+        Capture(c,"pc-material-detail",new Vector3(7.8f,1.1f,.7f),new Vector3(10.4f,.75f,0));
+        Capture(c,"pc-plants",new Vector3(-8.8f,1.2f,5.6f),new Vector3(-10.8f,.9f,7));
     }
     public static void RenderSaved(){EditorSceneManager.OpenScene(ScenePath);Render();}
     public static void CaptureRuntimeCamera(Camera camera){Capture(camera,"pc-clientsim",camera.transform.position,camera.transform.position+camera.transform.forward*10);}

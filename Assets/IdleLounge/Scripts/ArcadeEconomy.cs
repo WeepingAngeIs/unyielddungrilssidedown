@@ -11,6 +11,25 @@ public class ArcadeEconomy : UdonSharpBehaviour
     public Text detailText;
     public Text feedbackText;
 
+    [Header("Arcade dashboard")]
+    public Text walletValueText;
+    public Text incomeValueText;
+    public Text starValueText;
+    public Text cabinetOwnedText;
+    public Text cabinetPriceText;
+    public Text cabinetIncomeText;
+    public Text snackOwnedText;
+    public Text snackPriceText;
+    public Text snackIncomeText;
+    public Text loungeOwnedText;
+    public Text loungePriceText;
+    public Text loungeIncomeText;
+    public Text boostValueText;
+    public Text prestigeValueText;
+    public Text tapValueText;
+    public Image prestigeProgressFill;
+    public Image[] purchaseStateImages;
+
     [Header("Tuning")]
     public float startingCredits = 25f;
     public float prestigeThreshold = 25000f;
@@ -178,6 +197,35 @@ public class ArcadeEconomy : UdonSharpBehaviour
 
     public void RefreshDisplay()
     {
+        float multiplier = Multiplier();
+        float cabinetCost = Cost(25f, cabinets);
+        float snackCost = Cost(180f, snackBars);
+        float loungeCost = Cost(1200f, lounges);
+        if (walletValueText != null) walletValueText.text = Amount(credits);
+        if (incomeValueText != null) incomeValueText.text = IncomePerSecond().ToString("F1") + " / sec";
+        if (starValueText != null) starValueText.text = stars.ToString();
+        if (cabinetOwnedText != null) cabinetOwnedText.text = cabinets + " OWNED";
+        if (cabinetPriceText != null) cabinetPriceText.text = cabinets >= 100 ? "COMPLETE" : Amount(cabinetCost);
+        if (cabinetIncomeText != null) cabinetIncomeText.text = "+" + multiplier.ToString("F1") + " / sec";
+        if (snackOwnedText != null) snackOwnedText.text = snackBars + " OWNED";
+        if (snackPriceText != null) snackPriceText.text = snackBars >= 100 ? "COMPLETE" : Amount(snackCost);
+        if (snackIncomeText != null) snackIncomeText.text = "+" + (7f * multiplier).ToString("F1") + " / sec";
+        if (loungeOwnedText != null) loungeOwnedText.text = lounges + " OWNED";
+        if (loungePriceText != null) loungePriceText.text = lounges >= 100 ? "COMPLETE" : Amount(loungeCost);
+        if (loungeIncomeText != null) loungeIncomeText.text = "+" + (35f * multiplier).ToString("F1") + " / sec";
+        if (tapValueText != null) tapValueText.text = "+" + Amount(2f * multiplier) + " credits";
+        if (boostValueText != null) boostValueText.text = boosts >= 40 ? "MAX LEVEL" : Amount(BoostCost()) + "  /  +50%";
+        if (prestigeValueText != null)
+            prestigeValueText.text = prestigeConfirmUntil > Time.time ? "CONFIRM REOPEN" : Amount(runEarned) + " / " + Amount(prestigeThreshold);
+        if (prestigeProgressFill != null)
+            prestigeProgressFill.fillAmount = Mathf.Clamp01(runEarned / Mathf.Max(1f, prestigeThreshold));
+        if (purchaseStateImages != null && purchaseStateImages.Length >= 3)
+        {
+            Color unavailable = new Color(.48f, .54f, .60f, 1f);
+            if (purchaseStateImages[0] != null) purchaseStateImages[0].color = credits >= cabinetCost && cabinets < 100 ? new Color(.439f, .941f, .796f) : unavailable;
+            if (purchaseStateImages[1] != null) purchaseStateImages[1].color = credits >= snackCost && snackBars < 100 ? new Color(1f, .792f, .545f) : unavailable;
+            if (purchaseStateImages[2] != null) purchaseStateImages[2].color = credits >= loungeCost && lounges < 100 ? new Color(.780f, .710f, 1f) : unavailable;
+        }
         if (statusText != null)
             statusText.text = "YOUR ARCADE\n" + Amount(credits) + " CREDITS\n" + IncomePerSecond().ToString("F1") + " / second  |  " + stars + " stars";
         if (detailText != null)

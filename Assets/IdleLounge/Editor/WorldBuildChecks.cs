@@ -32,7 +32,7 @@ public static class WorldBuildChecks
         method.Invoke(null, new object[] { value });
     }
     public static void Windows() { Export(BuildTarget.StandaloneWindows64, "Windows"); }
-    public static void Android() { Export(BuildTarget.Android, "Android"); }
+    public static void Android() { NeonNookPerimeterLayout.ReviewQuest(); Export(BuildTarget.Android, "Android"); }
     public static void WindowsPC() { Export(BuildTarget.StandaloneWindows64, "Windows-PC", NeonNookPcUpgrade.ScenePath); }
 
     private static void Export(BuildTarget expectedTarget, string label, string scenePath = "Assets/IdleLounge/Scenes/NeonNook.unity")

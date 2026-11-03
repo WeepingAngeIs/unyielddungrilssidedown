@@ -1,0 +1,6 @@
+Neon Nook scene validation
+Triangles: 70226
+Renderers: 140
+Seats: 12
+Realtime lights: 0
+Rigidbodies: 1

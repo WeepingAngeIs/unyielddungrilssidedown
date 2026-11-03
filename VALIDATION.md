@@ -1,38 +1,53 @@
-# Validation — Neon Nook preview
+# Validation — Neon Nook
 
-Checked November 1, 2026 with Unity 2022.3.22f1 and VRChat SDK 3.10.6.
+Checked November 2, 2026 with Unity **2022.3.22f1** and VRChat SDK **3.10.6**. These results cover the current perimeter layout and wall-mounted arcade dashboard.
 
-## Completed
+## Scenes and geometry
 
-- Unity C# and UdonSharp compilation.
-- Editor behavior checks against the real economy component: affordability, escalating prices, income contributions, tap throttling, prestige eligibility, confirmation/cancellation/reset, and caps.
-- Real Udon VM / ClientSim Play Mode smoke test: idle wallet reached 32.525 credits, Tap produced 34.525, cabinet purchase left 9.525, and upgraded idle earnings continued (+4.022 over about two seconds).
-- Scene integrity: 77,582 triangles, 170 renderers, 12 stations, zero realtime lights, one Rigidbody. No missing used materials or Udon program sources.
-- Rendered and visually inspected overview, arcade, lounge and supplied gaming desk views.
-- Verified final scene video render mode is VRChat RenderTexture enum value 0 (Unity's differently numbered enum must not be used). Target texture, speaker, URL input, seven buttons and idle overlay are wired. Verified SDK routes audio to the speaker controlled by local volume/mute.
-- Matching VRChat SDK assetbundle exports passed after video correction: Android 1,014,926 bytes; Windows 935,619 bytes. Both were exported from the same saved scene.
-- Official pinned package versions are available through the restoration script.
+| Check | Enhanced PC | Lighter Quest / Android |
+|---|---:|---:|
+| Scene | `NeonNook-PC.unity` | `NeonNook.unity` |
+| Referenced triangles | 219,578 | 70,226 |
+| Reported renderers | 295 | 140 |
+| Sofas / VRChat seats | 6 / 12 | 6 / 12 |
+| Clear central floor | 168 m² | 168 m² |
+| Matching network entries | 23 | 23 |
 
-## Scope of these checks
+The lighter scene's renderer total includes six disabled renderers retained on the original arcade action objects and the disabled redundant decorative wordmark. It has zero realtime lights and one Rigidbody.
 
-SDK bundle exports run build callbacks and packaging, including Udon preprocessing. They do not replace the complete interactive SDK Builder panel validation or an actual VRChat test session. No world has been uploaded or published.
+Both perimeter circulation audits passed. They checked the clear zone at **x −7…7 m, z −6…6 m**, from y 0.08 to 2.20 m, and all twelve seat-exit routes using a walking capsule of radius 0.25 m and total height 1.65 m. The PC quality audit also checked twelve station exits with a radius 0.20 m / height 1.50 m capsule.
 
-Quest headset rendering/performance, VR hand interaction, multiplayer ownership/late joining, and real network video playback remain untested. Test a direct HTTPS MP4 first, then desired provider URLs on both PC and Quest. Progress is intentionally personal and current-visit-only.
+The PC quality audit passed with 84 unique geometry meshes, 48 used materials and 97 lightmap GI renderers. Two baked lightmap textures are saved with the PC scene. The final lighting bake produced no overlapping-UV warnings. Matching network entries are preserved between PC and Android; these are two platform versions of the same world.
 
-Gameplay smoke testing preceded the last static furniture/video-output refinements; the tested economy runtime code is unchanged.
+## Actual UI and Udon runtime checks
 
-## Enhanced PC scene — November 1, 2026
+Both saved scenes passed the ClientSim / Udon VM smoke test:
 
-The PC scene is `Assets/IdleLounge/Scenes/NeonNook-PC.unity`; the lighter Android scene remains `NeonNook.unity`.
+- Automatic income increased the fresh wallet above its starting 25 credits: **32.655 on PC** and **32.622 in the lighter scene**.
+- All six UI buttons had one enabled persistent listener, each targeting the correct existing `ArcadeAction`, its unique action ID and the same economy through `SendCustomEvent("Activate")`.
+- After the idle-income check, a deterministic 25-credit fixture exercised the actual **PLAY button** to reach 27 credits, then the actual **BUY CABINET button** to leave 2 credits and one owned cabinet.
+- The dashboard updated its wallet, income to **2.0 / sec**, owned count to **1 OWNED**, next price to **29**, marginal income, purchase feedback and opaque unaffordable state. Prestige progress matched the earned-credit value and stayed within 0–1.
+- Upgraded idle income continued: approximately **+4.027 credits on PC** and **+4.008 in the lighter scene** over two seconds. Display values refreshed after this continued income.
+- All **45 visible dashboard labels** fit their actual Unity font and wrapping bounds.
+- The PC player camera inherited HDR and post-processing, and the runtime loaded baked lightmaps. Player-camera and live dashboard captures were saved from ClientSim.
 
-- Unity compilation and CPU progressive lighting bake passed. Two directional lightmaps, baked light probes and two reflection probes are saved with the PC scene. Final bake produced no overlapping-UV warnings.
-- The PC scene audit passed: 257,294 referenced triangles, 359 active renderers, 42 used materials, 123 lightmapped renderers and all 12 station exits checked with a 0.20 m radius / 1.50 m height capsule. No missing used materials, invalid normals/tangents/indices, invalid bounds, or incomplete UV channels were reported.
-- Rounded meshes use six explicitly padded lightmap charts, preserving metric texture UVs. Small details and imported chair/keyboard pieces use baked probes. Generated imported snapshots had zero bounds; those bounds were repaired, and PC snapshots were reconstructed with geometry, submeshes and UVs verified unchanged.
-- Fixed the slow-corner seat exits, widened arcade gaps, aligned PC glazing/frame grids, closed the window header gaps and added shared window boundaries. The user's existing foundation position was retained.
-- PC and Android scenes contain the same 23 network entries (46 serialized ID/object fields compared equal).
-- Enhanced-scene ClientSim/Udon VM smoke passed: idle wallet 32.604, tap 34.604, cabinet purchase 9.604, then +3.999 upgraded income in about two seconds. The player camera inherited HDR/post-processing and loaded baked lightmaps.
-- Direct Unity captures were visually inspected at the entry, arcade, lounge, imported desk, and close furniture surfaces. `Docs/Preview/pc-clientsim.png` comes from the running ClientSim player camera after the purchase test. No AI image enhancement was used.
-- Enhanced PC VRChat SDK bundle export passed: 9,952,841 bytes.
-- Updated lighter Android bundle export passed: 1,013,980 bytes. Both exports use the matching network entries and revised shared layout.
+These tests invoke the real Unity UI button events and Udon programs. They do **not** simulate a physical pointer ray, VR controller pointing or headset touch input.
 
-These checks cover the generated geometry and saved lighting; they cannot certify every avatar size or camera angle. PC/Quest headset frame rate, real multiplayer and network video playback still require a VRChat session.
+## Exports
+
+VRChat SDK assetbundle exports completed for both target scenes without uploading:
+
+| Target | Bundle | Size |
+|---|---|---:|
+| Windows PC | `NeonNook-Windows-PC.vrcw` | 9,313,717 bytes |
+| Android | `NeonNook-Android.vrcw` | 1,095,647 bytes |
+
+Bundle export runs SDK build callbacks and packaging, including Udon preprocessing. It does not replace the complete interactive SDK Builder panel checks or a VRChat session. No world has been uploaded or published.
+
+## Evidence and remaining checks
+
+Reports are saved under `Docs/Validation`: `runtime-smoke-PC.txt`, `runtime-smoke.txt`, `build-validation-Windows-PC.txt`, `build-validation-Android.txt`, `validation.txt`, `pc-quality-audit.txt`, `pc-layout-audit.txt` and `quest-layout-audit.txt`. Updated views are under `Docs/Preview`; `pc-clientsim.png` and `pc-arcade-runtime.png` come from the running Unity/ClientSim scene. After the runtime tests, the redundant Quest decorative wordmark was hidden to prevent overlap in elevated views; its final layout audit, preview rendering and Android export were repeated.
+
+Actual PC/Quest hardware pointing, headset rendering and frame rate, multiplayer ownership and late joining, and network video playback remain **untested**. The lighter scene's ClientSim pass is an editor test, not Android runtime execution. Test a direct HTTPS MP4 and the intended video providers on both platforms, including local mute/volume and host departure.
+
+Collider clearance tests use defined capsule sizes and straight routes; they do not certify every avatar proportion or visual intersection. A bake without overlapping-UV warnings does not certify every UV chart or viewing angle. Personal arcade progress remains intentionally **current-visit-only**, with no persistent save or offline income.

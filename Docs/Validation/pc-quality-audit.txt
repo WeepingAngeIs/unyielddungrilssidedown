@@ -1,0 +1,16 @@
+NEON NOOK PC SCENE QUALITY AUDIT
+Scene: Assets/IdleLounge/Scenes/NeonNook-PC.unity
+UTC: 2026-11-02T17:39:46.9221524Z
+Active renderers: 295
+Referenced triangles: 219578
+Unique geometry meshes: 84
+Used materials: 48
+Lightmap GI renderers: 97
+Baked lightmap textures: 2
+Station exit capsules tested: 12
+Capsule radius 0.20 m; total height 1.50 m; sole 0.08 m above exit transform.
+Penetration tolerance 0.005 m; triggers, seat-local colliders, and floor contact excluded.
+
+
+PASS: PC_SCENE_AUDIT_PASS
+Does not certify UV chart overlap/stretching, all possible avatar proportions, visual intersections, shader compilation, or headset performance. Inspect actual Unity/VRChat views too.

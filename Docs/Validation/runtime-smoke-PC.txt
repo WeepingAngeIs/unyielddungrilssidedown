@@ -1,0 +1,17 @@
+NEON NOOK CLIENTSIM / UDON VM SMOKE
+Scene: Assets/IdleLounge/Scenes/NeonNook-PC.unity
+Started UTC: 2026-11-02T17:42:28.4526966Z
+PASS idle accrual: 32.655
+PASS six UI listeners: exact existing Udon targets, unique action IDs, Activate event and economy identity.
+PASS dashboard values: wallet=32, income=1.0 / sec, owned=0 OWNED, next=25, progress=0.00007
+PASS UI PLAY -> ArcadeAction -> Udon Tap: 27.000
+PASS UI cabinet purchase: wallet 2.000
+PASS dashboard values: wallet=2, income=2.0 / sec, owned=1 OWNED, next=29, progress=0.00010
+PASS continued upgraded idle accrual: +4.027
+PASS dashboard values: wallet=5, income=2.0 / sec, owned=1 OWNED, next=29, progress=0.00013
+PASS dashboard text layout: 45 visible labels fit their actual Unity font/wrap bounds.
+PASS dashboard refreshed after continued idle income, not just on purchase.
+Runtime dashboard capture: C:/Users/tolov/Documents/Codex/2026-11-01/li/outputs\pc-arcade-runtime.png
+PASS PC player camera: HDR, post-processing and baked lighting; direct ClientSim capture saved.
+PASS: RUNTIME_SMOKE_PASS: real Udon variable reads and events under ClientSim; upgraded scenes exercise persistent Unity UI actions and live display values.
+Not covered: physical pointer/raycast or headset input, multiplayer networking, video playback or Android runtime.
