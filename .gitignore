@@ -1,0 +1,13 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Bb]uilds/
+.vs/
+*.csproj
+*.sln
+*.log
+*.unitypackage
+Assets/UdonSharp/SerializedUdonPrograms/
+ClientSimStorage/

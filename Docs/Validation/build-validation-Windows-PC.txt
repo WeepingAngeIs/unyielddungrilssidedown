@@ -1,0 +1,6 @@
+STARTED 2026-11-02T17:43:05.8328668Z
+Target: Windows-PC
+PASS: VRChat SDK assetbundle export completed.
+Bundle: C:/Users/tolov/Documents/Codex/2026-11-01/li/outputs\NeonNook-Windows-PC.vrcw
+Bytes: 9313717
+No upload or runtime/headset test performed.
