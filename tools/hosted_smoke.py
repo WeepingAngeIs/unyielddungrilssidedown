@@ -33,6 +33,26 @@ def nbt_from_bytes(raw):
     require(r.p==len(raw),'Trailing chunk NBT data')
     return result
 
+def replace_nbt_string(raw,path,expected,replacement):
+    """Change one known string payload; preserve every other original NBT byte/type."""
+    r=Reader(raw);kind=r.num('B');r.string();found=[]
+    def visit(kind,here):
+        if kind==8:
+            start=r.p;value=r.string()
+            if here==path:found.append((start,r.p,value))
+        elif kind==10:
+            while (child:=r.num('B'))!=0:visit(child,here+(r.string(),))
+        elif kind==9:
+            child=r.num('B');length=r.num('i')
+            for index in range(length):visit(child,here+(index,))
+        elif kind in (7,11,12):r.take(r.num('i')*{7:1,11:4,12:8}[kind])
+        elif kind in (1,2,3,4,5,6):r.take({1:1,2:2,3:4,4:8,5:4,6:8}[kind])
+        else:raise ValueError('Unsupported NBT tag in fixture: '+str(kind))
+    visit(kind,());require(r.p==len(raw),'Trailing data in journal fixture')
+    require(len(found)==1 and found[0][2]==expected,'Journal fixture string/path differs from expected')
+    start,end,_=found[0];value=replacement.encode('utf-8')
+    return raw[:start]+struct.pack('>H',len(value))+value+raw[end:]
+
 class RegionReader:
     def __init__(self,folder):self.folder=folder;self.handles={}
     def chunk(self,x,z):
@@ -55,7 +75,7 @@ class Controller:
     def __init__(self,seconds):
         self.start=time.monotonic();self.hard_deadline=self.start+seconds
         self.deadline=self.hard_deadline-35 # Reserve clean-stop time within the same 40-minute limit.
-        self.proc=None;self.log_handle=None;self.boots=0;self.instances={};self.loaded={};self.events=[]
+        self.proc=None;self.log_handle=None;self.boots=0;self.instances={};self.loaded={};self.events=[];self.interrupted=set()
         self.report={'passed':False,'scope':'playerless GitHub-hosted integration; not client physics or two-player Lootr opening','steps':[],'anchors':ANCHORS}
         EVIDENCE.mkdir(exist_ok=True)
     def remaining(self,cleanup=False):
@@ -73,6 +93,16 @@ class Controller:
         finally:r.sock.close()
         if record:self.event('rcon',command=text,result=answer[:1600])
         return answer
+    def wait_success(self,text,label,seconds=10):
+        """Observe command readiness across ticks, never treat elapsed time as success."""
+        start=time.monotonic();end=min(self.deadline,start+seconds);attempts=0;last=''
+        while time.monotonic()<end:
+            attempts+=1;last=self.command(text,timeout=max(.2,min(2,end-time.monotonic())),record=False)
+            if 'Test passed' in last:
+                self.event('readiness_verified',check=label,attempts=attempts,wait_s=round(time.monotonic()-start,3))
+                return last
+            time.sleep(min(.25,max(0,end-time.monotonic())))
+        raise TimeoutError(f'{label} not ready within {seconds}s; last response {last!r}')
     def prepare(self):
         require(os.environ.get('GITHUB_ACTIONS')=='true' and sys.platform=='linux','This integration controller runs only on GitHub Actions Linux; local game/build execution is forbidden')
         require(not WORLD.exists(),'Refusing to reuse or erase an existing smoke world')
@@ -157,15 +187,19 @@ class Controller:
         entries=self.journal();require(len(entries)==len(expected),f'{stage}: journal count differs')
         indexed={e['Id']:e for e in entries};zones=self.zones()
         for name,i in expected.items():
-            require(i in indexed and indexed[i]['Status']=='PLACED' and indexed[i]['Template']==name,f'{stage}: missing placed entry for {name}')
+            status='BUILDING' if name in self.interrupted else 'PLACED'
+            require(i in indexed and indexed[i]['Status']==status and indexed[i]['Template']==name,f'{stage}: missing {status} entry for {name}')
             actual=[z for z in zones if z['name'].startswith('dungeon/'+i+'/')];t=self.loaded[name]
+            if name in self.interrupted:
+                require(not actual,f'{stage}: unfinished dungeon retained stale gravity zones')
+                continue
             require(len(actual)==len(t['Zones']),f'{stage}: gravity zone count differs for {name}')
             az={z['name'].split('/')[-1]:z for z in actual}
             for z in t['Zones']:
                 got=az[z['Name']];require(got['gravity']==z['Gravity'],f'{stage}: gravity changed')
                 for axis,n in zip('xyz',range(3)):
                     require(got[axis+'0']==t['Minimum'][n]+z['Min'][n] and got[axis+'1']==t['Minimum'][n]+z['Max'][n]+1,f'{stage}: gravity bounds changed')
-        require(len(zones)==sum(len(self.loaded[n]['Zones']) for n in expected),f'{stage}: leftover or unexpected gravity zones')
+        require(len(zones)==sum(len(self.loaded[n]['Zones']) for n in expected if n not in self.interrupted),f'{stage}: leftover or unexpected gravity zones')
         result={'stage':stage,'placements':len(entries),'zones':len(zones),'statuses':[e['Status'] for e in entries]}
         (EVIDENCE/(stage+'-persistence.json')).write_text(json.dumps(result,indent=2),encoding='utf-8');self.event('persistent_state_verified',**result)
     def place(self,name):
@@ -214,14 +248,41 @@ class Controller:
                 pos=[t['Minimum'][n]+(z['Min'][n]+z['Max'][n]+1)/2 for n in range(3)]
                 xyz=' '.join(map(str,pos));x,y,zz=map(int,pos)
                 self.command(f'forceload add {x} {zz}')
-                self.command('kill @e[type=minecraft:marker,tag=cu_ci_zone_probe]',record=False)
+                self.wait_success(f'execute if loaded {x} {y} {zz}','probe chunk '+name+'/'+gravity)
+                # Summon succeeds before entity sections are necessarily selector-
+                # visible. A unique marker plus observed registration avoids both
+                # that race and accidentally reading a prior probe's entity.
+                tag='cu_ci_probe_'+secrets.token_hex(6)
+                selector='@e[type=minecraft:marker,tag='+tag+',limit=1]'
                 try:
-                    result=self.command('summon minecraft:marker '+xyz+' {Tags:["cu_ci_zone_probe"]}')
+                    result=self.command('summon minecraft:marker '+xyz+' {Tags:["cu_ci_zone_probe","'+tag+'"]}')
                     require('Summoned' in result or 'summoned' in result,'Gravity probe marker could not spawn')
-                    result=self.command('execute as @e[type=minecraft:marker,tag=cu_ci_zone_probe,limit=1] at @s run gravity room')
-                    require('dungeon/'+self.instances[name]+'/'+z['Name'] in result and '(gravity '+gravity+')' in result,'Live gravity index did not return the expected zone/direction')
-                    self.event('live_gravity_verified',stage=stage,template=name,gravity=gravity)
-                finally:self.command('kill @e[type=minecraft:marker,tag=cu_ci_zone_probe]',record=False)
+                    self.wait_success('execute if entity '+selector,'probe marker '+name+'/'+gravity)
+                    result=self.command('execute as '+selector+' at @s run gravity room')
+                    if name in self.interrupted:
+                        require('Not in a gravity zone (normal gravity).' in result,'Interrupted dungeon still has live gravity')
+                    else:
+                        require('dungeon/'+self.instances[name]+'/'+z['Name'] in result and '(gravity '+gravity+')' in result,'Live gravity index did not return the expected zone/direction')
+                    self.event('live_gravity_verified',stage=stage,template=name,gravity='normal-after-recovery' if name in self.interrupted else gravity)
+                finally:self.command('kill '+selector,record=False)
+    def simulate_interrupted_state(self,name):
+        """A journal-state regression fixture, explicitly not a real crash simulation."""
+        require(self.proc is None,'Interrupted-state fixture requires a cleanly stopped server')
+        require(not self.interrupted,'Only one interrupted-state fixture is permitted')
+        entries=self.journal();i=self.instances[name]
+        indices=[n for n,e in enumerate(entries) if e['Id']==i];require(len(indices)==1,'Selected instance missing from journal')
+        require(entries[indices[0]]['Status']=='PLACED','Fixture must start from a complete placement')
+        path=WORLD/'data/cu_dungeons/placements.nbt';before=path.read_bytes();raw=gzip.decompress(before)
+        replacement=replace_nbt_string(raw,('Entries',indices[0],'Status'),'PLACED','BUILDING')
+        original=nbt_from_bytes(raw);changed=nbt_from_bytes(replacement)
+        changed['Entries'][indices[0]]['Status']='PLACED';require(changed==original,'Fixture changed more than selected status')
+        backup=WORLD/f'data/cu_dungeons/{i}.before.nbt';backup_hash=hashlib.sha256(backup.read_bytes()).hexdigest()
+        tmp=path.with_suffix('.ci-fixture.tmp');tmp.write_bytes(gzip.compress(replacement,mtime=0));os.replace(tmp,path)
+        self.interrupted.add(name)
+        report={'fixture':'simulated interrupted journal state, not process crash','template':name,'instance':i,'status_change':['PLACED','BUILDING'],'all_other_nbt_bytes_preserved':True,'backup_sha256':backup_hash,'retained_stale_zones_before_boot':len([z for z in self.zones() if z['name'].startswith('dungeon/'+i+'/')])}
+        require(report['retained_stale_zones_before_boot']==len(self.loaded[name]['Zones']),'Recovery fixture lacks stale zones')
+        (EVIDENCE/'interrupted-state-fixture.json').write_text(json.dumps(report,indent=2),encoding='utf-8');self.event('interrupted_state_fixture_created',**report)
+        return backup_hash
     def audit_disk(self,stage,air=False):
         require(self.proc is None,'Offline audit requires cleanly stopped server')
         region=RegionReader(WORLD/'region');summary={}
@@ -286,6 +347,15 @@ class Controller:
             self.assert_state('before-restart',self.instances);self.audit_disk('placed')
             self.boot();self.assert_state('after-restart',self.instances);self.runtime('after-restart')
             result=self.command('dungeon verifyloot',timeout=90);require('Dungeon loot verified:' in result,'Loot verification failed after restart')
+            # Regression: startup must reconcile stale zones of unfinished entries
+            # without deleting their backup/protection or touching PLACED siblings.
+            self.command('save-all flush');self.stop()
+            interrupted_name='sakura_labyrinth';backup_hash=self.simulate_interrupted_state(interrupted_name)
+            self.boot();self.assert_state('interrupted-recovery',self.instances);self.runtime('interrupted-recovery')
+            backup=WORLD/f'data/cu_dungeons/{self.instances[interrupted_name]}.before.nbt'
+            require(hashlib.sha256(backup.read_bytes()).hexdigest()==backup_hash,'Recovery modified the original backup')
+            self.assert_backup(interrupted_name,self.instances[interrupted_name])
+            self.event('interrupted_state_recovery_verified',template=interrupted_name,backup_unchanged=True,protection_retained=True,stale_zones_removed=True,placed_sibling_zones_retained=True)
             for name in list(self.instances):self.undo(name)
             require('No gravity zones.' in self.command('flipzone list'),'Live gravity index retained zones after undo')
             self.command('forceload remove all');self.command('save-all flush');self.stop()
