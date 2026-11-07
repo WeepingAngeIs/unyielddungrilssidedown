@@ -1,0 +1,70 @@
+name: Build and verify dungeons
+
+on:
+  push:
+    branches: [main, codex/japanese-gravity-dungeons]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dungeons-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    name: Java 21 build and content checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile and run geometry and dungeon data checks
+        run: |
+          mkdir -p test-evidence
+          chmod +x gradlew
+          ./gradlew --no-daemon build --console=plain 2>&1 | tee test-evidence/gradle-build.log
+      - name: Check models, textures, loot and bundled templates
+        run: |
+          python tools/check_block_assets.py | tee test-evidence/block-assets-check.log
+          mapfile -t jars < <(find build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar')
+          test "${#jars[@]}" -eq 1
+          python tools/validate_content.py --jar "${jars[0]}" --output test-evidence/content-validation.json
+          sha256sum "${jars[0]}" > test-evidence/SHA256SUMS.txt
+          git archive --format=zip --output=test-evidence/source-${GITHUB_SHA}.zip HEAD
+      - name: Upload compiled jar and matching source
+        uses: actions/upload-artifact@v4
+        with:
+          name: upside-down-dungeons-${{ github.sha }}
+          path: |
+            build/libs/*.jar
+            test-evidence/source-*.zip
+            test-evidence/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30
+      - name: Upload build and source-check evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-evidence-${{ github.sha }}
+          path: |
+            test-evidence/*.log
+            test-evidence/*validation.json
+            build/reports/
+          if-no-files-found: warn
+          retention-days: 14
