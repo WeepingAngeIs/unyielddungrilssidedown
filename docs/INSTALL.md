@@ -79,8 +79,10 @@ There are **147 Mimic spawners** across both complete builds: 17 in the maze and
 
 ## Beta test record
 
-Static geometry, content and packaging checks passed. The completed isolated server smoke test booted, validated 512 guaranteed final-loot samples and native Lootr identities, placed both full dungeons, and checked protected walls, fast spawner NBT and the final chest's loot-table assignment.
+The [GitHub-hosted build and server checks passed](https://github.com/WeepingAngeIs/unyielddungrilssidedown/actions/runs/42410149580), including static geometry and packaging, 512 final-loot samples, native Lootr identities, both full placements, live gravity before/after restart, protected walls, fast spawner data and final reward assignment. All 8,239,404 saved block positions and 747 block entities matched the templates. Confirmed undo restored every position to original air, removed the dungeon zones and journal entries, and released region protection.
 
-Further heavy builds/server/client tests belong on **GitHub-hosted Actions runners**, not the owner's desktop. Restart recovery and confirmed undo remain pending there. The CI environment may use an expanded-height datapack in its disposable test world; that fixture is not shipped in this mod.
+A separate simulated interrupted journal state was checked on a third startup: stale gravity was removed while the backup and protection remained, and the completed sibling dungeon kept its gravity. This was a controlled saved-state fixture, not an arbitrary process-crash test.
+
+Further heavy builds/server/client tests belong on **GitHub-hosted Actions runners**, not the owner's desktop. The hosted test used an expanded-height datapack in its disposable world; that fixture is not shipped in this mod. No existing client profile or live server was modified.
 
 Before production use, separately verify opening the same chest with two players and rejoining, real wall/ceiling transitions, inverted stairs, client rendering and full-pack gameplay balance. Headless tests do not provide client screenshots or prove traversal. No completed two-player or client walkthrough is claimed.
