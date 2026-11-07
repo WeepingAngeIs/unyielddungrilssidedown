@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "id": "minecraft:spawner"
+    },
+    "title": {
+      "text": "Mimic Pagoda"
+    },
+    "description": {
+      "text": "Step into the cherry pagoda. Someone up there looks a lot like you..."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/block/cherry_planks.png"
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,8385 @@
+{
+  "id": "sakura_labyrinth",
+  "name": "Sakura Labyrinth \u2014 100 Rooms",
+  "size": [
+    205,
+    36,
+    222
+  ],
+  "offset": [
+    -102,
+    -5,
+    -202
+  ],
+  "spawn": [
+    21,
+    6,
+    216
+  ],
+  "volume": 1638360,
+  "non_air": 372732,
+  "palette": [
+    "minecraft:air",
+    "minecraft:stone",
+    "minecraft:dirt",
+    "cuupsidedown:blossom_floor",
+    "cuupsidedown:sakura_wall",
+    "minecraft:stripped_cherry_log[axis=y]",
+    "minecraft:pink_concrete",
+    "cuupsidedown:tea_table[mount=up]",
+    "cuupsidedown:flower_planter[mount=up]",
+    "lootr:lootr_chest[facing=east,type=single,waterlogged=false]",
+    "lootr:lootr_chest[facing=west,type=single,waterlogged=false]",
+    "lootr:lootr_chest[facing=north,type=single,waterlogged=false]",
+    "cuupsidedown:lantern",
+    "minecraft:deepslate_tiles",
+    "minecraft:cherry_slab[type=bottom,waterlogged=false]",
+    "cuupsidedown:temple_stairs[facing=north,half=top,shape=straight,waterlogged=false]",
+    "cuupsidedown:temple_stairs[facing=south,half=top,shape=straight,waterlogged=false]",
+    "cuupsidedown:dark_floor",
+    "cuupsidedown:dark_wall",
+    "minecraft:purple_concrete",
+    "cuupsidedown:tea_table[mount=down]",
+    "cuupsidedown:flower_planter[mount=down]",
+    "cuupsidedown:moon_wall",
+    "minecraft:amethyst_block",
+    "minecraft:spawner",
+    "minecraft:polished_blackstone_bricks",
+    "cuupsidedown:tea_table[mount=west]",
+    "cuupsidedown:flower_planter[mount=west]",
+    "cuupsidedown:zen_wall",
+    "minecraft:smooth_sandstone",
+    "minecraft:moss_block",
+    "cuupsidedown:tea_table[mount=south]",
+    "cuupsidedown:flower_planter[mount=south]",
+    "cuupsidedown:tea_table[mount=east]",
+    "cuupsidedown:flower_planter[mount=east]",
+    "cuupsidedown:tea_table[mount=north]",
+    "cuupsidedown:flower_planter[mount=north]",
+    "minecraft:cherry_planks",
+    "minecraft:cherry_log[axis=y]",
+    "minecraft:cherry_leaves[distance=7,persistent=true,waterlogged=false]"
+  ],
+  "runs": 108095,
+  "block_entities": {
+    "lootr:lootr_chest": 400,
+    "minecraft:mob_spawner": 17
+  },
+  "loot_counts": {
+    "cuupsidedown:chests/maze_common": 380,
+    "cuupsidedown:chests/maze_rare": 20
+  },
+  "zones": [
+    {
+      "name": "room_001_sakura",
+      "min": [
+        17,
+        6,
+        17
+      ],
+      "max": [
+        25,
+        13,
+        25
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_002_emo_a",
+      "min": [
+        35,
+        6,
+        17
+      ],
+      "max": [
+        39,
+        13,
+        25
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_002_emo_b",
+      "min": [
+        40,
+        6,
+        17
+      ],
+      "max": [
+        43,
+        13,
+        21
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_002_emo_c",
+      "min": [
+        40,
+        6,
+        22
+      ],
+      "max": [
+        43,
+        10,
+        25
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_003_dark_a",
+      "min": [
+        53,
+        6,
+        17
+      ],
+      "max": [
+        57,
+        13,
+        25
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_003_dark_b",
+      "min": [
+        58,
+        6,
+        17
+      ],
+      "max": [
+        61,
+        13,
+        21
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_003_dark_c",
+      "min": [
+        58,
+        6,
+        22
+      ],
+      "max": [
+        61,
+        10,
+        25
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_004_zen_a",
+      "min": [
+        71,
+        6,
+        17
+      ],
+      "max": [
+        75,
+        13,
+        25
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_004_zen_b",
+      "min": [
+        76,
+        6,
+        17
+      ],
+      "max": [
+        79,
+        13,
+        21
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_004_zen_c",
+      "min": [
+        76,
+        6,
+        22
+      ],
+      "max": [
+        79,
+        10,
+        25
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_005_flower_a",
+      "min": [
+        89,
+        6,
+        17
+      ],
+      "max": [
+        93,
+        13,
+        25
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_005_flower_b",
+      "min": [
+        94,
+        6,
+        21
+      ],
+      "max": [
+        97,
+        13,
+        25
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_005_flower_c",
+      "min": [
+        94,
+        6,
+        17
+      ],
+      "max": [
+        97,
+        10,
+        20
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_006_moon_a",
+      "min": [
+        111,
+        6,
+        17
+      ],
+      "max": [
+        115,
+        13,
+        25
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_006_moon_b",
+      "min": [
+        107,
+        6,
+        17
+      ],
+      "max": [
+        110,
+        13,
+        21
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_006_moon_c",
+      "min": [
+        107,
+        6,
+        22
+      ],
+      "max": [
+        110,
+        10,
+        25
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_007_sakura",
+      "min": [
+        125,
+        6,
+        17
+      ],
+      "max": [
+        133,
+        13,
+        25
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_008_emo_a",
+      "min": [
+        143,
+        6,
+        17
+      ],
+      "max": [
+        147,
+        13,
+        25
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_008_emo_b",
+      "min": [
+        148,
+        6,
+        17
+      ],
+      "max": [
+        151,
+        13,
+        21
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_008_emo_c",
+      "min": [
+        148,
+        6,
+        22
+      ],
+      "max": [
+        151,
+        10,
+        25
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_009_dark_a",
+      "min": [
+        161,
+        6,
+        17
+      ],
+      "max": [
+        165,
+        13,
+        25
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_009_dark_b",
+      "min": [
+        166,
+        6,
+        17
+      ],
+      "max": [
+        169,
+        13,
+        21
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_009_dark_c",
+      "min": [
+        166,
+        6,
+        22
+      ],
+      "max": [
+        169,
+        10,
+        25
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_010_zen_a",
+      "min": [
+        179,
+        6,
+        17
+      ],
+      "max": [
+        183,
+        13,
+        25
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_010_zen_b",
+      "min": [
+        184,
+        6,
+        17
+      ],
+      "max": [
+        187,
+        13,
+        21
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_010_zen_c",
+      "min": [
+        184,
+        6,
+        22
+      ],
+      "max": [
+        187,
+        10,
+        25
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_011_zen_a",
+      "min": [
+        17,
+        6,
+        35
+      ],
+      "max": [
+        21,
+        13,
+        43
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_011_zen_b",
+      "min": [
+        22,
+        6,
+        35
+      ],
+      "max": [
+        25,
+        13,
+        39
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_011_zen_c",
+      "min": [
+        22,
+        6,
+        40
+      ],
+      "max": [
+        25,
+        10,
+        43
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_012_flower_a",
+      "min": [
+        35,
+        6,
+        35
+      ],
+      "max": [
+        39,
+        13,
+        43
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_012_flower_b",
+      "min": [
+        40,
+        6,
+        39
+      ],
+      "max": [
+        43,
+        13,
+        43
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_012_flower_c",
+      "min": [
+        40,
+        6,
+        35
+      ],
+      "max": [
+        43,
+        10,
+        38
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_013_moon_a",
+      "min": [
+        57,
+        6,
+        35
+      ],
+      "max": [
+        61,
+        13,
+        43
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_013_moon_b",
+      "min": [
+        53,
+        6,
+        35
+      ],
+      "max": [
+        56,
+        13,
+        39
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_013_moon_c",
+      "min": [
+        53,
+        6,
+        40
+      ],
+      "max": [
+        56,
+        10,
+        43
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_014_sakura",
+      "min": [
+        71,
+        6,
+        35
+      ],
+      "max": [
+        79,
+        13,
+        43
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_015_emo_a",
+      "min": [
+        89,
+        6,
+        35
+      ],
+      "max": [
+        93,
+        13,
+        43
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_015_emo_b",
+      "min": [
+        94,
+        6,
+        35
+      ],
+      "max": [
+        97,
+        13,
+        39
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_015_emo_c",
+      "min": [
+        94,
+        6,
+        40
+      ],
+      "max": [
+        97,
+        10,
+        43
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_016_dark_a",
+      "min": [
+        107,
+        6,
+        35
+      ],
+      "max": [
+        111,
+        13,
+        43
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_016_dark_b",
+      "min": [
+        112,
+        6,
+        35
+      ],
+      "max": [
+        115,
+        13,
+        39
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_016_dark_c",
+      "min": [
+        112,
+        6,
+        40
+      ],
+      "max": [
+        115,
+        10,
+        43
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_017_zen_a",
+      "min": [
+        125,
+        6,
+        35
+      ],
+      "max": [
+        129,
+        13,
+        43
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_017_zen_b",
+      "min": [
+        130,
+        6,
+        35
+      ],
+      "max": [
+        133,
+        13,
+        39
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_017_zen_c",
+      "min": [
+        130,
+        6,
+        40
+      ],
+      "max": [
+        133,
+        10,
+        43
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_018_flower",
+      "min": [
+        143,
+        6,
+        35
+      ],
+      "max": [
+        151,
+        13,
+        43
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_019_moon_a",
+      "min": [
+        161,
+        6,
+        35
+      ],
+      "max": [
+        165,
+        13,
+        43
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_019_moon_b",
+      "min": [
+        166,
+        6,
+        35
+      ],
+      "max": [
+        169,
+        13,
+        39
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_019_moon_c",
+      "min": [
+        166,
+        6,
+        40
+      ],
+      "max": [
+        169,
+        10,
+        43
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_020_sakura_a",
+      "min": [
+        179,
+        6,
+        35
+      ],
+      "max": [
+        183,
+        13,
+        43
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_020_sakura_b",
+      "min": [
+        184,
+        6,
+        35
+      ],
+      "max": [
+        187,
+        13,
+        39
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_020_sakura_c",
+      "min": [
+        184,
+        6,
+        40
+      ],
+      "max": [
+        187,
+        10,
+        43
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_021_emo",
+      "min": [
+        17,
+        6,
+        53
+      ],
+      "max": [
+        25,
+        13,
+        61
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_022_dark_a",
+      "min": [
+        35,
+        6,
+        53
+      ],
+      "max": [
+        39,
+        13,
+        61
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_022_dark_b",
+      "min": [
+        40,
+        6,
+        53
+      ],
+      "max": [
+        43,
+        13,
+        57
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_022_dark_c",
+      "min": [
+        40,
+        6,
+        58
+      ],
+      "max": [
+        43,
+        10,
+        61
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_023_zen_a",
+      "min": [
+        53,
+        6,
+        53
+      ],
+      "max": [
+        57,
+        13,
+        61
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_023_zen_b",
+      "min": [
+        58,
+        6,
+        53
+      ],
+      "max": [
+        61,
+        13,
+        57
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_023_zen_c",
+      "min": [
+        58,
+        6,
+        58
+      ],
+      "max": [
+        61,
+        10,
+        61
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_024_flower_a",
+      "min": [
+        71,
+        6,
+        53
+      ],
+      "max": [
+        75,
+        13,
+        61
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_024_flower_b",
+      "min": [
+        76,
+        6,
+        53
+      ],
+      "max": [
+        79,
+        13,
+        57
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_024_flower_c",
+      "min": [
+        76,
+        6,
+        58
+      ],
+      "max": [
+        79,
+        10,
+        61
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_025_moon",
+      "min": [
+        89,
+        6,
+        53
+      ],
+      "max": [
+        97,
+        13,
+        61
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_026_sakura_a",
+      "min": [
+        107,
+        6,
+        53
+      ],
+      "max": [
+        111,
+        13,
+        61
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_026_sakura_b",
+      "min": [
+        112,
+        6,
+        53
+      ],
+      "max": [
+        115,
+        13,
+        57
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_026_sakura_c",
+      "min": [
+        112,
+        6,
+        58
+      ],
+      "max": [
+        115,
+        10,
+        61
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_027_emo_a",
+      "min": [
+        125,
+        6,
+        53
+      ],
+      "max": [
+        129,
+        13,
+        61
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_027_emo_b",
+      "min": [
+        130,
+        6,
+        53
+      ],
+      "max": [
+        133,
+        13,
+        57
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_027_emo_c",
+      "min": [
+        130,
+        6,
+        58
+      ],
+      "max": [
+        133,
+        10,
+        61
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_028_dark_a",
+      "min": [
+        143,
+        6,
+        53
+      ],
+      "max": [
+        147,
+        13,
+        61
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_028_dark_b",
+      "min": [
+        148,
+        6,
+        53
+      ],
+      "max": [
+        151,
+        13,
+        57
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_028_dark_c",
+      "min": [
+        148,
+        6,
+        58
+      ],
+      "max": [
+        151,
+        10,
+        61
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_029_zen_a",
+      "min": [
+        161,
+        6,
+        53
+      ],
+      "max": [
+        165,
+        13,
+        61
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_029_zen_b",
+      "min": [
+        166,
+        6,
+        57
+      ],
+      "max": [
+        169,
+        13,
+        61
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_029_zen_c",
+      "min": [
+        166,
+        6,
+        53
+      ],
+      "max": [
+        169,
+        10,
+        56
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_030_flower_a",
+      "min": [
+        183,
+        6,
+        53
+      ],
+      "max": [
+        187,
+        13,
+        61
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_030_flower_b",
+      "min": [
+        179,
+        6,
+        53
+      ],
+      "max": [
+        182,
+        13,
+        57
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_030_flower_c",
+      "min": [
+        179,
+        6,
+        58
+      ],
+      "max": [
+        182,
+        10,
+        61
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_031_flower_a",
+      "min": [
+        17,
+        6,
+        71
+      ],
+      "max": [
+        21,
+        13,
+        79
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_031_flower_b",
+      "min": [
+        22,
+        6,
+        71
+      ],
+      "max": [
+        25,
+        13,
+        75
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_031_flower_c",
+      "min": [
+        22,
+        6,
+        76
+      ],
+      "max": [
+        25,
+        10,
+        79
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_032_moon",
+      "min": [
+        35,
+        6,
+        71
+      ],
+      "max": [
+        43,
+        13,
+        79
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_033_sakura_a",
+      "min": [
+        53,
+        6,
+        71
+      ],
+      "max": [
+        57,
+        13,
+        79
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_033_sakura_b",
+      "min": [
+        58,
+        6,
+        71
+      ],
+      "max": [
+        61,
+        13,
+        75
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_033_sakura_c",
+      "min": [
+        58,
+        6,
+        76
+      ],
+      "max": [
+        61,
+        10,
+        79
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_034_emo_a",
+      "min": [
+        71,
+        6,
+        71
+      ],
+      "max": [
+        75,
+        13,
+        79
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_034_emo_b",
+      "min": [
+        76,
+        6,
+        71
+      ],
+      "max": [
+        79,
+        13,
+        75
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_034_emo_c",
+      "min": [
+        76,
+        6,
+        76
+      ],
+      "max": [
+        79,
+        10,
+        79
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_035_dark_a",
+      "min": [
+        89,
+        6,
+        71
+      ],
+      "max": [
+        93,
+        13,
+        79
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_035_dark_b",
+      "min": [
+        94,
+        6,
+        71
+      ],
+      "max": [
+        97,
+        13,
+        75
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_035_dark_c",
+      "min": [
+        94,
+        6,
+        76
+      ],
+      "max": [
+        97,
+        10,
+        79
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_036_zen_a",
+      "min": [
+        107,
+        6,
+        71
+      ],
+      "max": [
+        111,
+        13,
+        79
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_036_zen_b",
+      "min": [
+        112,
+        6,
+        75
+      ],
+      "max": [
+        115,
+        13,
+        79
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_036_zen_c",
+      "min": [
+        112,
+        6,
+        71
+      ],
+      "max": [
+        115,
+        10,
+        74
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_037_flower_a",
+      "min": [
+        129,
+        6,
+        71
+      ],
+      "max": [
+        133,
+        13,
+        79
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_037_flower_b",
+      "min": [
+        125,
+        6,
+        71
+      ],
+      "max": [
+        128,
+        13,
+        75
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_037_flower_c",
+      "min": [
+        125,
+        6,
+        76
+      ],
+      "max": [
+        128,
+        10,
+        79
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_038_moon",
+      "min": [
+        143,
+        6,
+        71
+      ],
+      "max": [
+        151,
+        13,
+        79
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_039_sakura_a",
+      "min": [
+        161,
+        6,
+        71
+      ],
+      "max": [
+        165,
+        13,
+        79
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_039_sakura_b",
+      "min": [
+        166,
+        6,
+        71
+      ],
+      "max": [
+        169,
+        13,
+        75
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_039_sakura_c",
+      "min": [
+        166,
+        6,
+        76
+      ],
+      "max": [
+        169,
+        10,
+        79
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_040_emo_a",
+      "min": [
+        179,
+        6,
+        71
+      ],
+      "max": [
+        183,
+        13,
+        79
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_040_emo_b",
+      "min": [
+        184,
+        6,
+        71
+      ],
+      "max": [
+        187,
+        13,
+        75
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_040_emo_c",
+      "min": [
+        184,
+        6,
+        76
+      ],
+      "max": [
+        187,
+        10,
+        79
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_041_dark_a",
+      "min": [
+        17,
+        6,
+        89
+      ],
+      "max": [
+        21,
+        13,
+        97
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_041_dark_b",
+      "min": [
+        22,
+        6,
+        89
+      ],
+      "max": [
+        25,
+        13,
+        93
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_041_dark_c",
+      "min": [
+        22,
+        6,
+        94
+      ],
+      "max": [
+        25,
+        10,
+        97
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_042_zen_a",
+      "min": [
+        35,
+        6,
+        89
+      ],
+      "max": [
+        39,
+        13,
+        97
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_042_zen_b",
+      "min": [
+        40,
+        6,
+        89
+      ],
+      "max": [
+        43,
+        13,
+        93
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_042_zen_c",
+      "min": [
+        40,
+        6,
+        94
+      ],
+      "max": [
+        43,
+        10,
+        97
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_043_flower_a",
+      "min": [
+        53,
+        6,
+        89
+      ],
+      "max": [
+        57,
+        13,
+        97
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_043_flower_b",
+      "min": [
+        58,
+        6,
+        93
+      ],
+      "max": [
+        61,
+        13,
+        97
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_043_flower_c",
+      "min": [
+        58,
+        6,
+        89
+      ],
+      "max": [
+        61,
+        10,
+        92
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_044_moon_a",
+      "min": [
+        75,
+        6,
+        89
+      ],
+      "max": [
+        79,
+        13,
+        97
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_044_moon_b",
+      "min": [
+        71,
+        6,
+        89
+      ],
+      "max": [
+        74,
+        13,
+        93
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_044_moon_c",
+      "min": [
+        71,
+        6,
+        94
+      ],
+      "max": [
+        74,
+        10,
+        97
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_045_sakura",
+      "min": [
+        89,
+        6,
+        89
+      ],
+      "max": [
+        97,
+        13,
+        97
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_046_emo_a",
+      "min": [
+        107,
+        6,
+        89
+      ],
+      "max": [
+        111,
+        13,
+        97
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_046_emo_b",
+      "min": [
+        112,
+        6,
+        89
+      ],
+      "max": [
+        115,
+        13,
+        93
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_046_emo_c",
+      "min": [
+        112,
+        6,
+        94
+      ],
+      "max": [
+        115,
+        10,
+        97
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_047_dark_a",
+      "min": [
+        125,
+        6,
+        89
+      ],
+      "max": [
+        129,
+        13,
+        97
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_047_dark_b",
+      "min": [
+        130,
+        6,
+        89
+      ],
+      "max": [
+        133,
+        13,
+        93
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_047_dark_c",
+      "min": [
+        130,
+        6,
+        94
+      ],
+      "max": [
+        133,
+        10,
+        97
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_048_zen_a",
+      "min": [
+        143,
+        6,
+        89
+      ],
+      "max": [
+        147,
+        13,
+        97
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_048_zen_b",
+      "min": [
+        148,
+        6,
+        89
+      ],
+      "max": [
+        151,
+        13,
+        93
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_048_zen_c",
+      "min": [
+        148,
+        6,
+        94
+      ],
+      "max": [
+        151,
+        10,
+        97
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_049_flower",
+      "min": [
+        161,
+        6,
+        89
+      ],
+      "max": [
+        169,
+        13,
+        97
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_050_moon_a",
+      "min": [
+        179,
+        6,
+        89
+      ],
+      "max": [
+        183,
+        13,
+        97
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_050_moon_b",
+      "min": [
+        184,
+        6,
+        89
+      ],
+      "max": [
+        187,
+        13,
+        93
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_050_moon_c",
+      "min": [
+        184,
+        6,
+        94
+      ],
+      "max": [
+        187,
+        10,
+        97
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_051_moon_a",
+      "min": [
+        21,
+        6,
+        107
+      ],
+      "max": [
+        25,
+        13,
+        115
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_051_moon_b",
+      "min": [
+        17,
+        6,
+        107
+      ],
+      "max": [
+        20,
+        13,
+        111
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_051_moon_c",
+      "min": [
+        17,
+        6,
+        112
+      ],
+      "max": [
+        20,
+        10,
+        115
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_052_sakura",
+      "min": [
+        35,
+        6,
+        107
+      ],
+      "max": [
+        43,
+        13,
+        115
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_053_emo_a",
+      "min": [
+        53,
+        6,
+        107
+      ],
+      "max": [
+        57,
+        13,
+        115
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_053_emo_b",
+      "min": [
+        58,
+        6,
+        107
+      ],
+      "max": [
+        61,
+        13,
+        111
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_053_emo_c",
+      "min": [
+        58,
+        6,
+        112
+      ],
+      "max": [
+        61,
+        10,
+        115
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_054_dark_a",
+      "min": [
+        71,
+        6,
+        107
+      ],
+      "max": [
+        75,
+        13,
+        115
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_054_dark_b",
+      "min": [
+        76,
+        6,
+        107
+      ],
+      "max": [
+        79,
+        13,
+        111
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_054_dark_c",
+      "min": [
+        76,
+        6,
+        112
+      ],
+      "max": [
+        79,
+        10,
+        115
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_055_zen_a",
+      "min": [
+        89,
+        6,
+        107
+      ],
+      "max": [
+        93,
+        13,
+        115
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_055_zen_b",
+      "min": [
+        94,
+        6,
+        107
+      ],
+      "max": [
+        97,
+        13,
+        111
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_055_zen_c",
+      "min": [
+        94,
+        6,
+        112
+      ],
+      "max": [
+        97,
+        10,
+        115
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_056_flower",
+      "min": [
+        107,
+        6,
+        107
+      ],
+      "max": [
+        115,
+        13,
+        115
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_057_moon_a",
+      "min": [
+        125,
+        6,
+        107
+      ],
+      "max": [
+        129,
+        13,
+        115
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_057_moon_b",
+      "min": [
+        130,
+        6,
+        107
+      ],
+      "max": [
+        133,
+        13,
+        111
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_057_moon_c",
+      "min": [
+        130,
+        6,
+        112
+      ],
+      "max": [
+        133,
+        10,
+        115
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_058_sakura_a",
+      "min": [
+        143,
+        6,
+        107
+      ],
+      "max": [
+        147,
+        13,
+        115
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_058_sakura_b",
+      "min": [
+        148,
+        6,
+        107
+      ],
+      "max": [
+        151,
+        13,
+        111
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_058_sakura_c",
+      "min": [
+        148,
+        6,
+        112
+      ],
+      "max": [
+        151,
+        10,
+        115
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_059_emo_a",
+      "min": [
+        161,
+        6,
+        107
+      ],
+      "max": [
+        165,
+        13,
+        115
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_059_emo_b",
+      "min": [
+        166,
+        6,
+        107
+      ],
+      "max": [
+        169,
+        13,
+        111
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_059_emo_c",
+      "min": [
+        166,
+        6,
+        112
+      ],
+      "max": [
+        169,
+        10,
+        115
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_060_dark_a",
+      "min": [
+        179,
+        6,
+        107
+      ],
+      "max": [
+        183,
+        13,
+        115
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_060_dark_b",
+      "min": [
+        184,
+        6,
+        111
+      ],
+      "max": [
+        187,
+        13,
+        115
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_060_dark_c",
+      "min": [
+        184,
+        6,
+        107
+      ],
+      "max": [
+        187,
+        10,
+        110
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_061_zen_a",
+      "min": [
+        17,
+        6,
+        125
+      ],
+      "max": [
+        21,
+        13,
+        133
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_061_zen_b",
+      "min": [
+        22,
+        6,
+        125
+      ],
+      "max": [
+        25,
+        13,
+        129
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_061_zen_c",
+      "min": [
+        22,
+        6,
+        130
+      ],
+      "max": [
+        25,
+        10,
+        133
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_062_flower_a",
+      "min": [
+        35,
+        6,
+        125
+      ],
+      "max": [
+        39,
+        13,
+        133
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_062_flower_b",
+      "min": [
+        40,
+        6,
+        125
+      ],
+      "max": [
+        43,
+        13,
+        129
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_062_flower_c",
+      "min": [
+        40,
+        6,
+        130
+      ],
+      "max": [
+        43,
+        10,
+        133
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_063_moon",
+      "min": [
+        53,
+        6,
+        125
+      ],
+      "max": [
+        61,
+        13,
+        133
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_064_sakura_a",
+      "min": [
+        71,
+        6,
+        125
+      ],
+      "max": [
+        75,
+        13,
+        133
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_064_sakura_b",
+      "min": [
+        76,
+        6,
+        125
+      ],
+      "max": [
+        79,
+        13,
+        129
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_064_sakura_c",
+      "min": [
+        76,
+        6,
+        130
+      ],
+      "max": [
+        79,
+        10,
+        133
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_065_emo_a",
+      "min": [
+        89,
+        6,
+        125
+      ],
+      "max": [
+        93,
+        13,
+        133
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_065_emo_b",
+      "min": [
+        94,
+        6,
+        125
+      ],
+      "max": [
+        97,
+        13,
+        129
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_065_emo_c",
+      "min": [
+        94,
+        6,
+        130
+      ],
+      "max": [
+        97,
+        10,
+        133
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_066_dark_a",
+      "min": [
+        107,
+        6,
+        125
+      ],
+      "max": [
+        111,
+        13,
+        133
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_066_dark_b",
+      "min": [
+        112,
+        6,
+        125
+      ],
+      "max": [
+        115,
+        13,
+        129
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_066_dark_c",
+      "min": [
+        112,
+        6,
+        130
+      ],
+      "max": [
+        115,
+        10,
+        133
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_067_zen_a",
+      "min": [
+        125,
+        6,
+        125
+      ],
+      "max": [
+        129,
+        13,
+        133
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_067_zen_b",
+      "min": [
+        130,
+        6,
+        129
+      ],
+      "max": [
+        133,
+        13,
+        133
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_067_zen_c",
+      "min": [
+        130,
+        6,
+        125
+      ],
+      "max": [
+        133,
+        10,
+        128
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_068_flower_a",
+      "min": [
+        147,
+        6,
+        125
+      ],
+      "max": [
+        151,
+        13,
+        133
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_068_flower_b",
+      "min": [
+        143,
+        6,
+        125
+      ],
+      "max": [
+        146,
+        13,
+        129
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_068_flower_c",
+      "min": [
+        143,
+        6,
+        130
+      ],
+      "max": [
+        146,
+        10,
+        133
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_069_moon",
+      "min": [
+        161,
+        6,
+        125
+      ],
+      "max": [
+        169,
+        13,
+        133
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_070_sakura_a",
+      "min": [
+        179,
+        6,
+        125
+      ],
+      "max": [
+        183,
+        13,
+        133
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_070_sakura_b",
+      "min": [
+        184,
+        6,
+        125
+      ],
+      "max": [
+        187,
+        13,
+        129
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_070_sakura_c",
+      "min": [
+        184,
+        6,
+        130
+      ],
+      "max": [
+        187,
+        10,
+        133
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_071_sakura_a",
+      "min": [
+        17,
+        6,
+        143
+      ],
+      "max": [
+        21,
+        13,
+        151
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_071_sakura_b",
+      "min": [
+        22,
+        6,
+        143
+      ],
+      "max": [
+        25,
+        13,
+        147
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_071_sakura_c",
+      "min": [
+        22,
+        6,
+        148
+      ],
+      "max": [
+        25,
+        10,
+        151
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_072_emo_a",
+      "min": [
+        35,
+        6,
+        143
+      ],
+      "max": [
+        39,
+        13,
+        151
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_072_emo_b",
+      "min": [
+        40,
+        6,
+        143
+      ],
+      "max": [
+        43,
+        13,
+        147
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_072_emo_c",
+      "min": [
+        40,
+        6,
+        148
+      ],
+      "max": [
+        43,
+        10,
+        151
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_073_dark_a",
+      "min": [
+        53,
+        6,
+        143
+      ],
+      "max": [
+        57,
+        13,
+        151
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_073_dark_b",
+      "min": [
+        58,
+        6,
+        143
+      ],
+      "max": [
+        61,
+        13,
+        147
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_073_dark_c",
+      "min": [
+        58,
+        6,
+        148
+      ],
+      "max": [
+        61,
+        10,
+        151
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_074_zen_a",
+      "min": [
+        71,
+        6,
+        143
+      ],
+      "max": [
+        75,
+        13,
+        151
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_074_zen_b",
+      "min": [
+        76,
+        6,
+        147
+      ],
+      "max": [
+        79,
+        13,
+        151
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_074_zen_c",
+      "min": [
+        76,
+        6,
+        143
+      ],
+      "max": [
+        79,
+        10,
+        146
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_075_flower_a",
+      "min": [
+        93,
+        6,
+        143
+      ],
+      "max": [
+        97,
+        13,
+        151
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_075_flower_b",
+      "min": [
+        89,
+        6,
+        143
+      ],
+      "max": [
+        92,
+        13,
+        147
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_075_flower_c",
+      "min": [
+        89,
+        6,
+        148
+      ],
+      "max": [
+        92,
+        10,
+        151
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_076_moon",
+      "min": [
+        107,
+        6,
+        143
+      ],
+      "max": [
+        115,
+        13,
+        151
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_077_sakura_a",
+      "min": [
+        125,
+        6,
+        143
+      ],
+      "max": [
+        129,
+        13,
+        151
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_077_sakura_b",
+      "min": [
+        130,
+        6,
+        143
+      ],
+      "max": [
+        133,
+        13,
+        147
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_077_sakura_c",
+      "min": [
+        130,
+        6,
+        148
+      ],
+      "max": [
+        133,
+        10,
+        151
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_078_emo_a",
+      "min": [
+        143,
+        6,
+        143
+      ],
+      "max": [
+        147,
+        13,
+        151
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_078_emo_b",
+      "min": [
+        148,
+        6,
+        143
+      ],
+      "max": [
+        151,
+        13,
+        147
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_078_emo_c",
+      "min": [
+        148,
+        6,
+        148
+      ],
+      "max": [
+        151,
+        10,
+        151
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_079_dark_a",
+      "min": [
+        161,
+        6,
+        143
+      ],
+      "max": [
+        165,
+        13,
+        151
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_079_dark_b",
+      "min": [
+        166,
+        6,
+        143
+      ],
+      "max": [
+        169,
+        13,
+        147
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_079_dark_c",
+      "min": [
+        166,
+        6,
+        148
+      ],
+      "max": [
+        169,
+        10,
+        151
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_080_zen",
+      "min": [
+        179,
+        6,
+        143
+      ],
+      "max": [
+        187,
+        13,
+        151
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_081_flower_a",
+      "min": [
+        17,
+        6,
+        161
+      ],
+      "max": [
+        21,
+        13,
+        169
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_081_flower_b",
+      "min": [
+        22,
+        6,
+        165
+      ],
+      "max": [
+        25,
+        13,
+        169
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_081_flower_c",
+      "min": [
+        22,
+        6,
+        161
+      ],
+      "max": [
+        25,
+        10,
+        164
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_082_moon_a",
+      "min": [
+        39,
+        6,
+        161
+      ],
+      "max": [
+        43,
+        13,
+        169
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_082_moon_b",
+      "min": [
+        35,
+        6,
+        161
+      ],
+      "max": [
+        38,
+        13,
+        165
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_082_moon_c",
+      "min": [
+        35,
+        6,
+        166
+      ],
+      "max": [
+        38,
+        10,
+        169
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_083_sakura",
+      "min": [
+        53,
+        6,
+        161
+      ],
+      "max": [
+        61,
+        13,
+        169
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_084_emo_a",
+      "min": [
+        71,
+        6,
+        161
+      ],
+      "max": [
+        75,
+        13,
+        169
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_084_emo_b",
+      "min": [
+        76,
+        6,
+        161
+      ],
+      "max": [
+        79,
+        13,
+        165
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_084_emo_c",
+      "min": [
+        76,
+        6,
+        166
+      ],
+      "max": [
+        79,
+        10,
+        169
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_085_dark_a",
+      "min": [
+        89,
+        6,
+        161
+      ],
+      "max": [
+        93,
+        13,
+        169
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_085_dark_b",
+      "min": [
+        94,
+        6,
+        161
+      ],
+      "max": [
+        97,
+        13,
+        165
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_085_dark_c",
+      "min": [
+        94,
+        6,
+        166
+      ],
+      "max": [
+        97,
+        10,
+        169
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_086_zen_a",
+      "min": [
+        107,
+        6,
+        161
+      ],
+      "max": [
+        111,
+        13,
+        169
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_086_zen_b",
+      "min": [
+        112,
+        6,
+        161
+      ],
+      "max": [
+        115,
+        13,
+        165
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_086_zen_c",
+      "min": [
+        112,
+        6,
+        166
+      ],
+      "max": [
+        115,
+        10,
+        169
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_087_flower",
+      "min": [
+        125,
+        6,
+        161
+      ],
+      "max": [
+        133,
+        13,
+        169
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_088_moon_a",
+      "min": [
+        143,
+        6,
+        161
+      ],
+      "max": [
+        147,
+        13,
+        169
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_088_moon_b",
+      "min": [
+        148,
+        6,
+        161
+      ],
+      "max": [
+        151,
+        13,
+        165
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_088_moon_c",
+      "min": [
+        148,
+        6,
+        166
+      ],
+      "max": [
+        151,
+        10,
+        169
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_089_sakura_a",
+      "min": [
+        161,
+        6,
+        161
+      ],
+      "max": [
+        165,
+        13,
+        169
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_089_sakura_b",
+      "min": [
+        166,
+        6,
+        161
+      ],
+      "max": [
+        169,
+        13,
+        165
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_089_sakura_c",
+      "min": [
+        166,
+        6,
+        166
+      ],
+      "max": [
+        169,
+        10,
+        169
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_090_emo_a",
+      "min": [
+        179,
+        6,
+        161
+      ],
+      "max": [
+        183,
+        13,
+        169
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_090_emo_b",
+      "min": [
+        184,
+        6,
+        161
+      ],
+      "max": [
+        187,
+        13,
+        165
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_090_emo_c",
+      "min": [
+        184,
+        6,
+        166
+      ],
+      "max": [
+        187,
+        10,
+        169
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_091_emo_a",
+      "min": [
+        17,
+        6,
+        179
+      ],
+      "max": [
+        21,
+        13,
+        187
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_091_emo_b",
+      "min": [
+        22,
+        6,
+        179
+      ],
+      "max": [
+        25,
+        13,
+        183
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_091_emo_c",
+      "min": [
+        22,
+        6,
+        184
+      ],
+      "max": [
+        25,
+        10,
+        187
+      ],
+      "gravity": "south"
+    },
+    {
+      "name": "room_092_dark_a",
+      "min": [
+        35,
+        6,
+        179
+      ],
+      "max": [
+        39,
+        13,
+        187
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_092_dark_b",
+      "min": [
+        40,
+        6,
+        179
+      ],
+      "max": [
+        43,
+        13,
+        183
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_092_dark_c",
+      "min": [
+        40,
+        6,
+        184
+      ],
+      "max": [
+        43,
+        10,
+        187
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_093_zen_a",
+      "min": [
+        53,
+        6,
+        179
+      ],
+      "max": [
+        57,
+        13,
+        187
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_093_zen_b",
+      "min": [
+        58,
+        6,
+        179
+      ],
+      "max": [
+        61,
+        13,
+        183
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_093_zen_c",
+      "min": [
+        58,
+        6,
+        184
+      ],
+      "max": [
+        61,
+        10,
+        187
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_094_flower",
+      "min": [
+        71,
+        6,
+        179
+      ],
+      "max": [
+        79,
+        13,
+        187
+      ],
+      "gravity": "down"
+    },
+    {
+      "name": "room_095_moon_a",
+      "min": [
+        89,
+        6,
+        179
+      ],
+      "max": [
+        93,
+        13,
+        187
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_095_moon_b",
+      "min": [
+        94,
+        6,
+        179
+      ],
+      "max": [
+        97,
+        13,
+        183
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_095_moon_c",
+      "min": [
+        94,
+        6,
+        184
+      ],
+      "max": [
+        97,
+        10,
+        187
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_096_sakura_a",
+      "min": [
+        107,
+        6,
+        179
+      ],
+      "max": [
+        111,
+        13,
+        187
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_096_sakura_b",
+      "min": [
+        112,
+        6,
+        179
+      ],
+      "max": [
+        115,
+        13,
+        183
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_096_sakura_c",
+      "min": [
+        112,
+        6,
+        184
+      ],
+      "max": [
+        115,
+        10,
+        187
+      ],
+      "gravity": "east"
+    },
+    {
+      "name": "room_097_emo_a",
+      "min": [
+        125,
+        6,
+        179
+      ],
+      "max": [
+        129,
+        13,
+        187
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_097_emo_b",
+      "min": [
+        130,
+        6,
+        179
+      ],
+      "max": [
+        133,
+        13,
+        183
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_097_emo_c",
+      "min": [
+        130,
+        6,
+        184
+      ],
+      "max": [
+        133,
+        10,
+        187
+      ],
+      "gravity": "up"
+    },
+    {
+      "name": "room_098_dark_a",
+      "min": [
+        143,
+        6,
+        179
+      ],
+      "max": [
+        147,
+        13,
+        187
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_098_dark_b",
+      "min": [
+        148,
+        6,
+        183
+      ],
+      "max": [
+        151,
+        13,
+        187
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_098_dark_c",
+      "min": [
+        148,
+        6,
+        179
+      ],
+      "max": [
+        151,
+        10,
+        182
+      ],
+      "gravity": "north"
+    },
+    {
+      "name": "room_099_zen_a",
+      "min": [
+        165,
+        6,
+        179
+      ],
+      "max": [
+        169,
+        13,
+        187
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_099_zen_b",
+      "min": [
+        161,
+        6,
+        179
+      ],
+      "max": [
+        164,
+        13,
+        183
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_099_zen_c",
+      "min": [
+        161,
+        6,
+        184
+      ],
+      "max": [
+        164,
+        10,
+        187
+      ],
+      "gravity": "west"
+    },
+    {
+      "name": "room_100_flower",
+      "min": [
+        179,
+        6,
+        179
+      ],
+      "max": [
+        187,
+        13,
+        187
+      ],
+      "gravity": "down"
+    }
+  ],
+  "rooms": [
+    {
+      "number": 1,
+      "theme": "sakura",
+      "gravity": "down",
+      "cell": [
+        0,
+        0
+      ],
+      "bounds": [
+        12,
+        12,
+        30,
+        30
+      ],
+      "safe_waypoint": [
+        21,
+        6,
+        14
+      ],
+      "neighbors": [
+        11
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        24,
+        6,
+        23
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 2,
+      "theme": "emo",
+      "gravity": "up",
+      "cell": [
+        1,
+        0
+      ],
+      "bounds": [
+        30,
+        12,
+        48,
+        30
+      ],
+      "safe_waypoint": [
+        39,
+        6,
+        14
+      ],
+      "neighbors": [
+        3,
+        12
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        42,
+        11,
+        24
+      ],
+      "reward_pocket": {
+        "min": [
+          40,
+          11,
+          22
+        ],
+        "max": [
+          43,
+          13,
+          25
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          42,
+          11,
+          24
+        ]
+      }
+    },
+    {
+      "number": 3,
+      "theme": "dark",
+      "gravity": "east",
+      "cell": [
+        2,
+        0
+      ],
+      "bounds": [
+        48,
+        12,
+        66,
+        30
+      ],
+      "safe_waypoint": [
+        57,
+        6,
+        14
+      ],
+      "neighbors": [
+        2,
+        13
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        60,
+        11,
+        24
+      ],
+      "reward_pocket": {
+        "min": [
+          58,
+          11,
+          22
+        ],
+        "max": [
+          61,
+          13,
+          25
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          60,
+          11,
+          24
+        ]
+      }
+    },
+    {
+      "number": 4,
+      "theme": "zen",
+      "gravity": "up",
+      "cell": [
+        3,
+        0
+      ],
+      "bounds": [
+        66,
+        12,
+        84,
+        30
+      ],
+      "safe_waypoint": [
+        75,
+        6,
+        14
+      ],
+      "neighbors": [
+        5,
+        14
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        78,
+        11,
+        24
+      ],
+      "reward_pocket": {
+        "min": [
+          76,
+          11,
+          22
+        ],
+        "max": [
+          79,
+          13,
+          25
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          78,
+          11,
+          24
+        ]
+      }
+    },
+    {
+      "number": 5,
+      "theme": "flower",
+      "gravity": "north",
+      "cell": [
+        4,
+        0
+      ],
+      "bounds": [
+        84,
+        12,
+        102,
+        30
+      ],
+      "safe_waypoint": [
+        93,
+        6,
+        14
+      ],
+      "neighbors": [
+        4,
+        15
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        96,
+        11,
+        19
+      ],
+      "reward_pocket": {
+        "min": [
+          94,
+          11,
+          17
+        ],
+        "max": [
+          97,
+          13,
+          20
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "north",
+        "chest": [
+          96,
+          11,
+          19
+        ]
+      }
+    },
+    {
+      "number": 6,
+      "theme": "moon",
+      "gravity": "west",
+      "cell": [
+        5,
+        0
+      ],
+      "bounds": [
+        102,
+        12,
+        120,
+        30
+      ],
+      "safe_waypoint": [
+        111,
+        6,
+        14
+      ],
+      "neighbors": [
+        7,
+        16
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        109,
+        11,
+        24
+      ],
+      "reward_pocket": {
+        "min": [
+          107,
+          11,
+          22
+        ],
+        "max": [
+          110,
+          13,
+          25
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "west",
+        "chest": [
+          109,
+          11,
+          24
+        ]
+      }
+    },
+    {
+      "number": 7,
+      "theme": "sakura",
+      "gravity": "down",
+      "cell": [
+        6,
+        0
+      ],
+      "bounds": [
+        120,
+        12,
+        138,
+        30
+      ],
+      "safe_waypoint": [
+        129,
+        6,
+        14
+      ],
+      "neighbors": [
+        6,
+        8,
+        17
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        132,
+        6,
+        23
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 8,
+      "theme": "emo",
+      "gravity": "south",
+      "cell": [
+        7,
+        0
+      ],
+      "bounds": [
+        138,
+        12,
+        156,
+        30
+      ],
+      "safe_waypoint": [
+        147,
+        6,
+        14
+      ],
+      "neighbors": [
+        7,
+        9,
+        18
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        150,
+        11,
+        24
+      ],
+      "reward_pocket": {
+        "min": [
+          148,
+          11,
+          22
+        ],
+        "max": [
+          151,
+          13,
+          25
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "south",
+        "chest": [
+          150,
+          11,
+          24
+        ]
+      }
+    },
+    {
+      "number": 9,
+      "theme": "dark",
+      "gravity": "up",
+      "cell": [
+        8,
+        0
+      ],
+      "bounds": [
+        156,
+        12,
+        174,
+        30
+      ],
+      "safe_waypoint": [
+        165,
+        6,
+        14
+      ],
+      "neighbors": [
+        8,
+        10,
+        19
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        168,
+        11,
+        24
+      ],
+      "reward_pocket": {
+        "min": [
+          166,
+          11,
+          22
+        ],
+        "max": [
+          169,
+          13,
+          25
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          168,
+          11,
+          24
+        ]
+      }
+    },
+    {
+      "number": 10,
+      "theme": "zen",
+      "gravity": "east",
+      "cell": [
+        9,
+        0
+      ],
+      "bounds": [
+        174,
+        12,
+        192,
+        30
+      ],
+      "safe_waypoint": [
+        183,
+        6,
+        14
+      ],
+      "neighbors": [
+        9,
+        20
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        186,
+        11,
+        24
+      ],
+      "reward_pocket": {
+        "min": [
+          184,
+          11,
+          22
+        ],
+        "max": [
+          187,
+          13,
+          25
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          186,
+          11,
+          24
+        ]
+      }
+    },
+    {
+      "number": 11,
+      "theme": "zen",
+      "gravity": "up",
+      "cell": [
+        0,
+        1
+      ],
+      "bounds": [
+        12,
+        30,
+        30,
+        48
+      ],
+      "safe_waypoint": [
+        21,
+        6,
+        32
+      ],
+      "neighbors": [
+        1,
+        21
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        24,
+        11,
+        42
+      ],
+      "reward_pocket": {
+        "min": [
+          22,
+          11,
+          40
+        ],
+        "max": [
+          25,
+          13,
+          43
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          24,
+          11,
+          42
+        ]
+      }
+    },
+    {
+      "number": 12,
+      "theme": "flower",
+      "gravity": "north",
+      "cell": [
+        1,
+        1
+      ],
+      "bounds": [
+        30,
+        30,
+        48,
+        48
+      ],
+      "safe_waypoint": [
+        39,
+        6,
+        32
+      ],
+      "neighbors": [
+        2,
+        22
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        42,
+        11,
+        37
+      ],
+      "reward_pocket": {
+        "min": [
+          40,
+          11,
+          35
+        ],
+        "max": [
+          43,
+          13,
+          38
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "north",
+        "chest": [
+          42,
+          11,
+          37
+        ]
+      }
+    },
+    {
+      "number": 13,
+      "theme": "moon",
+      "gravity": "west",
+      "cell": [
+        2,
+        1
+      ],
+      "bounds": [
+        48,
+        30,
+        66,
+        48
+      ],
+      "safe_waypoint": [
+        57,
+        6,
+        32
+      ],
+      "neighbors": [
+        3,
+        14
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        55,
+        11,
+        42
+      ],
+      "reward_pocket": {
+        "min": [
+          53,
+          11,
+          40
+        ],
+        "max": [
+          56,
+          13,
+          43
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "west",
+        "chest": [
+          55,
+          11,
+          42
+        ]
+      }
+    },
+    {
+      "number": 14,
+      "theme": "sakura",
+      "gravity": "down",
+      "cell": [
+        3,
+        1
+      ],
+      "bounds": [
+        66,
+        30,
+        84,
+        48
+      ],
+      "safe_waypoint": [
+        75,
+        6,
+        32
+      ],
+      "neighbors": [
+        4,
+        13
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        78,
+        6,
+        41
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 15,
+      "theme": "emo",
+      "gravity": "south",
+      "cell": [
+        4,
+        1
+      ],
+      "bounds": [
+        84,
+        30,
+        102,
+        48
+      ],
+      "safe_waypoint": [
+        93,
+        6,
+        32
+      ],
+      "neighbors": [
+        5,
+        25
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        96,
+        11,
+        42
+      ],
+      "reward_pocket": {
+        "min": [
+          94,
+          11,
+          40
+        ],
+        "max": [
+          97,
+          13,
+          43
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "south",
+        "chest": [
+          96,
+          11,
+          42
+        ]
+      }
+    },
+    {
+      "number": 16,
+      "theme": "dark",
+      "gravity": "up",
+      "cell": [
+        5,
+        1
+      ],
+      "bounds": [
+        102,
+        30,
+        120,
+        48
+      ],
+      "safe_waypoint": [
+        111,
+        6,
+        32
+      ],
+      "neighbors": [
+        6,
+        17,
+        26
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        114,
+        11,
+        42
+      ],
+      "reward_pocket": {
+        "min": [
+          112,
+          11,
+          40
+        ],
+        "max": [
+          115,
+          13,
+          43
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          114,
+          11,
+          42
+        ]
+      }
+    },
+    {
+      "number": 17,
+      "theme": "zen",
+      "gravity": "east",
+      "cell": [
+        6,
+        1
+      ],
+      "bounds": [
+        120,
+        30,
+        138,
+        48
+      ],
+      "safe_waypoint": [
+        129,
+        6,
+        32
+      ],
+      "neighbors": [
+        7,
+        16
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        132,
+        11,
+        42
+      ],
+      "reward_pocket": {
+        "min": [
+          130,
+          11,
+          40
+        ],
+        "max": [
+          133,
+          13,
+          43
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          132,
+          11,
+          42
+        ]
+      }
+    },
+    {
+      "number": 18,
+      "theme": "flower",
+      "gravity": "down",
+      "cell": [
+        7,
+        1
+      ],
+      "bounds": [
+        138,
+        30,
+        156,
+        48
+      ],
+      "safe_waypoint": [
+        147,
+        6,
+        32
+      ],
+      "neighbors": [
+        8,
+        28
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        150,
+        6,
+        41
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 19,
+      "theme": "moon",
+      "gravity": "up",
+      "cell": [
+        8,
+        1
+      ],
+      "bounds": [
+        156,
+        30,
+        174,
+        48
+      ],
+      "safe_waypoint": [
+        165,
+        6,
+        32
+      ],
+      "neighbors": [
+        9,
+        20,
+        29
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        168,
+        11,
+        42
+      ],
+      "reward_pocket": {
+        "min": [
+          166,
+          11,
+          40
+        ],
+        "max": [
+          169,
+          13,
+          43
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          168,
+          11,
+          42
+        ]
+      }
+    },
+    {
+      "number": 20,
+      "theme": "sakura",
+      "gravity": "east",
+      "cell": [
+        9,
+        1
+      ],
+      "bounds": [
+        174,
+        30,
+        192,
+        48
+      ],
+      "safe_waypoint": [
+        183,
+        6,
+        32
+      ],
+      "neighbors": [
+        10,
+        19,
+        30
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        186,
+        11,
+        42
+      ],
+      "reward_pocket": {
+        "min": [
+          184,
+          11,
+          40
+        ],
+        "max": [
+          187,
+          13,
+          43
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          186,
+          11,
+          42
+        ]
+      }
+    },
+    {
+      "number": 21,
+      "theme": "emo",
+      "gravity": "down",
+      "cell": [
+        0,
+        2
+      ],
+      "bounds": [
+        12,
+        48,
+        30,
+        66
+      ],
+      "safe_waypoint": [
+        21,
+        6,
+        50
+      ],
+      "neighbors": [
+        11,
+        31
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        24,
+        6,
+        59
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 22,
+      "theme": "dark",
+      "gravity": "south",
+      "cell": [
+        1,
+        2
+      ],
+      "bounds": [
+        30,
+        48,
+        48,
+        66
+      ],
+      "safe_waypoint": [
+        39,
+        6,
+        50
+      ],
+      "neighbors": [
+        12,
+        32
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        42,
+        11,
+        60
+      ],
+      "reward_pocket": {
+        "min": [
+          40,
+          11,
+          58
+        ],
+        "max": [
+          43,
+          13,
+          61
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "south",
+        "chest": [
+          42,
+          11,
+          60
+        ]
+      }
+    },
+    {
+      "number": 23,
+      "theme": "zen",
+      "gravity": "up",
+      "cell": [
+        2,
+        2
+      ],
+      "bounds": [
+        48,
+        48,
+        66,
+        66
+      ],
+      "safe_waypoint": [
+        57,
+        6,
+        50
+      ],
+      "neighbors": [
+        24,
+        33
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        60,
+        11,
+        60
+      ],
+      "reward_pocket": {
+        "min": [
+          58,
+          11,
+          58
+        ],
+        "max": [
+          61,
+          13,
+          61
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          60,
+          11,
+          60
+        ]
+      }
+    },
+    {
+      "number": 24,
+      "theme": "flower",
+      "gravity": "east",
+      "cell": [
+        3,
+        2
+      ],
+      "bounds": [
+        66,
+        48,
+        84,
+        66
+      ],
+      "safe_waypoint": [
+        75,
+        6,
+        50
+      ],
+      "neighbors": [
+        23,
+        25,
+        34
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        78,
+        11,
+        60
+      ],
+      "reward_pocket": {
+        "min": [
+          76,
+          11,
+          58
+        ],
+        "max": [
+          79,
+          13,
+          61
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          78,
+          11,
+          60
+        ]
+      }
+    },
+    {
+      "number": 25,
+      "theme": "moon",
+      "gravity": "down",
+      "cell": [
+        4,
+        2
+      ],
+      "bounds": [
+        84,
+        48,
+        102,
+        66
+      ],
+      "safe_waypoint": [
+        93,
+        6,
+        50
+      ],
+      "neighbors": [
+        15,
+        24,
+        26
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        96,
+        6,
+        59
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 26,
+      "theme": "sakura",
+      "gravity": "up",
+      "cell": [
+        5,
+        2
+      ],
+      "bounds": [
+        102,
+        48,
+        120,
+        66
+      ],
+      "safe_waypoint": [
+        111,
+        6,
+        50
+      ],
+      "neighbors": [
+        16,
+        25,
+        36
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        114,
+        11,
+        60
+      ],
+      "reward_pocket": {
+        "min": [
+          112,
+          11,
+          58
+        ],
+        "max": [
+          115,
+          13,
+          61
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          114,
+          11,
+          60
+        ]
+      }
+    },
+    {
+      "number": 27,
+      "theme": "emo",
+      "gravity": "east",
+      "cell": [
+        6,
+        2
+      ],
+      "bounds": [
+        120,
+        48,
+        138,
+        66
+      ],
+      "safe_waypoint": [
+        129,
+        6,
+        50
+      ],
+      "neighbors": [
+        28,
+        37
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        132,
+        11,
+        60
+      ],
+      "reward_pocket": {
+        "min": [
+          130,
+          11,
+          58
+        ],
+        "max": [
+          133,
+          13,
+          61
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          132,
+          11,
+          60
+        ]
+      }
+    },
+    {
+      "number": 28,
+      "theme": "dark",
+      "gravity": "up",
+      "cell": [
+        7,
+        2
+      ],
+      "bounds": [
+        138,
+        48,
+        156,
+        66
+      ],
+      "safe_waypoint": [
+        147,
+        6,
+        50
+      ],
+      "neighbors": [
+        18,
+        27
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        150,
+        11,
+        60
+      ],
+      "reward_pocket": {
+        "min": [
+          148,
+          11,
+          58
+        ],
+        "max": [
+          151,
+          13,
+          61
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          150,
+          11,
+          60
+        ]
+      }
+    },
+    {
+      "number": 29,
+      "theme": "zen",
+      "gravity": "north",
+      "cell": [
+        8,
+        2
+      ],
+      "bounds": [
+        156,
+        48,
+        174,
+        66
+      ],
+      "safe_waypoint": [
+        165,
+        6,
+        50
+      ],
+      "neighbors": [
+        19,
+        30,
+        39
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        168,
+        11,
+        55
+      ],
+      "reward_pocket": {
+        "min": [
+          166,
+          11,
+          53
+        ],
+        "max": [
+          169,
+          13,
+          56
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "north",
+        "chest": [
+          168,
+          11,
+          55
+        ]
+      }
+    },
+    {
+      "number": 30,
+      "theme": "flower",
+      "gravity": "west",
+      "cell": [
+        9,
+        2
+      ],
+      "bounds": [
+        174,
+        48,
+        192,
+        66
+      ],
+      "safe_waypoint": [
+        183,
+        6,
+        50
+      ],
+      "neighbors": [
+        20,
+        29
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        181,
+        11,
+        60
+      ],
+      "reward_pocket": {
+        "min": [
+          179,
+          11,
+          58
+        ],
+        "max": [
+          182,
+          13,
+          61
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "west",
+        "chest": [
+          181,
+          11,
+          60
+        ]
+      }
+    },
+    {
+      "number": 31,
+      "theme": "flower",
+      "gravity": "east",
+      "cell": [
+        0,
+        3
+      ],
+      "bounds": [
+        12,
+        66,
+        30,
+        84
+      ],
+      "safe_waypoint": [
+        21,
+        6,
+        68
+      ],
+      "neighbors": [
+        21,
+        32
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        24,
+        11,
+        78
+      ],
+      "reward_pocket": {
+        "min": [
+          22,
+          11,
+          76
+        ],
+        "max": [
+          25,
+          13,
+          79
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          24,
+          11,
+          78
+        ]
+      }
+    },
+    {
+      "number": 32,
+      "theme": "moon",
+      "gravity": "down",
+      "cell": [
+        1,
+        3
+      ],
+      "bounds": [
+        30,
+        66,
+        48,
+        84
+      ],
+      "safe_waypoint": [
+        39,
+        6,
+        68
+      ],
+      "neighbors": [
+        22,
+        31
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        42,
+        6,
+        77
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 33,
+      "theme": "sakura",
+      "gravity": "up",
+      "cell": [
+        2,
+        3
+      ],
+      "bounds": [
+        48,
+        66,
+        66,
+        84
+      ],
+      "safe_waypoint": [
+        57,
+        6,
+        68
+      ],
+      "neighbors": [
+        23,
+        34,
+        43
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        60,
+        11,
+        78
+      ],
+      "reward_pocket": {
+        "min": [
+          58,
+          11,
+          76
+        ],
+        "max": [
+          61,
+          13,
+          79
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          60,
+          11,
+          78
+        ]
+      }
+    },
+    {
+      "number": 34,
+      "theme": "emo",
+      "gravity": "east",
+      "cell": [
+        3,
+        3
+      ],
+      "bounds": [
+        66,
+        66,
+        84,
+        84
+      ],
+      "safe_waypoint": [
+        75,
+        6,
+        68
+      ],
+      "neighbors": [
+        24,
+        33,
+        35
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        78,
+        11,
+        78
+      ],
+      "reward_pocket": {
+        "min": [
+          76,
+          11,
+          76
+        ],
+        "max": [
+          79,
+          13,
+          79
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          78,
+          11,
+          78
+        ]
+      }
+    },
+    {
+      "number": 35,
+      "theme": "dark",
+      "gravity": "up",
+      "cell": [
+        4,
+        3
+      ],
+      "bounds": [
+        84,
+        66,
+        102,
+        84
+      ],
+      "safe_waypoint": [
+        93,
+        6,
+        68
+      ],
+      "neighbors": [
+        34,
+        36,
+        45
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        96,
+        11,
+        78
+      ],
+      "reward_pocket": {
+        "min": [
+          94,
+          11,
+          76
+        ],
+        "max": [
+          97,
+          13,
+          79
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          96,
+          11,
+          78
+        ]
+      }
+    },
+    {
+      "number": 36,
+      "theme": "zen",
+      "gravity": "north",
+      "cell": [
+        5,
+        3
+      ],
+      "bounds": [
+        102,
+        66,
+        120,
+        84
+      ],
+      "safe_waypoint": [
+        111,
+        6,
+        68
+      ],
+      "neighbors": [
+        26,
+        35
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        114,
+        11,
+        73
+      ],
+      "reward_pocket": {
+        "min": [
+          112,
+          11,
+          71
+        ],
+        "max": [
+          115,
+          13,
+          74
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "north",
+        "chest": [
+          114,
+          11,
+          73
+        ]
+      }
+    },
+    {
+      "number": 37,
+      "theme": "flower",
+      "gravity": "west",
+      "cell": [
+        6,
+        3
+      ],
+      "bounds": [
+        120,
+        66,
+        138,
+        84
+      ],
+      "safe_waypoint": [
+        129,
+        6,
+        68
+      ],
+      "neighbors": [
+        27,
+        38
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        127,
+        11,
+        78
+      ],
+      "reward_pocket": {
+        "min": [
+          125,
+          11,
+          76
+        ],
+        "max": [
+          128,
+          13,
+          79
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "west",
+        "chest": [
+          127,
+          11,
+          78
+        ]
+      }
+    },
+    {
+      "number": 38,
+      "theme": "moon",
+      "gravity": "down",
+      "cell": [
+        7,
+        3
+      ],
+      "bounds": [
+        138,
+        66,
+        156,
+        84
+      ],
+      "safe_waypoint": [
+        147,
+        6,
+        68
+      ],
+      "neighbors": [
+        37,
+        39
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        150,
+        6,
+        77
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 39,
+      "theme": "sakura",
+      "gravity": "south",
+      "cell": [
+        8,
+        3
+      ],
+      "bounds": [
+        156,
+        66,
+        174,
+        84
+      ],
+      "safe_waypoint": [
+        165,
+        6,
+        68
+      ],
+      "neighbors": [
+        29,
+        38,
+        40
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        168,
+        11,
+        78
+      ],
+      "reward_pocket": {
+        "min": [
+          166,
+          11,
+          76
+        ],
+        "max": [
+          169,
+          13,
+          79
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "south",
+        "chest": [
+          168,
+          11,
+          78
+        ]
+      }
+    },
+    {
+      "number": 40,
+      "theme": "emo",
+      "gravity": "up",
+      "cell": [
+        9,
+        3
+      ],
+      "bounds": [
+        174,
+        66,
+        192,
+        84
+      ],
+      "safe_waypoint": [
+        183,
+        6,
+        68
+      ],
+      "neighbors": [
+        39,
+        50
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        186,
+        11,
+        78
+      ],
+      "reward_pocket": {
+        "min": [
+          184,
+          11,
+          76
+        ],
+        "max": [
+          187,
+          13,
+          79
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          186,
+          11,
+          78
+        ]
+      }
+    },
+    {
+      "number": 41,
+      "theme": "dark",
+      "gravity": "east",
+      "cell": [
+        0,
+        4
+      ],
+      "bounds": [
+        12,
+        84,
+        30,
+        102
+      ],
+      "safe_waypoint": [
+        21,
+        6,
+        86
+      ],
+      "neighbors": [
+        42,
+        51
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        24,
+        11,
+        96
+      ],
+      "reward_pocket": {
+        "min": [
+          22,
+          11,
+          94
+        ],
+        "max": [
+          25,
+          13,
+          97
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          24,
+          11,
+          96
+        ]
+      }
+    },
+    {
+      "number": 42,
+      "theme": "zen",
+      "gravity": "up",
+      "cell": [
+        1,
+        4
+      ],
+      "bounds": [
+        30,
+        84,
+        48,
+        102
+      ],
+      "safe_waypoint": [
+        39,
+        6,
+        86
+      ],
+      "neighbors": [
+        41,
+        43
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        42,
+        11,
+        96
+      ],
+      "reward_pocket": {
+        "min": [
+          40,
+          11,
+          94
+        ],
+        "max": [
+          43,
+          13,
+          97
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          42,
+          11,
+          96
+        ]
+      }
+    },
+    {
+      "number": 43,
+      "theme": "flower",
+      "gravity": "north",
+      "cell": [
+        2,
+        4
+      ],
+      "bounds": [
+        48,
+        84,
+        66,
+        102
+      ],
+      "safe_waypoint": [
+        57,
+        6,
+        86
+      ],
+      "neighbors": [
+        33,
+        42,
+        44
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        60,
+        11,
+        91
+      ],
+      "reward_pocket": {
+        "min": [
+          58,
+          11,
+          89
+        ],
+        "max": [
+          61,
+          13,
+          92
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "north",
+        "chest": [
+          60,
+          11,
+          91
+        ]
+      }
+    },
+    {
+      "number": 44,
+      "theme": "moon",
+      "gravity": "west",
+      "cell": [
+        3,
+        4
+      ],
+      "bounds": [
+        66,
+        84,
+        84,
+        102
+      ],
+      "safe_waypoint": [
+        75,
+        6,
+        86
+      ],
+      "neighbors": [
+        43,
+        54
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        73,
+        11,
+        96
+      ],
+      "reward_pocket": {
+        "min": [
+          71,
+          11,
+          94
+        ],
+        "max": [
+          74,
+          13,
+          97
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "west",
+        "chest": [
+          73,
+          11,
+          96
+        ]
+      }
+    },
+    {
+      "number": 45,
+      "theme": "sakura",
+      "gravity": "down",
+      "cell": [
+        4,
+        4
+      ],
+      "bounds": [
+        84,
+        84,
+        102,
+        102
+      ],
+      "safe_waypoint": [
+        93,
+        6,
+        86
+      ],
+      "neighbors": [
+        35,
+        46
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        96,
+        6,
+        95
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 46,
+      "theme": "emo",
+      "gravity": "south",
+      "cell": [
+        5,
+        4
+      ],
+      "bounds": [
+        102,
+        84,
+        120,
+        102
+      ],
+      "safe_waypoint": [
+        111,
+        6,
+        86
+      ],
+      "neighbors": [
+        45,
+        47,
+        56
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        114,
+        11,
+        96
+      ],
+      "reward_pocket": {
+        "min": [
+          112,
+          11,
+          94
+        ],
+        "max": [
+          115,
+          13,
+          97
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "south",
+        "chest": [
+          114,
+          11,
+          96
+        ]
+      }
+    },
+    {
+      "number": 47,
+      "theme": "dark",
+      "gravity": "up",
+      "cell": [
+        6,
+        4
+      ],
+      "bounds": [
+        120,
+        84,
+        138,
+        102
+      ],
+      "safe_waypoint": [
+        129,
+        6,
+        86
+      ],
+      "neighbors": [
+        46,
+        48,
+        57
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        132,
+        11,
+        96
+      ],
+      "reward_pocket": {
+        "min": [
+          130,
+          11,
+          94
+        ],
+        "max": [
+          133,
+          13,
+          97
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          132,
+          11,
+          96
+        ]
+      }
+    },
+    {
+      "number": 48,
+      "theme": "zen",
+      "gravity": "east",
+      "cell": [
+        7,
+        4
+      ],
+      "bounds": [
+        138,
+        84,
+        156,
+        102
+      ],
+      "safe_waypoint": [
+        147,
+        6,
+        86
+      ],
+      "neighbors": [
+        47,
+        58
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        150,
+        11,
+        96
+      ],
+      "reward_pocket": {
+        "min": [
+          148,
+          11,
+          94
+        ],
+        "max": [
+          151,
+          13,
+          97
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          150,
+          11,
+          96
+        ]
+      }
+    },
+    {
+      "number": 49,
+      "theme": "flower",
+      "gravity": "down",
+      "cell": [
+        8,
+        4
+      ],
+      "bounds": [
+        156,
+        84,
+        174,
+        102
+      ],
+      "safe_waypoint": [
+        165,
+        6,
+        86
+      ],
+      "neighbors": [
+        50,
+        59
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        168,
+        6,
+        95
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 50,
+      "theme": "moon",
+      "gravity": "up",
+      "cell": [
+        9,
+        4
+      ],
+      "bounds": [
+        174,
+        84,
+        192,
+        102
+      ],
+      "safe_waypoint": [
+        183,
+        6,
+        86
+      ],
+      "neighbors": [
+        40,
+        49,
+        60
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        186,
+        11,
+        96
+      ],
+      "reward_pocket": {
+        "min": [
+          184,
+          11,
+          94
+        ],
+        "max": [
+          187,
+          13,
+          97
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          186,
+          11,
+          96
+        ]
+      }
+    },
+    {
+      "number": 51,
+      "theme": "moon",
+      "gravity": "west",
+      "cell": [
+        0,
+        5
+      ],
+      "bounds": [
+        12,
+        102,
+        30,
+        120
+      ],
+      "safe_waypoint": [
+        21,
+        6,
+        104
+      ],
+      "neighbors": [
+        41,
+        52,
+        61
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        19,
+        11,
+        114
+      ],
+      "reward_pocket": {
+        "min": [
+          17,
+          11,
+          112
+        ],
+        "max": [
+          20,
+          13,
+          115
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "west",
+        "chest": [
+          19,
+          11,
+          114
+        ]
+      }
+    },
+    {
+      "number": 52,
+      "theme": "sakura",
+      "gravity": "down",
+      "cell": [
+        1,
+        5
+      ],
+      "bounds": [
+        30,
+        102,
+        48,
+        120
+      ],
+      "safe_waypoint": [
+        39,
+        6,
+        104
+      ],
+      "neighbors": [
+        51,
+        53,
+        62
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        42,
+        6,
+        113
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 53,
+      "theme": "emo",
+      "gravity": "south",
+      "cell": [
+        2,
+        5
+      ],
+      "bounds": [
+        48,
+        102,
+        66,
+        120
+      ],
+      "safe_waypoint": [
+        57,
+        6,
+        104
+      ],
+      "neighbors": [
+        52,
+        63
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        60,
+        11,
+        114
+      ],
+      "reward_pocket": {
+        "min": [
+          58,
+          11,
+          112
+        ],
+        "max": [
+          61,
+          13,
+          115
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "south",
+        "chest": [
+          60,
+          11,
+          114
+        ]
+      }
+    },
+    {
+      "number": 54,
+      "theme": "dark",
+      "gravity": "up",
+      "cell": [
+        3,
+        5
+      ],
+      "bounds": [
+        66,
+        102,
+        84,
+        120
+      ],
+      "safe_waypoint": [
+        75,
+        6,
+        104
+      ],
+      "neighbors": [
+        44,
+        55
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        78,
+        11,
+        114
+      ],
+      "reward_pocket": {
+        "min": [
+          76,
+          11,
+          112
+        ],
+        "max": [
+          79,
+          13,
+          115
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          78,
+          11,
+          114
+        ]
+      }
+    },
+    {
+      "number": 55,
+      "theme": "zen",
+      "gravity": "east",
+      "cell": [
+        4,
+        5
+      ],
+      "bounds": [
+        84,
+        102,
+        102,
+        120
+      ],
+      "safe_waypoint": [
+        93,
+        6,
+        104
+      ],
+      "neighbors": [
+        54,
+        65
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        96,
+        11,
+        114
+      ],
+      "reward_pocket": {
+        "min": [
+          94,
+          11,
+          112
+        ],
+        "max": [
+          97,
+          13,
+          115
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          96,
+          11,
+          114
+        ]
+      }
+    },
+    {
+      "number": 56,
+      "theme": "flower",
+      "gravity": "down",
+      "cell": [
+        5,
+        5
+      ],
+      "bounds": [
+        102,
+        102,
+        120,
+        120
+      ],
+      "safe_waypoint": [
+        111,
+        6,
+        104
+      ],
+      "neighbors": [
+        46,
+        57
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        114,
+        6,
+        113
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 57,
+      "theme": "moon",
+      "gravity": "up",
+      "cell": [
+        6,
+        5
+      ],
+      "bounds": [
+        120,
+        102,
+        138,
+        120
+      ],
+      "safe_waypoint": [
+        129,
+        6,
+        104
+      ],
+      "neighbors": [
+        47,
+        56,
+        58,
+        67
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        132,
+        11,
+        114
+      ],
+      "reward_pocket": {
+        "min": [
+          130,
+          11,
+          112
+        ],
+        "max": [
+          133,
+          13,
+          115
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          132,
+          11,
+          114
+        ]
+      }
+    },
+    {
+      "number": 58,
+      "theme": "sakura",
+      "gravity": "east",
+      "cell": [
+        7,
+        5
+      ],
+      "bounds": [
+        138,
+        102,
+        156,
+        120
+      ],
+      "safe_waypoint": [
+        147,
+        6,
+        104
+      ],
+      "neighbors": [
+        48,
+        57
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        150,
+        11,
+        114
+      ],
+      "reward_pocket": {
+        "min": [
+          148,
+          11,
+          112
+        ],
+        "max": [
+          151,
+          13,
+          115
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          150,
+          11,
+          114
+        ]
+      }
+    },
+    {
+      "number": 59,
+      "theme": "emo",
+      "gravity": "up",
+      "cell": [
+        8,
+        5
+      ],
+      "bounds": [
+        156,
+        102,
+        174,
+        120
+      ],
+      "safe_waypoint": [
+        165,
+        6,
+        104
+      ],
+      "neighbors": [
+        49,
+        69
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        168,
+        11,
+        114
+      ],
+      "reward_pocket": {
+        "min": [
+          166,
+          11,
+          112
+        ],
+        "max": [
+          169,
+          13,
+          115
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          168,
+          11,
+          114
+        ]
+      }
+    },
+    {
+      "number": 60,
+      "theme": "dark",
+      "gravity": "north",
+      "cell": [
+        9,
+        5
+      ],
+      "bounds": [
+        174,
+        102,
+        192,
+        120
+      ],
+      "safe_waypoint": [
+        183,
+        6,
+        104
+      ],
+      "neighbors": [
+        50
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        186,
+        11,
+        109
+      ],
+      "reward_pocket": {
+        "min": [
+          184,
+          11,
+          107
+        ],
+        "max": [
+          187,
+          13,
+          110
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "north",
+        "chest": [
+          186,
+          11,
+          109
+        ]
+      }
+    },
+    {
+      "number": 61,
+      "theme": "zen",
+      "gravity": "up",
+      "cell": [
+        0,
+        6
+      ],
+      "bounds": [
+        12,
+        120,
+        30,
+        138
+      ],
+      "safe_waypoint": [
+        21,
+        6,
+        122
+      ],
+      "neighbors": [
+        51,
+        62
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        24,
+        11,
+        132
+      ],
+      "reward_pocket": {
+        "min": [
+          22,
+          11,
+          130
+        ],
+        "max": [
+          25,
+          13,
+          133
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          24,
+          11,
+          132
+        ]
+      }
+    },
+    {
+      "number": 62,
+      "theme": "flower",
+      "gravity": "east",
+      "cell": [
+        1,
+        6
+      ],
+      "bounds": [
+        30,
+        120,
+        48,
+        138
+      ],
+      "safe_waypoint": [
+        39,
+        6,
+        122
+      ],
+      "neighbors": [
+        52,
+        61,
+        63
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        42,
+        11,
+        132
+      ],
+      "reward_pocket": {
+        "min": [
+          40,
+          11,
+          130
+        ],
+        "max": [
+          43,
+          13,
+          133
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          42,
+          11,
+          132
+        ]
+      }
+    },
+    {
+      "number": 63,
+      "theme": "moon",
+      "gravity": "down",
+      "cell": [
+        2,
+        6
+      ],
+      "bounds": [
+        48,
+        120,
+        66,
+        138
+      ],
+      "safe_waypoint": [
+        57,
+        6,
+        122
+      ],
+      "neighbors": [
+        53,
+        62,
+        73
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        60,
+        6,
+        131
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 64,
+      "theme": "sakura",
+      "gravity": "up",
+      "cell": [
+        3,
+        6
+      ],
+      "bounds": [
+        66,
+        120,
+        84,
+        138
+      ],
+      "safe_waypoint": [
+        75,
+        6,
+        122
+      ],
+      "neighbors": [
+        65,
+        74
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        78,
+        11,
+        132
+      ],
+      "reward_pocket": {
+        "min": [
+          76,
+          11,
+          130
+        ],
+        "max": [
+          79,
+          13,
+          133
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          78,
+          11,
+          132
+        ]
+      }
+    },
+    {
+      "number": 65,
+      "theme": "emo",
+      "gravity": "east",
+      "cell": [
+        4,
+        6
+      ],
+      "bounds": [
+        84,
+        120,
+        102,
+        138
+      ],
+      "safe_waypoint": [
+        93,
+        6,
+        122
+      ],
+      "neighbors": [
+        55,
+        64,
+        66
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        96,
+        11,
+        132
+      ],
+      "reward_pocket": {
+        "min": [
+          94,
+          11,
+          130
+        ],
+        "max": [
+          97,
+          13,
+          133
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          96,
+          11,
+          132
+        ]
+      }
+    },
+    {
+      "number": 66,
+      "theme": "dark",
+      "gravity": "up",
+      "cell": [
+        5,
+        6
+      ],
+      "bounds": [
+        102,
+        120,
+        120,
+        138
+      ],
+      "safe_waypoint": [
+        111,
+        6,
+        122
+      ],
+      "neighbors": [
+        65,
+        76
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        114,
+        11,
+        132
+      ],
+      "reward_pocket": {
+        "min": [
+          112,
+          11,
+          130
+        ],
+        "max": [
+          115,
+          13,
+          133
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          114,
+          11,
+          132
+        ]
+      }
+    },
+    {
+      "number": 67,
+      "theme": "zen",
+      "gravity": "north",
+      "cell": [
+        6,
+        6
+      ],
+      "bounds": [
+        120,
+        120,
+        138,
+        138
+      ],
+      "safe_waypoint": [
+        129,
+        6,
+        122
+      ],
+      "neighbors": [
+        57,
+        68,
+        77
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        132,
+        11,
+        127
+      ],
+      "reward_pocket": {
+        "min": [
+          130,
+          11,
+          125
+        ],
+        "max": [
+          133,
+          13,
+          128
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "north",
+        "chest": [
+          132,
+          11,
+          127
+        ]
+      }
+    },
+    {
+      "number": 68,
+      "theme": "flower",
+      "gravity": "west",
+      "cell": [
+        7,
+        6
+      ],
+      "bounds": [
+        138,
+        120,
+        156,
+        138
+      ],
+      "safe_waypoint": [
+        147,
+        6,
+        122
+      ],
+      "neighbors": [
+        67,
+        78
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        145,
+        11,
+        132
+      ],
+      "reward_pocket": {
+        "min": [
+          143,
+          11,
+          130
+        ],
+        "max": [
+          146,
+          13,
+          133
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "west",
+        "chest": [
+          145,
+          11,
+          132
+        ]
+      }
+    },
+    {
+      "number": 69,
+      "theme": "moon",
+      "gravity": "down",
+      "cell": [
+        8,
+        6
+      ],
+      "bounds": [
+        156,
+        120,
+        174,
+        138
+      ],
+      "safe_waypoint": [
+        165,
+        6,
+        122
+      ],
+      "neighbors": [
+        59,
+        70,
+        79
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        168,
+        6,
+        131
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 70,
+      "theme": "sakura",
+      "gravity": "south",
+      "cell": [
+        9,
+        6
+      ],
+      "bounds": [
+        174,
+        120,
+        192,
+        138
+      ],
+      "safe_waypoint": [
+        183,
+        6,
+        122
+      ],
+      "neighbors": [
+        69,
+        80
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        186,
+        11,
+        132
+      ],
+      "reward_pocket": {
+        "min": [
+          184,
+          11,
+          130
+        ],
+        "max": [
+          187,
+          13,
+          133
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "south",
+        "chest": [
+          186,
+          11,
+          132
+        ]
+      }
+    },
+    {
+      "number": 71,
+      "theme": "sakura",
+      "gravity": "up",
+      "cell": [
+        0,
+        7
+      ],
+      "bounds": [
+        12,
+        138,
+        30,
+        156
+      ],
+      "safe_waypoint": [
+        21,
+        6,
+        140
+      ],
+      "neighbors": [
+        72,
+        81
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        24,
+        11,
+        150
+      ],
+      "reward_pocket": {
+        "min": [
+          22,
+          11,
+          148
+        ],
+        "max": [
+          25,
+          13,
+          151
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          24,
+          11,
+          150
+        ]
+      }
+    },
+    {
+      "number": 72,
+      "theme": "emo",
+      "gravity": "east",
+      "cell": [
+        1,
+        7
+      ],
+      "bounds": [
+        30,
+        138,
+        48,
+        156
+      ],
+      "safe_waypoint": [
+        39,
+        6,
+        140
+      ],
+      "neighbors": [
+        71,
+        73
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        42,
+        11,
+        150
+      ],
+      "reward_pocket": {
+        "min": [
+          40,
+          11,
+          148
+        ],
+        "max": [
+          43,
+          13,
+          151
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          42,
+          11,
+          150
+        ]
+      }
+    },
+    {
+      "number": 73,
+      "theme": "dark",
+      "gravity": "up",
+      "cell": [
+        2,
+        7
+      ],
+      "bounds": [
+        48,
+        138,
+        66,
+        156
+      ],
+      "safe_waypoint": [
+        57,
+        6,
+        140
+      ],
+      "neighbors": [
+        63,
+        72
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        60,
+        11,
+        150
+      ],
+      "reward_pocket": {
+        "min": [
+          58,
+          11,
+          148
+        ],
+        "max": [
+          61,
+          13,
+          151
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          60,
+          11,
+          150
+        ]
+      }
+    },
+    {
+      "number": 74,
+      "theme": "zen",
+      "gravity": "north",
+      "cell": [
+        3,
+        7
+      ],
+      "bounds": [
+        66,
+        138,
+        84,
+        156
+      ],
+      "safe_waypoint": [
+        75,
+        6,
+        140
+      ],
+      "neighbors": [
+        64,
+        75,
+        84
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        78,
+        11,
+        145
+      ],
+      "reward_pocket": {
+        "min": [
+          76,
+          11,
+          143
+        ],
+        "max": [
+          79,
+          13,
+          146
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "north",
+        "chest": [
+          78,
+          11,
+          145
+        ]
+      }
+    },
+    {
+      "number": 75,
+      "theme": "flower",
+      "gravity": "west",
+      "cell": [
+        4,
+        7
+      ],
+      "bounds": [
+        84,
+        138,
+        102,
+        156
+      ],
+      "safe_waypoint": [
+        93,
+        6,
+        140
+      ],
+      "neighbors": [
+        74,
+        85
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        91,
+        11,
+        150
+      ],
+      "reward_pocket": {
+        "min": [
+          89,
+          11,
+          148
+        ],
+        "max": [
+          92,
+          13,
+          151
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "west",
+        "chest": [
+          91,
+          11,
+          150
+        ]
+      }
+    },
+    {
+      "number": 76,
+      "theme": "moon",
+      "gravity": "down",
+      "cell": [
+        5,
+        7
+      ],
+      "bounds": [
+        102,
+        138,
+        120,
+        156
+      ],
+      "safe_waypoint": [
+        111,
+        6,
+        140
+      ],
+      "neighbors": [
+        66,
+        77
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        114,
+        6,
+        149
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 77,
+      "theme": "sakura",
+      "gravity": "south",
+      "cell": [
+        6,
+        7
+      ],
+      "bounds": [
+        120,
+        138,
+        138,
+        156
+      ],
+      "safe_waypoint": [
+        129,
+        6,
+        140
+      ],
+      "neighbors": [
+        67,
+        76,
+        87
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        132,
+        11,
+        150
+      ],
+      "reward_pocket": {
+        "min": [
+          130,
+          11,
+          148
+        ],
+        "max": [
+          133,
+          13,
+          151
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "south",
+        "chest": [
+          132,
+          11,
+          150
+        ]
+      }
+    },
+    {
+      "number": 78,
+      "theme": "emo",
+      "gravity": "up",
+      "cell": [
+        7,
+        7
+      ],
+      "bounds": [
+        138,
+        138,
+        156,
+        156
+      ],
+      "safe_waypoint": [
+        147,
+        6,
+        140
+      ],
+      "neighbors": [
+        68,
+        79
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        150,
+        11,
+        150
+      ],
+      "reward_pocket": {
+        "min": [
+          148,
+          11,
+          148
+        ],
+        "max": [
+          151,
+          13,
+          151
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          150,
+          11,
+          150
+        ]
+      }
+    },
+    {
+      "number": 79,
+      "theme": "dark",
+      "gravity": "east",
+      "cell": [
+        8,
+        7
+      ],
+      "bounds": [
+        156,
+        138,
+        174,
+        156
+      ],
+      "safe_waypoint": [
+        165,
+        6,
+        140
+      ],
+      "neighbors": [
+        69,
+        78,
+        89
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        168,
+        11,
+        150
+      ],
+      "reward_pocket": {
+        "min": [
+          166,
+          11,
+          148
+        ],
+        "max": [
+          169,
+          13,
+          151
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          168,
+          11,
+          150
+        ]
+      }
+    },
+    {
+      "number": 80,
+      "theme": "zen",
+      "gravity": "down",
+      "cell": [
+        9,
+        7
+      ],
+      "bounds": [
+        174,
+        138,
+        192,
+        156
+      ],
+      "safe_waypoint": [
+        183,
+        6,
+        140
+      ],
+      "neighbors": [
+        70,
+        90
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        186,
+        6,
+        149
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 81,
+      "theme": "flower",
+      "gravity": "north",
+      "cell": [
+        0,
+        8
+      ],
+      "bounds": [
+        12,
+        156,
+        30,
+        174
+      ],
+      "safe_waypoint": [
+        21,
+        6,
+        158
+      ],
+      "neighbors": [
+        71,
+        91
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        24,
+        11,
+        163
+      ],
+      "reward_pocket": {
+        "min": [
+          22,
+          11,
+          161
+        ],
+        "max": [
+          25,
+          13,
+          164
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "north",
+        "chest": [
+          24,
+          11,
+          163
+        ]
+      }
+    },
+    {
+      "number": 82,
+      "theme": "moon",
+      "gravity": "west",
+      "cell": [
+        1,
+        8
+      ],
+      "bounds": [
+        30,
+        156,
+        48,
+        174
+      ],
+      "safe_waypoint": [
+        39,
+        6,
+        158
+      ],
+      "neighbors": [
+        83,
+        92
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        37,
+        11,
+        168
+      ],
+      "reward_pocket": {
+        "min": [
+          35,
+          11,
+          166
+        ],
+        "max": [
+          38,
+          13,
+          169
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "west",
+        "chest": [
+          37,
+          11,
+          168
+        ]
+      }
+    },
+    {
+      "number": 83,
+      "theme": "sakura",
+      "gravity": "down",
+      "cell": [
+        2,
+        8
+      ],
+      "bounds": [
+        48,
+        156,
+        66,
+        174
+      ],
+      "safe_waypoint": [
+        57,
+        6,
+        158
+      ],
+      "neighbors": [
+        82,
+        93
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        60,
+        6,
+        167
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 84,
+      "theme": "emo",
+      "gravity": "south",
+      "cell": [
+        3,
+        8
+      ],
+      "bounds": [
+        66,
+        156,
+        84,
+        174
+      ],
+      "safe_waypoint": [
+        75,
+        6,
+        158
+      ],
+      "neighbors": [
+        74,
+        94
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        78,
+        11,
+        168
+      ],
+      "reward_pocket": {
+        "min": [
+          76,
+          11,
+          166
+        ],
+        "max": [
+          79,
+          13,
+          169
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "south",
+        "chest": [
+          78,
+          11,
+          168
+        ]
+      }
+    },
+    {
+      "number": 85,
+      "theme": "dark",
+      "gravity": "up",
+      "cell": [
+        4,
+        8
+      ],
+      "bounds": [
+        84,
+        156,
+        102,
+        174
+      ],
+      "safe_waypoint": [
+        93,
+        6,
+        158
+      ],
+      "neighbors": [
+        75,
+        86
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        96,
+        11,
+        168
+      ],
+      "reward_pocket": {
+        "min": [
+          94,
+          11,
+          166
+        ],
+        "max": [
+          97,
+          13,
+          169
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          96,
+          11,
+          168
+        ]
+      }
+    },
+    {
+      "number": 86,
+      "theme": "zen",
+      "gravity": "east",
+      "cell": [
+        5,
+        8
+      ],
+      "bounds": [
+        102,
+        156,
+        120,
+        174
+      ],
+      "safe_waypoint": [
+        111,
+        6,
+        158
+      ],
+      "neighbors": [
+        85,
+        87
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        114,
+        11,
+        168
+      ],
+      "reward_pocket": {
+        "min": [
+          112,
+          11,
+          166
+        ],
+        "max": [
+          115,
+          13,
+          169
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          114,
+          11,
+          168
+        ]
+      }
+    },
+    {
+      "number": 87,
+      "theme": "flower",
+      "gravity": "down",
+      "cell": [
+        6,
+        8
+      ],
+      "bounds": [
+        120,
+        156,
+        138,
+        174
+      ],
+      "safe_waypoint": [
+        129,
+        6,
+        158
+      ],
+      "neighbors": [
+        77,
+        86,
+        88
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        132,
+        6,
+        167
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 88,
+      "theme": "moon",
+      "gravity": "up",
+      "cell": [
+        7,
+        8
+      ],
+      "bounds": [
+        138,
+        156,
+        156,
+        174
+      ],
+      "safe_waypoint": [
+        147,
+        6,
+        158
+      ],
+      "neighbors": [
+        87,
+        98
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        150,
+        11,
+        168
+      ],
+      "reward_pocket": {
+        "min": [
+          148,
+          11,
+          166
+        ],
+        "max": [
+          151,
+          13,
+          169
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          150,
+          11,
+          168
+        ]
+      }
+    },
+    {
+      "number": 89,
+      "theme": "sakura",
+      "gravity": "east",
+      "cell": [
+        8,
+        8
+      ],
+      "bounds": [
+        156,
+        156,
+        174,
+        174
+      ],
+      "safe_waypoint": [
+        165,
+        6,
+        158
+      ],
+      "neighbors": [
+        79,
+        90,
+        99
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        168,
+        11,
+        168
+      ],
+      "reward_pocket": {
+        "min": [
+          166,
+          11,
+          166
+        ],
+        "max": [
+          169,
+          13,
+          169
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          168,
+          11,
+          168
+        ]
+      }
+    },
+    {
+      "number": 90,
+      "theme": "emo",
+      "gravity": "up",
+      "cell": [
+        9,
+        8
+      ],
+      "bounds": [
+        174,
+        156,
+        192,
+        174
+      ],
+      "safe_waypoint": [
+        183,
+        6,
+        158
+      ],
+      "neighbors": [
+        80,
+        89,
+        100
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        186,
+        11,
+        168
+      ],
+      "reward_pocket": {
+        "min": [
+          184,
+          11,
+          166
+        ],
+        "max": [
+          187,
+          13,
+          169
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          186,
+          11,
+          168
+        ]
+      }
+    },
+    {
+      "number": 91,
+      "theme": "emo",
+      "gravity": "south",
+      "cell": [
+        0,
+        9
+      ],
+      "bounds": [
+        12,
+        174,
+        30,
+        192
+      ],
+      "safe_waypoint": [
+        21,
+        6,
+        176
+      ],
+      "neighbors": [
+        81
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        24,
+        11,
+        186
+      ],
+      "reward_pocket": {
+        "min": [
+          22,
+          11,
+          184
+        ],
+        "max": [
+          25,
+          13,
+          187
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "south",
+        "chest": [
+          24,
+          11,
+          186
+        ]
+      }
+    },
+    {
+      "number": 92,
+      "theme": "dark",
+      "gravity": "up",
+      "cell": [
+        1,
+        9
+      ],
+      "bounds": [
+        30,
+        174,
+        48,
+        192
+      ],
+      "safe_waypoint": [
+        39,
+        6,
+        176
+      ],
+      "neighbors": [
+        82,
+        93
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        42,
+        11,
+        186
+      ],
+      "reward_pocket": {
+        "min": [
+          40,
+          11,
+          184
+        ],
+        "max": [
+          43,
+          13,
+          187
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          42,
+          11,
+          186
+        ]
+      }
+    },
+    {
+      "number": 93,
+      "theme": "zen",
+      "gravity": "east",
+      "cell": [
+        2,
+        9
+      ],
+      "bounds": [
+        48,
+        174,
+        66,
+        192
+      ],
+      "safe_waypoint": [
+        57,
+        6,
+        176
+      ],
+      "neighbors": [
+        83,
+        92,
+        94
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        60,
+        11,
+        186
+      ],
+      "reward_pocket": {
+        "min": [
+          58,
+          11,
+          184
+        ],
+        "max": [
+          61,
+          13,
+          187
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          60,
+          11,
+          186
+        ]
+      }
+    },
+    {
+      "number": 94,
+      "theme": "flower",
+      "gravity": "down",
+      "cell": [
+        3,
+        9
+      ],
+      "bounds": [
+        66,
+        174,
+        84,
+        192
+      ],
+      "safe_waypoint": [
+        75,
+        6,
+        176
+      ],
+      "neighbors": [
+        84,
+        93,
+        95
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        78,
+        6,
+        185
+      ],
+      "reward_pocket": null
+    },
+    {
+      "number": 95,
+      "theme": "moon",
+      "gravity": "up",
+      "cell": [
+        4,
+        9
+      ],
+      "bounds": [
+        84,
+        174,
+        102,
+        192
+      ],
+      "safe_waypoint": [
+        93,
+        6,
+        176
+      ],
+      "neighbors": [
+        94,
+        96
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        96,
+        11,
+        186
+      ],
+      "reward_pocket": {
+        "min": [
+          94,
+          11,
+          184
+        ],
+        "max": [
+          97,
+          13,
+          187
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          96,
+          11,
+          186
+        ]
+      }
+    },
+    {
+      "number": 96,
+      "theme": "sakura",
+      "gravity": "east",
+      "cell": [
+        5,
+        9
+      ],
+      "bounds": [
+        102,
+        174,
+        120,
+        192
+      ],
+      "safe_waypoint": [
+        111,
+        6,
+        176
+      ],
+      "neighbors": [
+        95,
+        97
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        114,
+        11,
+        186
+      ],
+      "reward_pocket": {
+        "min": [
+          112,
+          11,
+          184
+        ],
+        "max": [
+          115,
+          13,
+          187
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "east",
+        "chest": [
+          114,
+          11,
+          186
+        ]
+      }
+    },
+    {
+      "number": 97,
+      "theme": "emo",
+      "gravity": "up",
+      "cell": [
+        6,
+        9
+      ],
+      "bounds": [
+        120,
+        174,
+        138,
+        192
+      ],
+      "safe_waypoint": [
+        129,
+        6,
+        176
+      ],
+      "neighbors": [
+        96
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        132,
+        11,
+        186
+      ],
+      "reward_pocket": {
+        "min": [
+          130,
+          11,
+          184
+        ],
+        "max": [
+          133,
+          13,
+          187
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "up",
+        "chest": [
+          132,
+          11,
+          186
+        ]
+      }
+    },
+    {
+      "number": 98,
+      "theme": "dark",
+      "gravity": "north",
+      "cell": [
+        7,
+        9
+      ],
+      "bounds": [
+        138,
+        174,
+        156,
+        192
+      ],
+      "safe_waypoint": [
+        147,
+        6,
+        176
+      ],
+      "neighbors": [
+        88,
+        99
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        150,
+        11,
+        181
+      ],
+      "reward_pocket": {
+        "min": [
+          148,
+          11,
+          179
+        ],
+        "max": [
+          151,
+          13,
+          182
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "north",
+        "chest": [
+          150,
+          11,
+          181
+        ]
+      }
+    },
+    {
+      "number": 99,
+      "theme": "zen",
+      "gravity": "west",
+      "cell": [
+        8,
+        9
+      ],
+      "bounds": [
+        156,
+        174,
+        174,
+        192
+      ],
+      "safe_waypoint": [
+        165,
+        6,
+        176
+      ],
+      "neighbors": [
+        89,
+        98,
+        100
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        163,
+        11,
+        186
+      ],
+      "reward_pocket": {
+        "min": [
+          161,
+          11,
+          184
+        ],
+        "max": [
+          164,
+          13,
+          187
+        ],
+        "gravity": "down",
+        "support_y": 10,
+        "entry_from": "west",
+        "chest": [
+          163,
+          11,
+          186
+        ]
+      }
+    },
+    {
+      "number": 100,
+      "theme": "flower",
+      "gravity": "down",
+      "cell": [
+        9,
+        9
+      ],
+      "bounds": [
+        174,
+        174,
+        192,
+        192
+      ],
+      "safe_waypoint": [
+        183,
+        6,
+        176
+      ],
+      "neighbors": [
+        90,
+        99
+      ],
+      "loot": 4,
+      "challenge_chest": [
+        186,
+        6,
+        185
+      ],
+      "reward_pocket": null
+    }
+  ],
+  "room_count": 100,
+  "graph_edges": 116,
+  "independent_cycles": 17,
+  "dead_end_rooms": [
+    1,
+    60,
+    91,
+    97
+  ],
+  "safe_promenade_bfs_reachable_cells": 28172,
+  "all_room_promenades_reachable_without_entering_gravity_zones": true,
+  "promenade_chests": 300,
+  "challenge_chests": 100,
+  "elevated_gravity_reward_pockets": 80,
+  "gravity_chambers": 100,
+  "spawner_policy": "20 initial, 40-100 tick interval; 3 per burst; cap12; bright rooms allowed",
+  "geometry_checks": "Normal-gravity 2-high promenade BFS, all 100 room waypoints and 300 restock chests; 100 challenge chests inside chambers, 80 on high normal-gravity reward ledges connected to active gravity support surface; deterministic graph plus17loops. Actual gravity movement requires game playtest."
+}

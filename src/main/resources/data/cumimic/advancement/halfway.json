@@ -1,0 +1,26 @@
+{
+  "parent": "cumimic:lights_out",
+  "display": {
+    "icon": {
+      "id": "minecraft:cherry_sapling"
+    },
+    "title": {
+      "text": "Halfway to Heaven"
+    },
+    "description": {
+      "text": "Reach the 13th floor of the Mimic Pagoda"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 50
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.unyielding.upsidedown.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "EntityAccessor", "EntityMixin", "LivingEntityMixin", "PlayerMixin", "ServerPlayerMixin",
+    "ServerGamePacketListenerImplMixin", "PathNavigationMixin", "MeleeAttackGoalMixin", "BlockStateBaseMixin",
+    "ProjectileMixin", "ThrowableProjectileMixin", "AbstractArrowMixin", "DirectionMixin", "DungeonLevelMixin"
+  ],
+  "client": [
+    "client.MouseHandlerMixin", "client.LivingEntityRendererMixin", "client.GameRendererMixin", "client.CameraMixin",
+    "client.LocalPlayerMixin", "client.ScreenEffectRendererMixin", "client.EntityRenderDispatcherMixin", "client.EntityRendererMixin"
+  ],
+  "injectors": { "defaultRequire": 1 }
+}

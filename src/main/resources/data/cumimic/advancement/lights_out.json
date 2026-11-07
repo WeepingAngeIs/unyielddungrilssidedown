@@ -1,0 +1,23 @@
+{
+  "parent": "cumimic:root",
+  "display": {
+    "icon": {
+      "id": "minecraft:black_candle"
+    },
+    "title": {
+      "text": "Lights Out"
+    },
+    "description": {
+      "text": "Climb past the 2nd floor, where the lights die and the Mimics wake up"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "cumimic:halfway",
+  "display": {
+    "icon": {
+      "id": "minecraft:bell"
+    },
+    "title": {
+      "text": "Top of the Pagoda"
+    },
+    "description": {
+      "text": "Reach the top floor of the Mimic Pagoda"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 300
+  }
+}

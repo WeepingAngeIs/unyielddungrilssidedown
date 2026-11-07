@@ -1,0 +1,26 @@
+{
+  "parent": "cumimic:first_blood",
+  "display": {
+    "icon": {
+      "id": "minecraft:netherite_chestplate"
+    },
+    "title": {
+      "text": "Dressed to Kill"
+    },
+    "description": {
+      "text": "Defeat a Mimic wearing a full set of netherite armor"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 50
+  }
+}

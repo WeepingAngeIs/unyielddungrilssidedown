@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "cuupsidedown:block/moon_wall",
+    "north": "cuupsidedown:block/moon_wall",
+    "south": "cuupsidedown:block/moon_wall",
+    "east": "cuupsidedown:block/moon_wall",
+    "west": "cuupsidedown:block/moon_wall",
+    "up": "cuupsidedown:block/lacquer",
+    "down": "cuupsidedown:block/lacquer"
+  }
+}

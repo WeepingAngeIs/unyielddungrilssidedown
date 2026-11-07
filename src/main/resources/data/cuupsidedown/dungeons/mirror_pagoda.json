@@ -1,0 +1,807 @@
+{
+  "id": "mirror_pagoda",
+  "name": "Mirror Sakura Pagoda \u2014 25 + 25 Floors",
+  "size": [
+    97,
+    636,
+    107
+  ],
+  "offset": [
+    -48,
+    -323,
+    -48
+  ],
+  "spawn": [
+    48,
+    324,
+    103
+  ],
+  "volume": 6601044,
+  "non_air": 299163,
+  "palette": [
+    "minecraft:air",
+    "cuupsidedown:blossom_floor",
+    "cuupsidedown:sakura_wall",
+    "minecraft:stripped_cherry_log[axis=y]",
+    "minecraft:pink_stained_glass",
+    "minecraft:deepslate_tiles",
+    "cuupsidedown:temple_stairs[facing=north,half=top,shape=straight,waterlogged=false]",
+    "cuupsidedown:temple_stairs[facing=south,half=top,shape=straight,waterlogged=false]",
+    "minecraft:pink_concrete",
+    "lootr:lootr_chest[facing=north,type=single,waterlogged=false]",
+    "cuupsidedown:tea_table[mount=up]",
+    "cuupsidedown:flower_planter[mount=up]",
+    "cuupsidedown:lantern",
+    "minecraft:spawner",
+    "cuupsidedown:temple_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]",
+    "cuupsidedown:dark_floor",
+    "cuupsidedown:temple_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]",
+    "cuupsidedown:dark_wall",
+    "minecraft:purple_concrete",
+    "minecraft:polished_blackstone_bricks",
+    "cuupsidedown:zen_wall",
+    "minecraft:smooth_sandstone",
+    "minecraft:moss_block",
+    "cuupsidedown:moon_wall",
+    "minecraft:amethyst_block",
+    "cuupsidedown:temple_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]",
+    "cuupsidedown:tea_table[mount=down]",
+    "cuupsidedown:flower_planter[mount=down]",
+    "cuupsidedown:temple_stairs[facing=east,half=top,shape=straight,waterlogged=false]",
+    "minecraft:chain[axis=y,waterlogged=false]",
+    "minecraft:stone",
+    "minecraft:ladder[facing=north,waterlogged=false]",
+    "minecraft:cherry_planks",
+    "minecraft:cherry_log[axis=y]",
+    "minecraft:cherry_leaves[distance=7,persistent=true,waterlogged=false]"
+  ],
+  "runs": 158183,
+  "block_entities": {
+    "lootr:lootr_chest": 200,
+    "minecraft:mob_spawner": 130
+  },
+  "loot_counts": {
+    "cuupsidedown:chests/pagoda_rare": 199,
+    "cuupsidedown:chests/pagoda_final": 1
+  },
+  "zones": [
+    {
+      "name": "mirror_pagoda_up",
+      "min": [
+        16,
+        0,
+        16
+      ],
+      "max": [
+        80,
+        317,
+        80
+      ],
+      "gravity": "up"
+    }
+  ],
+  "rooms": [
+    {
+      "wing": "upright",
+      "floor": 1,
+      "base_y": 323,
+      "radius": 27,
+      "theme": "sakura",
+      "spawners": 1,
+      "loot": 4,
+      "landing": [
+        43,
+        324,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 2,
+      "base_y": 335,
+      "radius": 27,
+      "theme": "sakura",
+      "spawners": 1,
+      "loot": 4,
+      "landing": [
+        43,
+        336,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 3,
+      "base_y": 347,
+      "radius": 27,
+      "theme": "sakura",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        348,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 4,
+      "base_y": 359,
+      "radius": 26,
+      "theme": "sakura",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        360,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 5,
+      "base_y": 371,
+      "radius": 26,
+      "theme": "emo",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        372,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 6,
+      "base_y": 383,
+      "radius": 26,
+      "theme": "emo",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        384,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 7,
+      "base_y": 395,
+      "radius": 25,
+      "theme": "emo",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        396,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 8,
+      "base_y": 407,
+      "radius": 25,
+      "theme": "emo",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        408,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 9,
+      "base_y": 419,
+      "radius": 25,
+      "theme": "dark",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        420,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 10,
+      "base_y": 431,
+      "radius": 24,
+      "theme": "dark",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        432,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 11,
+      "base_y": 443,
+      "radius": 24,
+      "theme": "dark",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        444,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 12,
+      "base_y": 455,
+      "radius": 24,
+      "theme": "dark",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        456,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 13,
+      "base_y": 467,
+      "radius": 23,
+      "theme": "zen",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        468,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 14,
+      "base_y": 479,
+      "radius": 23,
+      "theme": "zen",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        480,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 15,
+      "base_y": 491,
+      "radius": 23,
+      "theme": "zen",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        492,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 16,
+      "base_y": 503,
+      "radius": 22,
+      "theme": "zen",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        504,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 17,
+      "base_y": 515,
+      "radius": 22,
+      "theme": "flower",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        516,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 18,
+      "base_y": 527,
+      "radius": 22,
+      "theme": "flower",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        528,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 19,
+      "base_y": 539,
+      "radius": 21,
+      "theme": "flower",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        540,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 20,
+      "base_y": 551,
+      "radius": 21,
+      "theme": "flower",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        552,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 21,
+      "base_y": 563,
+      "radius": 21,
+      "theme": "moon",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        564,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 22,
+      "base_y": 575,
+      "radius": 20,
+      "theme": "moon",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        576,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 23,
+      "base_y": 587,
+      "radius": 20,
+      "theme": "moon",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        588,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 24,
+      "base_y": 599,
+      "radius": 20,
+      "theme": "moon",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        600,
+        40
+      ]
+    },
+    {
+      "wing": "upright",
+      "floor": 25,
+      "base_y": 611,
+      "radius": 19,
+      "theme": "sakura",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        612,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 1,
+      "base_y": 312,
+      "radius": 27,
+      "theme": "sakura",
+      "spawners": 1,
+      "loot": 4,
+      "landing": [
+        43,
+        324,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 2,
+      "base_y": 300,
+      "radius": 27,
+      "theme": "sakura",
+      "spawners": 1,
+      "loot": 4,
+      "landing": [
+        43,
+        336,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 3,
+      "base_y": 288,
+      "radius": 27,
+      "theme": "sakura",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        348,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 4,
+      "base_y": 276,
+      "radius": 26,
+      "theme": "sakura",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        360,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 5,
+      "base_y": 264,
+      "radius": 26,
+      "theme": "emo",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        372,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 6,
+      "base_y": 252,
+      "radius": 26,
+      "theme": "emo",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        384,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 7,
+      "base_y": 240,
+      "radius": 25,
+      "theme": "emo",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        396,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 8,
+      "base_y": 228,
+      "radius": 25,
+      "theme": "emo",
+      "spawners": 2,
+      "loot": 4,
+      "landing": [
+        43,
+        408,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 9,
+      "base_y": 216,
+      "radius": 25,
+      "theme": "dark",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        420,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 10,
+      "base_y": 204,
+      "radius": 24,
+      "theme": "dark",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        432,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 11,
+      "base_y": 192,
+      "radius": 24,
+      "theme": "dark",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        444,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 12,
+      "base_y": 180,
+      "radius": 24,
+      "theme": "dark",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        456,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 13,
+      "base_y": 168,
+      "radius": 23,
+      "theme": "zen",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        468,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 14,
+      "base_y": 156,
+      "radius": 23,
+      "theme": "zen",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        480,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 15,
+      "base_y": 144,
+      "radius": 23,
+      "theme": "zen",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        492,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 16,
+      "base_y": 132,
+      "radius": 22,
+      "theme": "zen",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        504,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 17,
+      "base_y": 120,
+      "radius": 22,
+      "theme": "flower",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        516,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 18,
+      "base_y": 108,
+      "radius": 22,
+      "theme": "flower",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        528,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 19,
+      "base_y": 96,
+      "radius": 21,
+      "theme": "flower",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        540,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 20,
+      "base_y": 84,
+      "radius": 21,
+      "theme": "flower",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        552,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 21,
+      "base_y": 72,
+      "radius": 21,
+      "theme": "moon",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        564,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 22,
+      "base_y": 60,
+      "radius": 20,
+      "theme": "moon",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        576,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 23,
+      "base_y": 48,
+      "radius": 20,
+      "theme": "moon",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        588,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 24,
+      "base_y": 36,
+      "radius": 20,
+      "theme": "moon",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        600,
+        40
+      ]
+    },
+    {
+      "wing": "inverted",
+      "floor": 25,
+      "base_y": 24,
+      "radius": 19,
+      "theme": "sakura",
+      "spawners": 3,
+      "loot": 4,
+      "landing": [
+        43,
+        612,
+        40
+      ]
+    }
+  ],
+  "floors_per_wing": 25,
+  "floor_spacing": 12,
+  "ground_local_y": 323,
+  "world_y_range_relative_anchor": [
+    -323,
+    312
+  ],
+  "stairs": {
+    "width": 3,
+    "flights_per_storey": 2,
+    "rise_per_flight": 6,
+    "normal_and_mirrored_headroom_verified": true,
+    "upper_floor_access_bfs": true
+  },
+  "final_chest_local": [
+    60,
+    19,
+    57
+  ],
+  "normal_stair_bfs_reachable_nodes": 51514,
+  "spawner_policy": "20 initial, 40-100 tick interval; 3 per burst; cap12; bright rooms allowed",
+  "geometry_checks": "All 25 upright floors and all upright chests reached by 2-block headroom/support graph. All 864 staircase blocks and reflected counterpart states/headroom verified. Mirror mapping proves same geometry in UP gravity; in-game collision playtest remains required."
+}

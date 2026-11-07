@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "cuupsidedown:block/dark_floor",
+    "top": "cuupsidedown:block/dark_floor",
+    "side": "cuupsidedown:block/lacquer"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "cumimic:is_that_me",
+  "display": {
+    "icon": {
+      "id": "minecraft:diamond_sword"
+    },
+    "title": {
+      "text": "Mirror Match"
+    },
+    "description": {
+      "text": "Defeat a Mimic wearing your own face"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 50
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "cuupsidedown:block/blossom_floor",
+    "north": "cuupsidedown:block/lacquer",
+    "south": "cuupsidedown:block/lacquer",
+    "east": "cuupsidedown:block/lacquer",
+    "west": "cuupsidedown:block/lacquer",
+    "up": "cuupsidedown:block/blossom_floor",
+    "down": "cuupsidedown:block/lacquer"
+  }
+}

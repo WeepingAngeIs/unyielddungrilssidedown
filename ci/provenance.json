@@ -1,0 +1,14 @@
+[
+  {
+    "filename": "cu-mimic-dungeon-1.0.1.jar",
+    "sha256": "c439e07a3b9ae0eaf85709c8ccf2a5df15faeae6f295e3e510c42921e9bcc52f",
+    "bytes": 31892,
+    "source": "Author-provided original binary; hash identifies the unchanged recovery input. Binary is not redistributed in this repository."
+  },
+  {
+    "filename": "upsidedown-1.1.0.jar",
+    "sha256": "dfcaa5fc269cb34cb297498e43aca6e346f6045542542119a707c43a99331092",
+    "bytes": 109696,
+    "source": "Author-provided original binary; hash identifies the unchanged recovery input. Binary is not redistributed in this repository."
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "parent": "cumimic:hunter",
+  "display": {
+    "icon": {
+      "id": "minecraft:mace"
+    },
+    "title": {
+      "text": "Mimic Exterminator"
+    },
+    "description": {
+      "text": "Defeat 100 Mimics"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 500
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "parent": "cumimic:lights_out",
+  "display": {
+    "icon": {
+      "id": "minecraft:skeleton_skull"
+    },
+    "title": {
+      "text": "Slain by Mimic"
+    },
+    "description": {
+      "text": "Get slain by a Mimic"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

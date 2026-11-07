@@ -1,0 +1,68 @@
+[
+  {
+    "name": "architectury-13.0.11-neoforge.jar",
+    "file": "architectury-13.0.11-neoforge.jar",
+    "url": "https://edge.forgecdn.net/files/8492/726/architectury-13.0.11-neoforge.jar",
+    "sha256": "9cc92f2c09533fc5482c60f993bd891c655a0e32b637037cdcb7c2b23adedeeb",
+    "bytes": 584734,
+    "project_id": 419699,
+    "file_id": 8492726,
+    "source": "https://www.curseforge.com/minecraft/mc-mods/architectury-api/files/8492726",
+    "display_name": "Architectury API"
+  },
+  {
+    "name": "Cobblemon-neoforge-1.8.4+1.21.1.jar",
+    "file": "Cobblemon-neoforge-1.8.4+1.21.1.jar",
+    "url": "https://edge.forgecdn.net/files/9341/850/Cobblemon-neoforge-1.8.4%2b1.21.1.jar",
+    "sha256": "89306baca7b4332fc4dcc448507b45ca0133254c70f77990a63c500ed9a7b863",
+    "bytes": 141635727,
+    "project_id": 687131,
+    "file_id": 9341850,
+    "source": "https://www.curseforge.com/minecraft/mc-mods/cobblemon/files/9341850",
+    "display_name": "Cobblemon"
+  },
+  {
+    "name": "fzzy_config-0.7.7+1.21+neoforge.jar",
+    "file": "fzzy_config-0.7.7+1.21+neoforge.jar",
+    "url": "https://edge.forgecdn.net/files/8883/390/fzzy_config-0.7.7%2b1.21%2bneoforge.jar",
+    "sha256": "26af871cacd134ce52610384bbdd362a018707444eb2d498e4833063f378cf85",
+    "bytes": 2392693,
+    "project_id": 1005914,
+    "file_id": 8883390,
+    "source": "https://www.curseforge.com/minecraft/mc-mods/fzzy-config/files/8883390",
+    "display_name": "Fzzy Config"
+  },
+  {
+    "name": "kotlinforforge-5.12.0-all.jar",
+    "file": "kotlinforforge-5.12.0-all.jar",
+    "url": "https://edge.forgecdn.net/files/8335/665/kotlinforforge-5.12.0-all.jar",
+    "sha256": "095aed94f21b4e55895b21ea957750ae3ab829fbcfc6d3c66a3489f5f1128d46",
+    "bytes": 7279276,
+    "project_id": 351264,
+    "file_id": 8335665,
+    "source": "https://www.curseforge.com/minecraft/mc-mods/kotlin-for-forge/files/8335665",
+    "display_name": "Kotlin for Forge"
+  },
+  {
+    "name": "lootr-neoforge-1.21.1-1.11.38.125.jar",
+    "file": "lootr-neoforge-1.21.1-1.11.38.125.jar",
+    "url": "https://edge.forgecdn.net/files/8811/105/lootr-neoforge-1.21.1-1.11.38.125.jar",
+    "sha256": "091878598fa5cb51cd304bf9324afe46420d328b6f77a9ba38acc15e26945e9e",
+    "bytes": 1000464,
+    "project_id": 361276,
+    "file_id": 8811105,
+    "source": "https://www.curseforge.com/minecraft/mc-mods/lootr/files/8811105",
+    "display_name": "Lootr (Forge & NeoForge)"
+  },
+  {
+    "name": "simplyswords-neoforge-1.70.2-1.21.1.jar",
+    "file": "simplyswords-neoforge-1.70.2-1.21.1.jar",
+    "url": "https://edge.forgecdn.net/files/8746/1/simplyswords-neoforge-1.70.2-1.21.1.jar",
+    "sha256": "5e75bd66ea489079d60c9c1ed98762550fbc0bee88cd7af399f17bbeb56608c3",
+    "bytes": 16282660,
+    "project_id": 659887,
+    "file_id": 8746001,
+    "source": "https://www.curseforge.com/minecraft/mc-mods/simply-swords/files/8746001",
+    "display_name": "Simply Swords [Fabric & Forge]"
+  }
+]

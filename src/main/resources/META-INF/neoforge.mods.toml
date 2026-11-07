@@ -1,0 +1,84 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="MIT"
+
+[[mods]]
+modId="cuupsidedown"
+version="1.2.0-beta.1"
+displayName="Unyielding: Upside Down Dungeons"
+authors="Cobblemon Unyielding"
+description='''
+Gravity zones. Inside a zone set with /flipzone, gravity points up (players stand on the ceiling with the
+camera turned over) or sideways (any wall becomes the floor: real wall walking, the view turns with you).
+Players, mobs, Pokemon, items and thrown things all follow the zone's gravity.
+Includes the original gravity layouts, Mimic module, a 100-room Sakura Labyrinth and mirrored Japanese pagoda.
+New dungeons only spawn via /dungeon preview and explicit confirmation, with protected blocks, backups and per-player loot.
+Needed on both the server and the client. Replaces the old separate Upside Down and Mimic Dungeon jars.
+'''
+
+[[mixins]]
+config="cuupsidedown.mixins.json"
+
+[[dependencies.cuupsidedown]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.195,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.cuupsidedown]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.cuupsidedown]]
+modId="lootr"
+type="required"
+versionRange="[1.21.1-1.11,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.cuupsidedown]]
+modId="cobblemon"
+type="required"
+versionRange="[1.8.4,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.cuupsidedown]]
+modId="simplyswords"
+type="required"
+versionRange="[1.70.2,)"
+ordering="AFTER"
+side="BOTH"
+
+[[mods]]
+modId="cumimic"
+version="1.0.1"
+displayName="Unyielding: Mimic Dungeon"
+authors="Cobblemon Unyielding"
+description='''
+Mimics: spawner mobs tagged cu_mimic look like a random online player and wear a copy of that
+player's current gear. They only drop cow loot, deaths say "slain by Mimic", and the Mimic
+Pagoda advancements track kills and floors. Server-side only.
+'''
+displayTest="IGNORE_ALL_VERSION"
+
+[[accessTransformers]]
+file="META-INF/accesstransformer.cfg"
+
+[[dependencies.cumimic]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.cumimic]]
+modId="minecraft"
+type="required"
+versionRange="[1.21.1]"
+ordering="NONE"
+side="BOTH"

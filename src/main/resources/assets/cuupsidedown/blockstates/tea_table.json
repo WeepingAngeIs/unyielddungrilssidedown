@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "mount=up": {
+      "model": "cuupsidedown:block/tea_table_up"
+    },
+    "mount=down": {
+      "model": "cuupsidedown:block/tea_table_down"
+    },
+    "mount=north": {
+      "model": "cuupsidedown:block/tea_table_north"
+    },
+    "mount=south": {
+      "model": "cuupsidedown:block/tea_table_south"
+    },
+    "mount=east": {
+      "model": "cuupsidedown:block/tea_table_east"
+    },
+    "mount=west": {
+      "model": "cuupsidedown:block/tea_table_west"
+    }
+  }
+}

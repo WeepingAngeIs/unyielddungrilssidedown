@@ -1,0 +1,23 @@
+{
+  "parent": "cumimic:lights_out",
+  "display": {
+    "icon": {
+      "id": "minecraft:player_head"
+    },
+    "title": {
+      "text": "Is That... Me?"
+    },
+    "description": {
+      "text": "See a Mimic wearing your own face"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

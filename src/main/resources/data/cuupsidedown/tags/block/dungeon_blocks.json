@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "cuupsidedown:sakura_wall",
+    "cuupsidedown:dark_wall",
+    "cuupsidedown:zen_wall",
+    "cuupsidedown:moon_wall",
+    "cuupsidedown:blossom_floor",
+    "cuupsidedown:dark_floor",
+    "cuupsidedown:lantern",
+    "cuupsidedown:temple_stairs",
+    "cuupsidedown:tea_table",
+    "cuupsidedown:flower_planter"
+  ]
+}

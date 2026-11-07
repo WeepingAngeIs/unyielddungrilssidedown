@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "mount=up": {
+      "model": "cuupsidedown:block/flower_planter_up"
+    },
+    "mount=down": {
+      "model": "cuupsidedown:block/flower_planter_down"
+    },
+    "mount=north": {
+      "model": "cuupsidedown:block/flower_planter_north"
+    },
+    "mount=south": {
+      "model": "cuupsidedown:block/flower_planter_south"
+    },
+    "mount=east": {
+      "model": "cuupsidedown:block/flower_planter_east"
+    },
+    "mount=west": {
+      "model": "cuupsidedown:block/flower_planter_west"
+    }
+  }
+}

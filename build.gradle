@@ -1,0 +1,37 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.148'
+}
+group = 'dev.unyielding'
+version = '1.2.0-beta.1'
+base.archivesName = 'upsidedown'
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+neoForge {
+    version = '21.1.249'
+    accessTransformers.from('src/main/resources/META-INF/accesstransformer.cfg')
+    runs { client { client() }; server { server() } }
+    mods { cuupsidedown { sourceSet(sourceSets.main) } }
+}
+repositories { mavenCentral() }
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+tasks.withType(AbstractArchiveTask).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+// Pure production geometry checks, independent of a running Minecraft client.
+tasks.register('geometryCheck', JavaExec) {
+    dependsOn tasks.named('testClasses')
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'dev.unyielding.upsidedown.dungeon.block.GeometryCheck'
+}
+tasks.named('check') { dependsOn tasks.named('geometryCheck') }
+
+// Assertions run through explicit JavaExec checks; this project deliberately has no JUnit engine.
+tasks.named('test') { failOnNoDiscoveredTests = false }
+tasks.register('dungeonDataCheck', JavaExec) {
+    dependsOn tasks.named('testClasses')
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'dev.unyielding.upsidedown.dungeon.DungeonDataCheck'
+}
+tasks.named('check') { dependsOn tasks.named('dungeonDataCheck') }

@@ -1,0 +1,14 @@
+// Optional local QA profile. Never reads or writes an installed Minecraft profile.
+// Usage: gradlew.bat -I tools/client-smoke.init.gradle runClient
+gradle.beforeProject { target ->
+    target.pluginManager.withPlugin('net.neoforged.moddev') {
+        target.extensions.getByName('neoForge').runs.configureEach {
+            if (name == 'client') {
+                gameDirectory.set(target.layout.projectDirectory.dir('run-client'))
+                programArguments.addAll('--quickPlayMultiplayer', '127.0.0.1:25595',
+                                        '--username', 'DungeonQA', '--width', '1280', '--height', '800')
+                jvmArguments.add('-Xmx4G')
+            }
+        }
+    }
+}

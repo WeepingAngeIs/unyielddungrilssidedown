@@ -1,0 +1,28 @@
+# Local Gradle/build products
+.gradle/
+.cache/
+cache/
+caches/
+build/
+out/
+
+# Disposable local game/test environments (not source or CI configuration)
+/run*/
+/test-server/
+/test-runtime/
+/smoke-runtime/
+/.ci-runtime/
+logs/
+*.log
+
+# Recovery inputs and raw decompiler output are not redistributed
+vendor/
+decompiled/
+
+# Local visual reviews and runtime evidence
+art-review/
+test-evidence/
+
+# Python caches
+__pycache__/
+*.py[cod]

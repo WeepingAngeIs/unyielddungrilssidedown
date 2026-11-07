@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "cuupsidedown:block/dark_wall",
+    "north": "cuupsidedown:block/dark_wall",
+    "south": "cuupsidedown:block/dark_wall",
+    "east": "cuupsidedown:block/dark_wall",
+    "west": "cuupsidedown:block/dark_wall",
+    "up": "cuupsidedown:block/lacquer",
+    "down": "cuupsidedown:block/lacquer"
+  }
+}
