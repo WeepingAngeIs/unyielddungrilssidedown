@@ -49,6 +49,21 @@ public final class DungeonService {
     }
 
     public DungeonService(MinecraftServer server)throws IOException {this.server=server;store=new DungeonStore(server);}
+    /** Remove crash-left gravity only for unfinished journal entries; retain their protection and backups. */
+    void reconcileInterruptedZones() throws IOException {
+        int removed=0;
+        for(var entry:store.entries.values()) {
+            if("PLACED".equals(entry.status()))continue;
+            var dimension=ResourceKey.create(Registries.DIMENSION,ResourceLocation.parse(entry.dimension()));
+            String prefix="dungeon/"+entry.id();
+            if(!DungeonZoneBridge.snapshot(server,dimension,prefix).isEmpty())
+                removed+=DungeonZoneBridge.remove(server,dimension,prefix);
+        }
+        if(removed>0) {
+            DungeonZoneBridge.flush(server);
+            UpsideDown.LOG.warn("Removed {} stale gravity zones from unfinished dungeon instances; backups and protection retained",removed);
+        }
+    }
     public void stop(){if(job!=null)release(job);job=null;}
     public static void register(CommandDispatcher<CommandSourceStack> d) {
         var root=Commands.literal("dungeon").requires(s->s.hasPermission(2))

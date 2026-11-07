@@ -41,6 +41,7 @@ jobs:
           ./gradlew --no-daemon build --console=plain 2>&1 | tee test-evidence/gradle-build.log
       - name: Check models, textures, loot and bundled templates
         run: |
+          python tools/make_loot_tables.py --check | tee test-evidence/loot-source-check.log
           python tools/check_block_assets.py | tee test-evidence/block-assets-check.log
           mapfile -t jars < <(find build/libs -maxdepth 1 -type f -name '*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar')
           test "${#jars[@]}" -eq 1
@@ -66,5 +67,51 @@ jobs:
             test-evidence/*.log
             test-evidence/*validation.json
             build/reports/
+          if-no-files-found: warn
+          retention-days: 14
+
+  runtime:
+    name: Hosted server placement, persistence and undo
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Cache pinned disposable test dependencies
+        uses: actions/cache@v4
+        with:
+          path: run/mods
+          key: dungeon-test-mods-${{ runner.os }}-${{ hashFiles('ci/runtime-mods.json') }}
+      - name: Download and verify official runtime dependencies
+        run: |
+          mkdir -p test-evidence
+          python ci/download_runtime_mods.py
+          python tools/validate_content.py --mods run/mods --output test-evidence/runtime-content-validation.json
+      - name: Prepare compiled server classes before the memory-limited game process
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon classes --console=plain 2>&1 | tee test-evidence/runtime-compile.log
+      - name: Exercise placement, restart recovery, protection and undo
+        timeout-minutes: 41
+        run: python tools/hosted_smoke.py --timeout-seconds 2400
+      - name: Upload hosted runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-evidence-${{ github.sha }}
+          path: |
+            test-evidence/
+            run/logs/
+            run/crash-reports/
           if-no-files-found: warn
           retention-days: 14

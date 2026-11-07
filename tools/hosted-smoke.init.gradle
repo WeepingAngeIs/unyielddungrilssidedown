@@ -1,0 +1,12 @@
+// GitHub-only controller fixture; never an installed Minecraft profile.
+gradle.beforeProject { target ->
+    target.pluginManager.withPlugin('net.neoforged.moddev') {
+        target.extensions.getByName('neoForge').runs.configureEach {
+            if (name == 'server') {
+                gameDirectory.set(target.layout.projectDirectory.dir('run'))
+                programArguments.add('--nogui')
+                jvmArguments.addAll('-Xms512m', '-Xmx3G')
+            }
+        }
+    }
+}

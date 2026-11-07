@@ -3,10 +3,11 @@ import socket,struct,sys
 from pathlib import Path
 
 class Rcon:
-    def __init__(self):
-        props=dict(line.split('=',1) for line in (Path(__file__).resolve().parents[1]/'run/server.properties').read_text().splitlines() if '=' in line)
+    def __init__(self,properties=None,timeout=30):
+        properties=Path(properties) if properties else Path(__file__).resolve().parents[1]/'run/server.properties'
+        props=dict(line.split('=',1) for line in properties.read_text().splitlines() if '=' in line)
         assert props.get('server-ip')=='127.0.0.1','Smoke script is restricted to loopback'
-        self.sock=socket.create_connection(('127.0.0.1',int(props['rcon.port'])),timeout=30)
+        self.sock=socket.create_connection(('127.0.0.1',int(props['rcon.port'])),timeout=timeout)
         self.counter=0
         self.send(3,props['rcon.password'])
         ident,kind,text=self.receive()

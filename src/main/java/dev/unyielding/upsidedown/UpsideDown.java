@@ -101,6 +101,7 @@ public final class UpsideDown {
       bus.addListener(ServerStartedEvent.class, e -> {
          server = e.getServer();
          Flip.setServer(ZoneData.get(server).zones);
+         dev.unyielding.upsidedown.dungeon.DungeonModule.afterZonesLoaded(server);
       });
       bus.addListener(ServerStoppedEvent.class, e -> {
          server = null;

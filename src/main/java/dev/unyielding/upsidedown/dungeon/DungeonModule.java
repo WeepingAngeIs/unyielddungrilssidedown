@@ -44,6 +44,11 @@ public final class DungeonModule {
         if(found==null)throw new IllegalStateException("Dungeon journal unavailable; check server log before placing anything");
         return found;
     }
+    /** Called after persisted gravity is loaded, before the server accepts normal play. */
+    public static void afterZonesLoaded(MinecraftServer server){
+        try{service(server).reconcileInterruptedZones();}
+        catch(Exception failure){throw new IllegalStateException("Cannot reconcile unfinished dungeon gravity; refusing unsafe server startup",failure);}
+    }
     public static void init(IEventBus modBus) {
         DungeonBlocks.init(modBus);
         IEventBus bus=NeoForge.EVENT_BUS;

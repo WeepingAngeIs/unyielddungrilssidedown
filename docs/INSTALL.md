@@ -67,6 +67,8 @@ Undo first shows a separate confirmation. It restores the saved original volume,
 
 After a crash or interrupted placement/restoration, use `/dungeon list` to find the persisted instance ID, then use the same confirmed undo process. **Do not manually delete the journal or backup files** under the world's `data/cu_dungeons` folder: they retain the restoration information and region protection. An interrupted operation is not automatically resumed as a fresh placement.
 
+On restart, unfinished instances keep their protection and backups. Any remaining gravity zones belonging to those unfinished instances are removed and saved before play resumes; completed-dungeon and unrelated zones are preserved. Startup stops if that cleanup cannot be saved.
+
 ## Loot and encounters
 
 The maze has **400 Lootr chests**, and the paired pagoda has **200**. The sole final chest at the deepest inverted level uses an unconditional high-end roll, with no empty or chance branch. Its pool is Master Ball, Ancient Origin Ball, Star's Edge, Whisperwind, Ribboncleaver, Mjolnir, Hearthflame and Arcanethyst. SimplySwords classifies the six weapons as **unique**; “high-end” is this dungeon's curated reward tier.
