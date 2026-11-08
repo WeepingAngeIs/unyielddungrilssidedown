@@ -263,6 +263,18 @@ class Controller:
                         require('Not in a gravity zone (normal gravity).' in result,'Interrupted dungeon still has live gravity')
                     else:
                         require('dungeon/'+self.instances[name]+'/'+z['Name'] in result and '(gravity '+gravity+')' in result,'Live gravity index did not return the expected zone/direction')
+                    if name not in self.interrupted:
+                        for mob in ('bat', 'pig'):
+                            mobtag='cu_ci_mob_'+secrets.token_hex(6)
+                            mobsel='@e[tag='+mobtag+',limit=1]'
+                            try:
+                                self.command('summon minecraft:'+mob+' '+xyz+' {Tags:["'+mobtag+'"],NoAI:1b,NoGravity:1b,Invulnerable:1b,Silent:1b,PersistenceRequired:1b}')
+                                self.wait_success('execute if entity '+mobsel,'mob regression spawn')
+                                time.sleep(3)
+                                self.check()
+                                self.wait_success('execute if entity '+mobsel,'rotated living entity survives ticking')
+                                self.event('living_gravity_regression',stage=stage,gravity=gravity,mob=mob)
+                            finally:self.command('kill '+mobsel,record=False)
                     self.event('live_gravity_verified',stage=stage,template=name,gravity='normal-after-recovery' if name in self.interrupted else gravity)
                 finally:self.command('kill '+selector,record=False)
     def simulate_interrupted_state(self,name):

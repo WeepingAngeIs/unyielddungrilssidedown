@@ -160,7 +160,7 @@ public abstract class EntityMixin implements GravityEntity {
    private void cu$turnedBox(CallbackInfoReturnable<AABB> cir) {
       Direction g = this.cu$gravity();
       if (Frames.sideways(g) && this.cu$self() instanceof LivingEntity) {
-         cir.setReturnValue(Frames.box(g, this.position, (double)(Object)this.dimensions.width(), (double)(Object)this.dimensions.height()));
+         cir.setReturnValue(Frames.box(g, this.position, (double)this.dimensions.width(), (double)this.dimensions.height()));
       }
    }
 
@@ -171,7 +171,7 @@ public abstract class EntityMixin implements GravityEntity {
    )
    private void cu$eyePos(CallbackInfoReturnable<Vec3> cir) {
       if (Gravity.rotated(this.cu$self())) {
-         cir.setReturnValue(this.position.add(Frames.up(this.cu$gravity()).scale((double)(Object)this.eyeHeight)));
+         cir.setReturnValue(this.position.add(Frames.up(this.cu$gravity()).scale((double)this.eyeHeight)));
       }
    }
 
@@ -185,7 +185,7 @@ public abstract class EntityMixin implements GravityEntity {
          Vec3 feet = new Vec3(
             Mth.lerp((double)pt, this.xo, this.getX()), Mth.lerp((double)pt, this.yo, this.getY()), Mth.lerp((double)pt, this.zo, this.getZ())
          );
-         cir.setReturnValue(feet.add(Frames.up(this.cu$gravity()).scale((double)(Object)this.eyeHeight)));
+         cir.setReturnValue(feet.add(Frames.up(this.cu$gravity()).scale((double)this.eyeHeight)));
       }
    }
 
@@ -368,9 +368,9 @@ public abstract class EntityMixin implements GravityEntity {
    private void cu$eyeY(CallbackInfoReturnable<Double> cir) {
       Direction g = this.cu$gravity();
       if (g == Direction.UP) {
-         cir.setReturnValue(this.position.y + (double)(Object)this.getBbHeight() - (double)(Object)this.eyeHeight);
+         cir.setReturnValue(this.position.y + (double)this.getBbHeight() - (double)this.eyeHeight);
       } else if (Frames.sideways(g) && this.cu$self() instanceof LivingEntity) {
-         cir.setReturnValue(this.position.y + Frames.up(g).y * (double)(Object)this.eyeHeight);
+         cir.setReturnValue(this.position.y + Frames.up(g).y * (double)this.eyeHeight);
       }
    }
 
