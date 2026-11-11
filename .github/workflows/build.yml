@@ -2,7 +2,7 @@ name: Build and verify dungeons
 
 on:
   push:
-    branches: [main, codex/japanese-gravity-dungeons]
+    branches: [main, codex/japanese-gravity-dungeons, codex/pagoda-connections-protection]
   pull_request:
   workflow_dispatch:
 
