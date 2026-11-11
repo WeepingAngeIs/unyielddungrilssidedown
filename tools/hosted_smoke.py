@@ -115,7 +115,12 @@ class Controller:
             expected=array.array('H')
             for n,p in zip(t['Runs'][::2],t['Runs'][1::2]):expected.extend(array.array('H',[p])*n)
             require(len(expected)==t['Size'][0]*t['Size'][1]*t['Size'][2],'Invalid template run length')
-            t['Expected']=expected;self.loaded[name]=t
+            t['Expected']=expected
+            mask=bytearray()
+            for n,v in zip(t['PlacementRuns'][::2],t['PlacementRuns'][1::2]):mask.extend(bytes([v])*n)
+            require(len(mask)==len(expected) and any(mask) and not all(mask),'Invalid authored placement mask')
+            require(all(mask[i] or t['CanonicalPalette'][v] in AIR for i,v in enumerate(expected)),'Solid block outside placement mask')
+            t['Mask']=mask;self.loaded[name]=t
         # A test-only datapack overrides Overworld height; it is not shipped in the mod.
         pack=WORLD/'datapacks/hosted-height';(pack/'data/minecraft/dimension_type').mkdir(parents=True)
         (pack/'pack.mcmeta').write_text(json.dumps({'pack':{'pack_format':48,'description':'CI fixture only: expanded-height empty world'}}),encoding='utf-8')
@@ -326,7 +331,8 @@ class Controller:
                                     for x in range(max(mx,cx*16),min(maxx,cx*16+15)+1):
                                         idx=(y%16)*256+(z%16)*16+(x%16)
                                         pi=0 if len(names)==1 else ((packed[idx//per]&((1<<64)-1))>>((idx%per)*bits))&mask
-                                        got=names[pi];want=original_states.get((x,y,z),'minecraft:air') if air else states[expected[(y-my)*sx*sz+(z-mz)*sx+x-mx]]
+                                        got=names[pi];cell=(y-my)*sx*sz+(z-mz)*sx+x-mx
+                                        want=original_states.get((x,y,z),'minecraft:air') if air or not t['Mask'][cell] else states[expected[cell]]
                                         if got!=want and not(got in AIR and want in AIR):
                                             if len(mismatches)<8:mismatches.append({'position':[x,y,z],'expected':want,'actual':got})
                                         cells+=1
@@ -361,7 +367,25 @@ class Controller:
         originals = {}
         for name, template in self.loaded.items():
             mx, my, mz = template['Minimum']
-            x, y, z = mx + 6, my + 4, mz + 6
+            sx,sy,sz=template['Size'];mask=template['Mask'];expected=template['Expected'];pal=template['CanonicalPalette']
+            def index(x,y,z):return (y*sz+z)*sx+x
+            # Pick a wholly authored interior so even original containers and fluids are replaced.
+            found=None
+            for yy in range(1,sy-1):
+                for zz in range(1,sz-1):
+                    for xx in range(1,sx-4):
+                        if all(mask[index(a,b,c)] and pal[expected[index(a,b,c)]] in AIR for a in range(xx-1,xx+4) for b in range(yy-1,yy+2) for c in range(zz-1,zz+2)):
+                            found=(xx,yy,zz);break
+                    if found:break
+                if found:break
+            require(found is not None,'No clearable interior fixture for '+name)
+            x,y,z=(mx+found[0],my+found[1],mz+found[2])
+            outside=next(i for i,v in enumerate(mask) if not v)
+            sentinel=(mx+outside%sx,my+outside//(sx*sz),mz+(outside//sx)%sz)
+            self.command(f'forceload add {sentinel[0]} {sentinel[2]}')
+            self.wait_success(f'execute if loaded {sentinel[0]} {sentinel[1]} {sentinel[2]}','outside-mask fixture '+name)
+            self.command('setblock '+' '.join(map(str,sentinel))+' minecraft:diamond_block')
+            self.wait_success('execute if block '+' '.join(map(str,sentinel))+' minecraft:diamond_block','outside-mask sentinel '+name)
             chest = (x + 3, y, z)
             chest_at = ' '.join(map(str, chest))
             self.command(f'forceload add {x-1} {z-1} {x+3} {z+1}')
@@ -380,6 +404,7 @@ class Controller:
             states[x, y, z] = 'minecraft:lava[level=0]'
             states[x+2, y, z] = 'cuupsidedown:zen_wall'
             states[chest] = 'minecraft:chest[facing=east,type=single,waterlogged=false]'
+            states[sentinel] = 'minecraft:diamond_block'
             originals[name] = (states, {chest: None})
         self.command('save-all flush')
         region = RegionReader(WORLD/'region')
@@ -445,7 +470,7 @@ class Controller:
             self.verify_no_item_drops(name, originals)
         self.command('save-all flush')
         self.stop()
-        self.audit_disk('direct-placed')
+        self.audit_disk('direct-placed',originals=originals)
         self.boot()
         self.assert_state('direct-after-restart', self.instances)
         self.runtime('direct-after-restart')

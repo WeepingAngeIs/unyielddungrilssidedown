@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +29,7 @@ final class DungeonPasteBackup {
     private final Path directory;
     private final int volume;
     private int covered;
+    private BitSet mask;
 
     private DungeonPasteBackup(DungeonStore store, DungeonStore.Entry entry) {
         this.entry = entry;
@@ -36,8 +38,9 @@ final class DungeonPasteBackup {
         volume = Math.multiplyExact(Math.multiplyExact(entry.sx(), entry.sy()), entry.sz());
     }
 
-    static DungeonPasteBackup create(DungeonStore store, DungeonStore.Entry entry) throws IOException {
+    static DungeonPasteBackup create(DungeonStore store, DungeonStore.Entry entry, BitSet mask) throws IOException {
         var backup = new DungeonPasteBackup(store, entry);
+        backup.mask = (BitSet) mask.clone();
         Files.createDirectory(backup.directory);
         backup.saveManifest(0);
         return backup;
@@ -53,6 +56,9 @@ final class DungeonPasteBackup {
                 || !tag.contains("Covered", Tag.TAG_INT)) {
             throw new IOException("Direct placement backup does not match the dungeon journal");
         }
+        if(tag.contains("PlacementMask", Tag.TAG_LONG_ARRAY)) backup.mask=BitSet.valueOf(tag.getLongArray("PlacementMask"));
+        else { backup.mask=new BitSet(backup.volume); backup.mask.set(0,backup.volume); }
+        if(backup.mask.length()>backup.volume) throw new IOException("Invalid placement mask");
         backup.covered = tag.getInt("Covered");
         if (backup.covered < 0 || backup.covered > backup.volume
                 || ("PLACED".equals(entry.status()) && backup.covered != backup.volume)) {
@@ -60,6 +66,8 @@ final class DungeonPasteBackup {
         }
         return backup;
     }
+
+    BitSet mask() { return (BitSet) mask.clone(); }
 
     int covered() {
         return covered;
@@ -73,6 +81,7 @@ final class DungeonPasteBackup {
         tag.putIntArray("Size", new int[]{entry.sx(), entry.sy(), entry.sz()});
         tag.putIntArray("Min", DungeonStore.vec(entry.min()));
         tag.putInt("Covered", end);
+        tag.putLongArray("PlacementMask",mask.toLongArray());
         DungeonStore.write(manifest, tag);
     }
 

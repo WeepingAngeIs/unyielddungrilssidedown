@@ -9,12 +9,11 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-/** Indestructible architecture, with bespoke models/textures and no survival drops. */
+/** Reusable architecture, protected by dungeon placement rather than block type. */
 public final class DungeonBlocks {
     private static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks("cuupsidedown");
     private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems("cuupsidedown");
@@ -32,7 +31,7 @@ public final class DungeonBlocks {
     private DungeonBlocks() {}
     private static BlockBehaviour.Properties properties(MapColor color) {
         return BlockBehaviour.Properties.of().mapColor(color).sound(SoundType.DEEPSLATE_TILES)
-                .strength(-1.0F,3600000.0F).pushReaction(PushReaction.BLOCK).noLootTable();
+                .strength(2.0F,6.0F);
     }
     private static Supplier<Block> full(String name, MapColor color) { return register(name, () -> new Block(properties(color))); }
     private static <T extends Block> Supplier<T> register(String name, Supplier<T> supplier) {

@@ -19,6 +19,7 @@ public final class DungeonTemplate {
     public final BlockPos offset, spawn;
     public final List<BlockState> palette;
     public final int[] blocks;
+    public final BitSet placementMask;
     public final List<CompoundTag> blockEntities;
     public final List<Zone> zones;
     public record Zone(String name, BlockPos min, BlockPos max, Direction gravity) {}
@@ -34,6 +35,12 @@ public final class DungeonTemplate {
             if(!ModList.get().isLoaded(mod.getAsString())) throw new IOException("Missing required mod: "+mod.getAsString());
         palette=parsePalette(tag.getList("Palette",Tag.TAG_STRING));
         blocks=decodeRuns(tag.getIntArray("Runs"),volume,palette.size());
+        placementMask=new BitSet(volume);
+        if(tag.contains("PlacementRuns",Tag.TAG_INT_ARRAY)) {
+            int[] mask=decodeRuns(tag.getIntArray("PlacementRuns"),volume,2);
+            for(int i=0;i<volume;i++) if(mask[i]!=0) placementMask.set(i);
+            for(int i=0;i<volume;i++) if(!palette.get(blocks[i]).isAir()&&!placementMask.get(i)) throw new IOException("Non-air block outside placement mask");
+        } else placementMask.set(0,volume);
         blockEntities=new ArrayList<>(); Set<BlockPos> used=new HashSet<>();
         for(Tag raw:tag.getList("BlockEntities",Tag.TAG_COMPOUND)) {
             CompoundTag be=((CompoundTag)raw).copy();

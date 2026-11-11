@@ -43,17 +43,17 @@ def arr(v):return np.array(v,dtype=np.int32)
 
 class Build:
  def __init__(self,id,size,offset):
-  self.id=id;self.size=size;self.offset=offset;self.a=np.zeros((size[1],size[2],size[0]),dtype=np.int16);self.pal=[AIR];self.index={AIR:0};self.tiles=[];self.zones=[];self.rooms=[];self.meta={};self.spawn=[0,0,0]
+  self.id=id;self.size=size;self.offset=offset;self.a=np.zeros((size[1],size[2],size[0]),dtype=np.int16);self.mask=np.zeros_like(self.a,dtype=np.bool_);self.pal=[AIR];self.index={AIR:0};self.tiles=[];self.zones=[];self.rooms=[];self.meta={};self.spawn=[0,0,0]
  def pi(self,s):
   if s not in self.index:self.index[s]=len(self.pal);self.pal.append(s)
   return self.index[s]
  def put(self,x,y,z,s):
   assert 0<=x<self.size[0] and 0<=y<self.size[1] and 0<=z<self.size[2],(self.id,x,y,z)
-  self.a[y,z,x]=self.pi(s)
+  self.a[y,z,x]=self.pi(s);self.mask[y,z,x]=True
  def box(self,x0,y0,z0,x1,y1,z1,s):
   if x1<x0 or y1<y0 or z1<z0:return
   assert min(x0,y0,z0)>=0 and x1<self.size[0] and y1<self.size[1] and z1<self.size[2],(x0,y0,z0,x1,y1,z1)
-  self.a[y0:y1+1,z0:z1+1,x0:x1+1]=self.pi(s)
+  self.a[y0:y1+1,z0:z1+1,x0:x1+1]=self.pi(s);self.mask[y0:y1+1,z0:z1+1,x0:x1+1]=True
  def chest(self,x,y,z,loot,facing='north'):
   self.put(x,y,z,f'lootr:lootr_chest[facing={facing},type=single,waterlogged=false]')
   self.tiles.append({'id':'lootr:lootr_chest','x':x,'y':y,'z':z,'LootTable':f'cuupsidedown:chests/{loot}'})
@@ -67,7 +67,8 @@ class Build:
  def save(self,title):
   flat=self.a.ravel(); starts=np.r_[0,np.flatnonzero(flat[1:]!=flat[:-1])+1]; lens=np.diff(np.r_[starts,flat.size]);runs=np.column_stack([lens,flat[starts]]).astype(np.int32).ravel()
   assert int(runs[::2].sum())==flat.size
-  root={'Id':self.id,'Name':title,'Size':arr(self.size),'Offset':arr(self.offset),'Palette':self.pal,'Runs':runs,'BlockEntities':self.tiles,'Zones':self.zones,'Spawn':arr(self.spawn),'Requirements':REQ}
+  maskflat=self.mask.ravel().astype(np.int32); ms=np.r_[0,np.flatnonzero(maskflat[1:]!=maskflat[:-1])+1]; maskruns=np.column_stack([np.diff(np.r_[ms,maskflat.size]),maskflat[ms]]).astype(np.int32).ravel()
+  root={'PlacementRuns':maskruns,'Id':self.id,'Name':title,'Size':arr(self.size),'Offset':arr(self.offset),'Palette':self.pal,'Runs':runs,'BlockEntities':self.tiles,'Zones':self.zones,'Spawn':arr(self.spawn),'Requirements':REQ}
   raw=b'\x0a'+nbtstr('')+payload(root)
   with (OUT/(self.id+'.nbt')).open('wb') as f:
    with gzip.GzipFile(filename='',mode='wb',fileobj=f,mtime=0) as g:g.write(raw)
@@ -82,6 +83,8 @@ def furniture(name,mount):return f'cuupsidedown:{name}[mount={mount}]'
 
 def build_maze():
  b=Build('sakura_labyrinth',[205,36,222],[-102,-5,-202]);rng=random.Random(20261107)
+ # Clear authored interior, while preserving all untouched space outside the maze.
+ b.box(3,6,3,201,14,218,AIR)
  # Ten by ten pavilions. Every room has a three-wide, normal-gravity promenade.
  ox=12;oz=12;stride=18;fy=5;cy=14
  b.box(3,0,3,201,3,218,'minecraft:stone');b.box(3,4,3,201,4,218,'minecraft:dirt');b.box(3,fy,3,201,fy,218,CUSTOM+'blossom_floor')
@@ -222,6 +225,7 @@ def build_pagoda():
  stair_cells=[];landings=[];floor_records=[]
  for f in range(25):
   base=Y+f*12;r=27-f//3;theme=THEMES[(f//4)%6];wall=CUSTOM+WALLS[theme]
+  b.box(cx-r+1,base+1,cz-r+1,cx+r-1,base+10,cz+r-1,AIR)
   b.box(cx-r,base,cz-r,cx+r,base,cz+r,CUSTOM+'blossom_floor')
   # Open stairwell in every level, with the north landing left intact.
   b.box(cx-11,base,cz-6,cx-3,base,cz+3,AIR)
@@ -286,10 +290,12 @@ def build_pagoda():
  for x,y,z in stair_cells:
   assert b.a[y+1,z,x]==0 and b.a[y+2,z,x]==0,('stair headroom',x,y,z,b.pal[b.a[y+1,z,x]],b.pal[b.a[y+2,z,x]])
  # Mirror every tower cell through yworld=-5.5. y' = 2*Y - 11 - y.
- original=b.a[Y:,:,:].copy();pal_before=list(b.pal);flipids=np.array([b.pi(flip_state(s)) for s in pal_before],np.int16)
+ original=b.a[Y:,:,:].copy();original_mask=b.mask[Y:,:,:].copy();pal_before=list(b.pal);flipids=np.array([b.pi(flip_state(s)) for s in pal_before],np.int16)
  for y in range(Y,b.size[1]):
   my=2*Y-11-y
-  if my>=0:b.a[my]=flipids[original[y-Y]]
+  if my>=0:
+   b.a[my]=flipids[original[y-Y]]
+   b.mask[my]=original_mask[y-Y]
  originals=copy.deepcopy(b.tiles)
  for t in originals:
   t['y']=2*Y-11-t['y']
@@ -302,20 +308,30 @@ def build_pagoda():
    b.put(t['x'],t['y']+1,t['z'],'minecraft:chain[axis=y,waterlogged=false]')
    b.put(t['x'],t['y']+2,t['z'],CUSTOM+'dark_floor')
   b.tiles.append(t)
- # Base courtyard: upright entrance at world y0; inverted entrance via protected external ladder well.
- b.box(4,Y-2,4,92,Y-1,102,'minecraft:stone');b.box(4,Y,4,92,Y,102,CUSTOM+'blossom_floor')
+ # Join the two towers with a matching enclosed transition rather than an
+ # isolated exterior ladder and a stone-filled gap.
+ b.box(cx-26,Y-10,cz-26,cx+26,Y-1,cz+26,AIR)
+ for xx in [cx-27,cx+27]:b.box(xx,Y-10,cz-27,xx,Y-1,cz+27,CUSTOM+'sakura_wall')
+ for zz in [cz-27,cz+27]:b.box(cx-27,Y-10,zz,cx+27,Y-1,zz,CUSTOM+'sakura_wall')
+ for delta in range(-20,21,7):
+  for xx in [cx-27,cx+27]:b.box(xx,Y-8,cz+delta,xx,Y-4,cz+delta+2,'minecraft:pink_stained_glass')
+  for zz in [cz-27,cz+27]:b.box(cx+delta,Y-8,zz,cx+delta+2,Y-4,zz,'minecraft:pink_stained_glass')
+ # Base courtyard and upright entrance.
+ b.box(4,Y,4,92,Y,102,CUSTOM+'blossom_floor')
  # Restore main staircase hole after plaza floor. Main front door.
  b.box(cx-11,Y,cz-6,cx-3,Y,cz+3,AIR)
  b.box(cx-2,Y+1,cz+27,cx+2,Y+5,cz+27,AIR)
- # Downward access shaft outside all gravity zones, with an open connection into inverted tower.
- sx=cx+8;sz=cz+38
- b.box(sx-2,Y-18,sz-2,sx+2,Y+2,sz+2,CUSTOM+'zen_wall');b.box(sx-1,Y-17,sz-1,sx+1,Y+3,sz+1,AIR)
- for y in range(Y-17,Y+3):b.put(sx,y,sz+1,'minecraft:ladder[facing=north,waterlogged=false]')
- b.box(sx-1,Y-14,cz+26,sx+1,Y-12,sz,AIR)
- b.box(sx-2,Y-15,cz+26,sx+2,Y-15,sz,CUSTOM+'dark_floor')
- b.box(sx-2,Y-11,cz+26,sx+2,Y-11,sz,CUSTOM+'blossom_floor')
- # Shaft outside zone; tunnel reaches the upside chamber through full-height door.
- b.zone('mirror_pagoda_up',[cx-32,0,cz-32],[cx+32,Y-6,cz+32],'up')
+ # Interior ladder connects the upright ground floor directly to the first
+ # inverted room. The shaft is open at both ends, with gravity changing as
+ # soon as the player descends below the ground-floor surface.
+ sx=cx+8;sz=cz+8
+ b.box(sx-2,Y-13,sz-2,sx+2,Y+3,sz+2,CUSTOM+'zen_wall')
+ b.box(sx-1,Y-13,sz-1,sx+1,Y+3,sz+1,AIR)
+ for y in range(Y-13,Y+3):b.put(sx+1,y,sz,'minecraft:ladder[facing=west,waterlogged=false]')
+ # Enter the ladder from the upright room and leave it into the inverted room.
+ b.box(sx-1,Y+1,sz-2,sx+1,Y+2,sz-2,AIR)
+ b.box(sx-1,Y-13,sz-2,sx+1,Y-12,sz-2,AIR)
+ b.zone('mirror_pagoda_up',[cx-27,0,cz-27],[cx+27,Y-2,cz+27],'up')
  # Wooden entry arch, cherry trees, lantern-lined front path.
  for xx in [cx-8,cx+8]:b.box(xx,Y+1,97,xx,Y+10,97,CUSTOM+'sakura_wall')
  b.box(cx-11,Y+10,97,cx+11,Y+10,97,CUSTOM+'dark_wall');b.box(cx-12,Y+12,97,cx+12,Y+12,97,'minecraft:cherry_planks')

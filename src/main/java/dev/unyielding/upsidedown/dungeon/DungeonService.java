@@ -34,6 +34,7 @@ public final class DungeonService {
     private static final Set<String> TERRAIN=Set.of("stone","deepslate","dirt","coarse_dirt","rooted_dirt","grass_block","podzol","mycelium","gravel","sand","red_sand","sandstone","red_sandstone","tuff","granite","diorite","andesite","calcite","bedrock","clay","mud","snow","snow_block","ice","packed_ice","blue_ice","netherrack","end_stone","dripstone_block");
     private final MinecraftServer server;
     private final DungeonStore store;
+    private final DungeonProtection protection;
     private Job job;
     private int ticks;
 
@@ -44,6 +45,7 @@ public final class DungeonService {
         BlockPos min;int sx,sy,sz,volume,cursor;boolean terrain,undo,locked,journaled;
         Phase phase;long expires;int[] before;
         DungeonPasteBackup directBackup;
+        BitSet mask;
         DungeonPasteBackup.Capture capture;
         DungeonPasteBackup.Part restorePart;
         List<BlockState> palette=new ArrayList<>();Map<BlockState,Integer> paletteMap=new HashMap<>();
@@ -53,7 +55,7 @@ public final class DungeonService {
         int workLimit(){return undo&&directBackup!=null?directBackup.covered():volume;}
     }
 
-    public DungeonService(MinecraftServer server)throws IOException {this.server=server;store=new DungeonStore(server);}
+    public DungeonService(MinecraftServer server)throws IOException {this.server=server;store=new DungeonStore(server);protection=new DungeonProtection(store);}
     /** Remove crash-left gravity only for unfinished journal entries; retain their protection and backups. */
     void reconcileInterruptedZones() throws IOException {
         int removed=0;
@@ -102,7 +104,7 @@ public final class DungeonService {
         if(!problems.isEmpty())throw new IOException("Dungeon dependencies/loot not ready: "+String.join("; ",problems));
         DungeonTemplate t=DungeonTemplate.load(id);
         Job j=new Job();
-        j.template=t;j.source=s;j.owner=owner(s);j.level=s.getLevel();j.instance=shortId();
+        j.template=t;j.mask=(BitSet)t.placementMask.clone();j.source=s;j.owner=owner(s);j.level=s.getLevel();j.instance=shortId();
         j.min=anchor.offset(t.offset);j.sx=t.sx;j.sy=t.sy;j.sz=t.sz;j.volume=t.volume;
         if(j.min.getY()<j.level.getMinBuildHeight()||(long)j.min.getY()+j.sy>j.level.getMaxBuildHeight())throw new IOException("Does not fit this dimension: dungeon Y "+j.min.getY()+".."+(j.min.getY()+j.sy-1)+", world Y "+j.level.getMinBuildHeight()+".."+(j.level.getMaxBuildHeight()-1)+". The twin pagoda needs expanded height; no blocks changed.");
         if(!j.level.getWorldBorder().isWithinBounds(j.min)||!j.level.getWorldBorder().isWithinBounds(j.min.offset(j.sx-1,0,j.sz-1)))throw new IOException("Dungeon would cross the world border.");
@@ -120,22 +122,24 @@ public final class DungeonService {
         try {
             Job j=placement(source,templateId,anchor);
             j.entry=buildingEntry(j,true);
-            j.directBackup=DungeonPasteBackup.create(store,j.entry);
+            j.directBackup=DungeonPasteBackup.create(store,j.entry,j.mask);
             // The protection journal and an empty, restorable manifest exist before the first block edit.
             store.put(j.entry);
             j.journaled=true;
             j.locked=true;
             j.phase=Phase.PLACE;
             job=j;
-            say(source,"Direct placement started: "+j.instance+". Replacing all blocks inside "+bounds(j)+", including template air. /dungeon status tracks progress.");
+            say(source,"Direct placement started: "+j.instance+". Replacing authored dungeon blocks and interior spaces inside "+bounds(j)+". /dungeon status tracks progress.");
             return 1;
         } catch(Exception ex) {
             return error(source,"Cannot place dungeon: "+ex.getMessage());
         }
     }
 
-    private DungeonStore.Entry buildingEntry(Job j,boolean direct) {
-        return new DungeonStore.Entry(j.instance,j.template.id,j.level.dimension().location().toString(),j.min,j.sx,j.sy,j.sz,j.min.offset(j.template.spawn),"BUILDING",direct);
+    private DungeonStore.Entry buildingEntry(Job j,boolean direct) throws IOException {
+        DungeonStore.Entry entry=new DungeonStore.Entry(j.instance,j.template.id,j.level.dimension().location().toString(),j.min,j.sx,j.sy,j.sz,j.min.offset(j.template.spawn),"BUILDING",direct);
+        protection.save(entry,j.template);
+        return entry;
     }
 
     int preview(CommandSourceStack s,String id,BlockPos anchor,boolean terrain) {
@@ -176,9 +180,13 @@ public final class DungeonService {
             j.min=e.min();j.sx=e.sx();j.sy=e.sy();j.sz=e.sz();j.volume=Math.multiplyExact(Math.multiplyExact(j.sx,j.sy),j.sz);
             if(e.direct()) {
                 j.directBackup=DungeonPasteBackup.open(store,e);
+                j.mask=j.directBackup.mask();
             } else {
                 CompoundTag backup=DungeonStore.read(store.backup(instance));
                 if(!Arrays.equals(backup.getIntArray("Size"),new int[]{j.sx,j.sy,j.sz})||!Arrays.equals(backup.getIntArray("Min"),DungeonStore.vec(j.min))||!backup.getString("Dimension").equals(e.dimension()))throw new IOException("Backup bounds/dimension do not match journal");
+                j.mask=backup.contains("PlacementMask",Tag.TAG_LONG_ARRAY)?BitSet.valueOf(backup.getLongArray("PlacementMask")):new BitSet(j.volume);
+                if(!backup.contains("PlacementMask",Tag.TAG_LONG_ARRAY))j.mask.set(0,j.volume);
+                if(j.mask.length()>j.volume)throw new IOException("Invalid backup placement mask");
                 j.palette=new ArrayList<>(DungeonTemplate.parsePalette(backup.getList("Palette",Tag.TAG_STRING)));j.before=DungeonTemplate.decodeRuns(backup.getIntArray("Runs"),j.volume,j.palette.size());
             }
             job=j;say(s,"UNDO PREVIEW: this removes dungeon "+instance+" and restores its original blocks, including any later admin edits inside "+bounds(j)+". Move everyone outside first.");offer(j);draw(j);return 1;
@@ -210,6 +218,8 @@ public final class DungeonService {
                     if(j.capture.full()){j.capture.commit();j.capture=null;}
                     continue;
                 }
+                if(j.phase==Phase.RESTORE&&j.directBackup!=null&&(j.restorePart==null||j.cursor==j.restorePart.end()))j.restorePart=j.directBackup.readPart(j.cursor);
+                if(!j.mask.get(j.cursor)) { j.cursor++; continue; }
                 switch(j.phase) {
                     case SCAN -> {
                         BlockState old=j.level.getBlockState(p);
@@ -289,7 +299,7 @@ public final class DungeonService {
             case VERIFY -> {
                 if(occupied(j))throw new IOException("An entity entered the area during verification. No blocks placed; preview again.");
                 CompoundTag backup=new CompoundTag();backup.putIntArray("Size",new int[]{j.sx,j.sy,j.sz});backup.putIntArray("Min",DungeonStore.vec(j.min));backup.putString("Dimension",j.level.dimension().location().toString());
-                ListTag pal=new ListTag();j.palette.forEach(state->pal.add(StringTag.valueOf(DungeonTemplate.stateString(state))));backup.put("Palette",pal);backup.putIntArray("Runs",DungeonTemplate.encodeRuns(j.before));
+                ListTag pal=new ListTag();j.palette.forEach(state->pal.add(StringTag.valueOf(DungeonTemplate.stateString(state))));backup.put("Palette",pal);backup.putIntArray("Runs",DungeonTemplate.encodeRuns(j.before));backup.putLongArray("PlacementMask",j.mask.toLongArray());
                 DungeonStore.write(store.backup(j.instance),backup);
                 j.entry=buildingEntry(j,false);store.put(j.entry);j.journaled=true;
                 j.phase=Phase.PLACE;j.cursor=0;say(j.source,"Original terrain backed up. Placing "+j.template.name+"; keep players outside until complete. Instance "+j.instance);
@@ -335,12 +345,17 @@ public final class DungeonService {
         }else error(j.source,e.getMessage()+" No dungeon blocks were placed.");
         release(j);job=null;
     }
-    public boolean protectedAt(ServerLevel level,BlockPos p){return protectedBox(level,new AABB(p));}
+    public boolean protectedAt(ServerLevel level,BlockPos p){
+        if(isWriting(level,p))return true;
+        String dim=level.dimension().location().toString();
+        for(var e:store.entries.values())if(e.dimension().equals(dim)&&e.box().intersects(new AABB(p))&&(!e.status().equals("PLACED")||protection.contains(e,p)))return true;
+        return false;
+    }
     public boolean isWriting(ServerLevel level,BlockPos p){return job!=null&&job.locked&&job.level==level&&job.box().intersects(new AABB(p));}
     public boolean protectedBox(ServerLevel level,AABB box) {
         String dim=level.dimension().location().toString();
         if(job!=null&&job.locked&&job.level==level&&job.box().intersects(box))return true;
-        for(var e:store.entries.values())if(e.dimension().equals(dim)&&e.box().intersects(box))return true;
+        for(var e:store.entries.values())if(e.dimension().equals(dim)&&e.box().intersects(box)&&(!e.status().equals("PLACED")||protection.intersects(e,box)))return true;
         return false;
     }
 }
