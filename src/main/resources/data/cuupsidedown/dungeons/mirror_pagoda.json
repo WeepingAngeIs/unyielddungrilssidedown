@@ -17,7 +17,7 @@
     103
   ],
   "volume": 6601044,
-  "non_air": 299163,
+  "non_air": 283554,
   "palette": [
     "minecraft:air",
     "cuupsidedown:blossom_floor",
@@ -49,13 +49,12 @@
     "cuupsidedown:flower_planter[mount=down]",
     "cuupsidedown:temple_stairs[facing=east,half=top,shape=straight,waterlogged=false]",
     "minecraft:chain[axis=y,waterlogged=false]",
-    "minecraft:stone",
-    "minecraft:ladder[facing=north,waterlogged=false]",
+    "minecraft:ladder[facing=west,waterlogged=false]",
     "minecraft:cherry_planks",
     "minecraft:cherry_log[axis=y]",
     "minecraft:cherry_leaves[distance=7,persistent=true,waterlogged=false]"
   ],
-  "runs": 158183,
+  "runs": 159947,
   "block_entities": {
     "lootr:lootr_chest": 200,
     "minecraft:mob_spawner": 130
@@ -68,14 +67,14 @@
     {
       "name": "mirror_pagoda_up",
       "min": [
-        16,
+        21,
         0,
-        16
+        21
       ],
       "max": [
-        80,
-        317,
-        80
+        75,
+        321,
+        75
       ],
       "gravity": "up"
     }
@@ -801,7 +800,7 @@
     19,
     57
   ],
-  "normal_stair_bfs_reachable_nodes": 51514,
+  "normal_stair_bfs_reachable_nodes": 51492,
   "spawner_policy": "20 initial, 40-100 tick interval; 3 per burst; cap12; bright rooms allowed",
   "geometry_checks": "All 25 upright floors and all upright chests reached by 2-block headroom/support graph. All 864 staircase blocks and reflected counterpart states/headroom verified. Mirror mapping proves same geometry in UP gravity; in-game collision playtest remains required."
 }
