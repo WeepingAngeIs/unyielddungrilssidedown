@@ -4,7 +4,7 @@ license="MIT"
 
 [[mods]]
 modId="cuupsidedown"
-version="1.2.0-beta.2"
+version="1.2.0-beta.3"
 displayName="Unyielding: Upside Down Dungeons"
 authors="Cobblemon Unyielding"
 description='''
@@ -12,7 +12,7 @@ Gravity zones. Inside a zone set with /flipzone, gravity points up (players stan
 camera turned over) or sideways (any wall becomes the floor: real wall walking, the view turns with you).
 Players, mobs, Pokemon, items and thrown things all follow the zone's gravity.
 Includes the original gravity layouts, Mimic module, a 100-room Sakura Labyrinth and mirrored Japanese pagoda.
-New dungeons only spawn via /dungeon preview and explicit confirmation, with protected blocks, backups and per-player loot.
+Place either dungeon with /place structure. Optional previews, protected blocks, backups and per-player loot are available.
 Needed on both the server and the client. Replaces the old separate Upside Down and Mimic Dungeon jars.
 '''
 

@@ -13,14 +13,14 @@ import net.minecraft.world.phys.AABB;
 final class DungeonStore {
     final Path directory;
     final Map<String,Entry> entries=new LinkedHashMap<>();
-    record Entry(String id,String template,String dimension,BlockPos min,int sx,int sy,int sz,BlockPos spawn,String status) {
+    record Entry(String id,String template,String dimension,BlockPos min,int sx,int sy,int sz,BlockPos spawn,String status,boolean direct) {
         AABB box(){return new AABB(min.getX(),min.getY(),min.getZ(),min.getX()+sx,min.getY()+sy,min.getZ()+sz);}
-        Entry status(String state){return new Entry(id,template,dimension,min,sx,sy,sz,spawn,state);}
-        CompoundTag save(){CompoundTag t=new CompoundTag();t.putString("Id",id);t.putString("Template",template);t.putString("Dimension",dimension);t.putIntArray("Min",vec(min));t.putIntArray("Size",new int[]{sx,sy,sz});t.putIntArray("Spawn",vec(spawn));t.putString("Status",status);return t;}
+        Entry status(String state){return new Entry(id,template,dimension,min,sx,sy,sz,spawn,state,direct);}
+        CompoundTag save(){CompoundTag t=new CompoundTag();t.putString("Id",id);t.putString("Template",template);t.putString("Dimension",dimension);t.putIntArray("Min",vec(min));t.putIntArray("Size",new int[]{sx,sy,sz});t.putIntArray("Spawn",vec(spawn));t.putString("Status",status);if(direct)t.putBoolean("Direct",true);return t;}
         static Entry load(CompoundTag t)throws IOException {
             int[] s=t.getIntArray("Size");String id=t.getString("Id");
             if(!id.matches("[a-f0-9]{12}")||s.length!=3||s[0]<1||s[1]<1||s[2]<1||(long)s[0]*s[1]*s[2]>16_000_000)throw new IOException("Invalid dungeon journal entry");
-            return new Entry(id,t.getString("Template"),t.getString("Dimension"),DungeonTemplate.pos(t,"Min"),s[0],s[1],s[2],DungeonTemplate.pos(t,"Spawn"),t.getString("Status"));
+            return new Entry(id,t.getString("Template"),t.getString("Dimension"),DungeonTemplate.pos(t,"Min"),s[0],s[1],s[2],DungeonTemplate.pos(t,"Spawn"),t.getString("Status"),t.getBoolean("Direct"));
         }
     }
     DungeonStore(MinecraftServer server)throws IOException {

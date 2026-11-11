@@ -15,14 +15,25 @@ Use a copy of the world to try this beta first. Keep a world backup before chang
 ## Replace the two old modules
 
 1. Stop Minecraft and the server.
-2. In each relevant `mods` folder, move the old Upside Down jar and old Mimic Dungeon jar into a backup folder **outside `mods`**. Examples are `upsidedown-1.1.0.jar`, `cuupsidedown-1.1.0.jar`, and `cu-mimic-dungeon-1.0.1.jar`; identify the module, not only its filename.
-3. Put **`upsidedown-1.2.0-beta.1.jar`** in the server's `mods` folder and every participating client's `mods` folder.
+2. In each relevant `mods` folder, move any earlier combined dungeon jar (including beta.2) and any standalone Upside Down or Mimic Dungeon jars to a backup folder **outside `mods`**. Examples are `upsidedown-1.1.0.jar`, `cuupsidedown-1.1.0.jar`, and `cu-mimic-dungeon-1.0.1.jar`; identify the module, not only its filename.
+3. Put **`upsidedown-1.2.0-beta.3.jar`** in the server's `mods` folder and every participating client's `mods` folder.
 4. Keep Lootr, Cobblemon, SimplySwords, their dependencies and the separate CU Build Height mod where already required. Do not replace unrelated pack mods.
 5. Start the server and clients. A duplicate `cuupsidedown` or `cumimic` error means an old standalone jar is still loading.
 
 This one jar supplies both `cuupsidedown` and `cumimic`. Never install the old standalone Mimic jar beside it, even if it has a different filename. Existing schematic files do not need to be deleted or replaced.
 
-## Preview and place
+## Place at your current position
+
+As an operator, run one command in the intended dimension.
+
+```mcfunction
+/place structure cuupsidedown:sakura_labyrinth
+/place structure cuupsidedown:mirror_pagoda
+```
+
+Each command starts placing its dungeon at your current block position. You can append three coordinates for a different loaded anchor. For example, `/place structure cuupsidedown:mirror_pagoda -744 70 -169` uses the indicated X, Y and Z. Direct placement overwrites the entire template volume, including water, lava, modded terrain and containers. The placement must fit the dimension and world border and must be clear of existing protected dungeon instances and gravity zones. The pagoda still requires expanded world height. Use `/dungeon status` while the server places the blocks and `/dungeon list` for the finished instance ID.
+
+## Optional preview and confirmation
 
 Commands require administrator permission level 2. Run them in the intended dimension. Coordinates are a placement anchor; the preview reports the exact occupied bounds. **Rotation is not supported in this beta.**
 

@@ -3,7 +3,7 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.148'
 }
 group = 'dev.unyielding'
-version = '1.2.0-beta.2'
+version = '1.2.0-beta.3'
 base.archivesName = 'upsidedown'
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 neoForge {

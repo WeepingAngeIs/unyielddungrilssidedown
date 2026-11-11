@@ -71,10 +71,14 @@ jobs:
           retention-days: 14
 
   runtime:
-    name: Hosted server placement, persistence and undo
+    name: Hosted ${{ matrix.scenario }} placement, persistence and undo
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 65
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: [direct, legacy]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -103,12 +107,12 @@ jobs:
           ./gradlew --no-daemon classes --console=plain 2>&1 | tee test-evidence/runtime-compile.log
       - name: Exercise placement, restart recovery, protection and undo
         timeout-minutes: 41
-        run: python tools/hosted_smoke.py --timeout-seconds 2400
+        run: python tools/hosted_smoke.py --scenario ${{ matrix.scenario }} --timeout-seconds 2400
       - name: Upload hosted runtime evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: runtime-evidence-${{ github.sha }}
+          name: runtime-evidence-${{ matrix.scenario }}-${{ github.sha }}
           path: |
             test-evidence/
             run/logs/

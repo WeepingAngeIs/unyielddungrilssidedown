@@ -2,7 +2,8 @@
 """Hosted, disposable NeoForge integration smoke. Refuses execution outside GitHub Linux.
 
 Prerequisites: Java 21, repository Gradle wrapper, the six pinned dependencies in
-run/mods. Run `python tools/hosted_smoke.py --timeout-seconds 2400` on a fresh
+run/mods. Run `python tools/hosted_smoke.py --scenario legacy` or select
+`--scenario direct` for the native placement check on a fresh
 GitHub-hosted Ubuntu runner. No real profile, server account, or credentials used.
 The fixture is deliberately playerless: client physics and two-player Lootr
 opening remain separate tests, never claimed by this controller.
@@ -18,7 +19,7 @@ RUN=ROOT/'run';WORLD=RUN/'hosted-smoke-world';EVIDENCE=ROOT/'test-evidence'
 TEMPLATES=ROOT/'src/main/resources/data/cuupsidedown/dungeons'
 ANCHORS={'sakura_labyrinth':(1024,64,1024),'mirror_pagoda':(1536,64,1024)}
 AIR={'minecraft:air','minecraft:cave_air','minecraft:void_air'}
-STATE_RE=re.compile(r'^(SCAN|READY|VERIFY|PLACE|RESTORE) ([a-f0-9]{12}) (\d+)%;.*preview token ([a-f0-9]{12})',re.S)
+STATE_RE=re.compile(r'^([A-Z_]+) ([a-f0-9]{12}) (\d+)%;')
 
 def require(ok,message):
     if not ok:raise AssertionError(message)
@@ -166,10 +167,15 @@ class Controller:
         while time.monotonic()<end:
             text=self.command('dungeon status',record=False);match=STATE_RE.search(text)
             if match:
-                phase,i,percent,token=match.groups();last=f'{phase} {percent}%'
+                phase,i,percent=match.groups();last=f'{phase} {percent}%'
                 if last!=last_logged:self.event('phase',instance=i,phase=phase,percent=int(percent));last_logged=last
                 if instance:require(i==instance,'Active job unexpectedly changed identity')
-                if phase==wanted:return i,token
+                if phase==wanted:
+                    token = re.search(r'preview token ([a-f0-9]{12})', text)
+                    require(phase!='READY' or token is not None,'Ready preview is missing its confirmation token')
+                    return i,token[1] if token else None
+                if phase=='READY' and wanted=='IDLE':
+                    raise AssertionError('Placement stalled waiting for an unexpected confirmation')
             else:
                 if wanted=='IDLE' and 'No placement job.' in text:return None,None
                 if 'No placement job.' in text:raise RuntimeError('Job vanished before expected '+wanted+'; inspect server log')
@@ -295,13 +301,14 @@ class Controller:
         require(report['retained_stale_zones_before_boot']==len(self.loaded[name]['Zones']),'Recovery fixture lacks stale zones')
         (EVIDENCE/'interrupted-state-fixture.json').write_text(json.dumps(report,indent=2),encoding='utf-8');self.event('interrupted_state_fixture_created',**report)
         return backup_hash
-    def audit_disk(self,stage,air=False):
+    def audit_disk(self,stage,air=False,originals=None):
         require(self.proc is None,'Offline audit requires cleanly stopped server')
         region=RegionReader(WORLD/'region');summary={}
         try:
             for name,t in self.loaded.items():
                 self.check();mx,my,mz=t['Minimum'];sx,sy,sz=t['Size'];maxx,maxy,maxz=mx+sx-1,my+sy-1,mz+sz-1
                 states=t['CanonicalPalette'];expected=t['Expected'];cells=chunks=0;found_be={};mismatches=[]
+                original_states,original_tiles = originals[name] if originals else ({}, {})
                 for cx in range(mx//16,maxx//16+1):
                     for cz in range(mz//16,maxz//16+1):
                         self.check();chunk=region.chunk(cx,cz);require(chunk is not None,f'Missing saved chunk {cx},{cz} after completed placement/undo')
@@ -319,12 +326,12 @@ class Controller:
                                     for x in range(max(mx,cx*16),min(maxx,cx*16+15)+1):
                                         idx=(y%16)*256+(z%16)*16+(x%16)
                                         pi=0 if len(names)==1 else ((packed[idx//per]&((1<<64)-1))>>((idx%per)*bits))&mask
-                                        got=names[pi];want='minecraft:air' if air else states[expected[(y-my)*sx*sz+(z-mz)*sx+x-mx]]
+                                        got=names[pi];want=original_states.get((x,y,z),'minecraft:air') if air else states[expected[(y-my)*sx*sz+(z-mz)*sx+x-mx]]
                                         if got!=want and not(got in AIR and want in AIR):
                                             if len(mismatches)<8:mismatches.append({'position':[x,y,z],'expected':want,'actual':got})
                                         cells+=1
                 require(not mismatches,f'{stage}: block mismatches in {name}: {mismatches}')
-                if air:require(not found_be,f'{stage}: block entities survived undo in {name}')
+                if air:require(found_be==original_tiles,f'{stage}: original block entities, contents or components differ in {name}')
                 else:
                     require(len(found_be)==len(t['BlockEntities']),f'{stage}: block entity count differs in {name}')
                     for expected_be in t['BlockEntities']:
@@ -335,44 +342,154 @@ class Controller:
                             for key in ['MinSpawnDelay','MaxSpawnDelay','SpawnCount','MaxNearbyEntities','RequiredPlayerRange','SpawnRange']:
                                 require(be.get(key)==expected_be[key],f'{stage}: spawner {key} changed at {pos}')
                             require('cu_mimic' in be['SpawnData']['entity']['Tags'] and 'custom_spawn_rules' in be['SpawnData'],f'{stage}: Mimic/light rules missing')
-                summary[name]={'cells_verified':cells,'saved_chunks':chunks,'block_entities_verified':len(found_be),'all_original_air':air}
+                summary[name]={'cells_verified':cells,'saved_chunks':chunks,'block_entities_verified':len(found_be),'all_original_air':air and not original_states,'original_nonair_verified':len(original_states) if air else 0}
                 self.event('full_saved_world_verified',stage=stage,template=name,**summary[name])
         finally:region.close()
         (EVIDENCE/(stage+'-full-world-audit.json')).write_text(json.dumps(summary,indent=2),encoding='utf-8');self.report['steps'].append({'stage':stage,'full_world_audit':summary})
-    def undo(self,name):
+    def undo(self,name,stage_prefix=''):
         i=self.instances[name];out=self.command('dungeon undo '+i);require('UNDO PREVIEW:' in out,'Undo preview refused: '+out)
         _,token=self.wait_phase('READY',i);out=self.command('dungeon confirm '+token);require('Restoring the original terrain' in out,'Undo confirmation refused')
         self.wait_phase('IDLE',i,max_seconds=420)
-        expected={n:j for n,j in self.instances.items() if n!=name};self.assert_state('undone-'+name,expected)
+        expected={n:j for n,j in self.instances.items() if n!=name};self.assert_state(stage_prefix+'undone-'+name,expected)
         # Region protection must actually be removed, not just its journal entry.
         p=self.probes(name)[0];xyz=' '.join(map(str,p));self.command('forceload add '+str(p[0])+' '+str(p[2]))
         require('Test passed' in self.command('execute if block '+xyz+' minecraft:air'),'Restored probe is not air')
         self.command('setblock '+xyz+' minecraft:stone');require('Test passed' in self.command('execute if block '+xyz+' minecraft:stone'),'Protection persisted after undo')
         self.command('setblock '+xyz+' minecraft:air');require('Test passed' in self.command('execute if block '+xyz+' minecraft:air'),'Air reset failed')
-        del self.instances[name];self.event('undo_verified',template=name,instance=i)
-    def run(self):
+        del self.instances[name];self.event('undo_verified',template=name,instance=i,placement='native' if stage_prefix else 'preview')
+    def seed_obstructions(self):
+        originals = {}
+        for name, template in self.loaded.items():
+            mx, my, mz = template['Minimum']
+            x, y, z = mx + 6, my + 4, mz + 6
+            chest = (x + 3, y, z)
+            chest_at = ' '.join(map(str, chest))
+            self.command(f'forceload add {x-1} {z-1} {x+3} {z+1}')
+            for px, pz in ((x-1, z-1), (x+3, z+1)):
+                self.wait_success(f'execute if loaded {px} {y} {pz}', 'fixture chunk '+name)
+            # The obsidian shell keeps lava stable before placement and after undo.
+            self.command(f'fill {x-1} {y-1} {z-1} {x+1} {y+1} {z+1} minecraft:obsidian')
+            self.command(f'setblock {x} {y} {z} minecraft:lava[level=0]')
+            self.command(f'setblock {x+2} {y} {z} cuupsidedown:zen_wall')
+            self.command('setblock '+chest_at+' minecraft:chest[facing=east]{Items:[{Slot:4b,id:"minecraft:diamond",count:7,components:{"minecraft:custom_data":{proof:"direct placement"}}}]}')
+            self.wait_success(f'execute if block {x} {y} {z} minecraft:lava[level=0]', 'source lava '+name)
+            self.wait_success(f'execute if block {x+2} {y} {z} cuupsidedown:zen_wall', 'mod block '+name)
+            self.wait_success('execute if data block '+chest_at+' Items[{Slot:4b,id:"minecraft:diamond",count:7}]', 'original chest inventory '+name)
+            states = {(px, py, pz): 'minecraft:obsidian'
+                      for px in range(x-1, x+2) for py in range(y-1, y+2) for pz in range(z-1, z+2)}
+            states[x, y, z] = 'minecraft:lava[level=0]'
+            states[x+2, y, z] = 'cuupsidedown:zen_wall'
+            states[chest] = 'minecraft:chest[facing=east,type=single,waterlogged=false]'
+            originals[name] = (states, {chest: None})
+        self.command('save-all flush')
+        region = RegionReader(WORLD/'region')
         try:
-            self.prepare();self.boot()
-            result=self.command('dungeon verifyloot',timeout=90);require('Dungeon loot verified:' in result and 'all 512 final rolls' in result,'Runtime loot verification failed')
-            for name in ANCHORS:self.place(name)
-            self.runtime('before-restart');self.command('save-all flush');self.stop()
-            self.assert_state('before-restart',self.instances);self.audit_disk('placed')
-            self.boot();self.assert_state('after-restart',self.instances);self.runtime('after-restart')
-            result=self.command('dungeon verifyloot',timeout=90);require('Dungeon loot verified:' in result,'Loot verification failed after restart')
-            # Regression: startup must reconcile stale zones of unfinished entries
-            # without deleting their backup/protection or touching PLACED siblings.
-            self.command('save-all flush');self.stop()
-            interrupted_name='sakura_labyrinth';backup_hash=self.simulate_interrupted_state(interrupted_name)
-            self.boot();self.assert_state('interrupted-recovery',self.instances);self.runtime('interrupted-recovery')
-            backup=WORLD/f'data/cu_dungeons/{self.instances[interrupted_name]}.before.nbt'
-            require(hashlib.sha256(backup.read_bytes()).hexdigest()==backup_hash,'Recovery modified the original backup')
-            self.assert_backup(interrupted_name,self.instances[interrupted_name])
-            self.event('interrupted_state_recovery_verified',template=interrupted_name,backup_unchanged=True,protection_retained=True,stale_zones_removed=True,placed_sibling_zones_retained=True)
-            for name in list(self.instances):self.undo(name)
-            require('No gravity zones.' in self.command('flipzone list'),'Live gravity index retained zones after undo')
-            self.command('forceload remove all');self.command('save-all flush');self.stop()
-            self.assert_state('final-empty',{});self.audit_disk('restored',air=True)
-            self.report['passed']=True;self.event('PASS',meaning='both real placements, restart persistence, full saved geometry, all loot/spawner records, full air undo, zones/protection removed')
+            for name, (_, tiles) in originals.items():
+                (position,) = tiles
+                x, _, z = position
+                chunk = region.chunk(x//16, z//16)
+                chest = next(tile for tile in chunk['block_entities'] if tuple(tile[k] for k in 'xyz') == position)
+                item, = chest['Items']
+                require(chest['id'] == 'minecraft:chest' and item['Slot'] == 4 and item['count'] == 7
+                        and item['id'] == 'minecraft:diamond'
+                        and item['components']['minecraft:custom_data']['proof'] == 'direct placement',
+                        'Original inventory fixture is incomplete for '+name)
+                tiles[position] = chest
+                self.event('original_inventory_recorded', template=name, position=position)
+        finally:
+            region.close()
+        return originals
+
+    def verify_no_item_drops(self, name, originals):
+        (chest,) = originals[name][1]
+        xyz = ' '.join(map(str, chest))
+        self.wait_success('execute positioned '+xyz+' unless entity @e[type=minecraft:item,distance=..12]',
+                          'original inventory was not dropped '+name)
+
+    def place_direct(self, name):
+        x, y, z = ANCHORS[name]
+        self.command(f'forceload add {x} {z}')
+        self.wait_success(f'execute if loaded {x} {y} {z}', 'direct placement anchor '+name)
+        structure = 'place structure cuupsidedown:'+name
+        marker = '@e[type=minecraft:marker,tag=direct_dungeon_builder,limit=1]'
+        default_position = name == 'sakura_labyrinth'
+        if default_position:
+            self.command(f'summon minecraft:marker {x}.5 {y} {z}.5 {{Tags:["direct_dungeon_builder"]}}')
+            self.wait_success('execute if entity '+marker, 'builder at the requested origin')
+            native_command = 'execute as '+marker+' at @s run '+structure
+        else:
+            native_command = f'{structure} {x} {y} {z}'
+        try:
+            queued = self.command(native_command)
+            match = re.search(r'Direct placement started: ([a-f0-9]{12})\.', queued)
+            require(match is not None, 'Native placement did not start from one command: '+queued)
+            instance = match[1]
+            self.wait_phase('IDLE', instance, max_seconds=600)
+            self.instances[name] = instance
+            self.assert_state('direct-placed-'+name, self.instances)
+            require(any(e['Id'] == instance and e.get('Direct') for e in self.journal()),
+                    'Direct placement missing from durable journal')
+            self.event('direct_placement_verified', template=name, instance=instance,
+                       default_position=default_position, command=native_command)
+        finally:
+            if default_position:
+                self.command('kill '+marker)
+
+    def direct_scenario(self):
+        self.boot()
+        result = self.command('dungeon verifyloot', timeout=90)
+        require('Dungeon loot verified:' in result and 'all 512 final rolls' in result, 'Runtime loot verification failed')
+        originals = self.seed_obstructions()
+        for name in ANCHORS:
+            self.place_direct(name)
+            self.verify_no_item_drops(name, originals)
+        self.command('save-all flush')
+        self.stop()
+        self.audit_disk('direct-placed')
+        self.boot()
+        self.assert_state('direct-after-restart', self.instances)
+        self.runtime('direct-after-restart')
+        for name in list(self.instances):
+            self.undo(name, stage_prefix='direct-')
+            self.verify_no_item_drops(name, originals)
+        require('No gravity zones.' in self.command('flipzone list'), 'Direct undo retained zones')
+        self.command('forceload remove all')
+        self.command('save-all flush')
+        self.stop()
+        self.assert_state('direct-final-empty', {})
+        self.audit_disk('direct-restored', air=True, originals=originals)
+
+    def legacy_scenario(self):
+        self.boot()
+        result=self.command('dungeon verifyloot',timeout=90);require('Dungeon loot verified:' in result and 'all 512 final rolls' in result,'Runtime loot verification failed')
+        for name in ANCHORS:self.place(name)
+        self.runtime('before-restart');self.command('save-all flush');self.stop()
+        self.assert_state('before-restart',self.instances);self.audit_disk('placed')
+        self.boot();self.assert_state('after-restart',self.instances);self.runtime('after-restart')
+        result=self.command('dungeon verifyloot',timeout=90);require('Dungeon loot verified:' in result,'Loot verification failed after restart')
+        # Startup reconciles stale zones without deleting the unfinished backup or the placed sibling.
+        self.command('save-all flush');self.stop()
+        interrupted_name='sakura_labyrinth';backup_hash=self.simulate_interrupted_state(interrupted_name)
+        self.boot();self.assert_state('interrupted-recovery',self.instances);self.runtime('interrupted-recovery')
+        backup=WORLD/f'data/cu_dungeons/{self.instances[interrupted_name]}.before.nbt'
+        require(hashlib.sha256(backup.read_bytes()).hexdigest()==backup_hash,'Recovery modified the original backup')
+        self.assert_backup(interrupted_name,self.instances[interrupted_name])
+        self.event('interrupted_state_recovery_verified',template=interrupted_name,backup_unchanged=True,protection_retained=True,stale_zones_removed=True,placed_sibling_zones_retained=True)
+        for name in list(self.instances):self.undo(name)
+        require('No gravity zones.' in self.command('flipzone list'),'Live gravity index retained zones after undo')
+        self.command('forceload remove all');self.command('save-all flush');self.stop()
+        self.assert_state('final-empty',{});self.audit_disk('restored',air=True)
+
+    def run(self, scenario):
+        self.report['scenario'] = scenario
+        try:
+            self.prepare()
+            if scenario == 'direct':
+                self.direct_scenario()
+            else:
+                self.legacy_scenario()
+            self.report['passed'] = True
+            self.event('PASS', scenario=scenario)
         except Exception as e:
             self.report['error']=type(e).__name__+': '+str(e);self.event('FAIL',error=self.report['error'])
             (EVIDENCE/'hosted-smoke-traceback.txt').write_text(traceback.format_exc(),encoding='utf-8')
@@ -384,10 +501,12 @@ class Controller:
                 (EVIDENCE/'hosted-smoke-report.json').write_text(json.dumps(self.report,indent=2),encoding='utf-8')
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--timeout-seconds',type=int,default=2400);args=parser.parse_args()
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--timeout-seconds',type=int,default=2400)
+    parser.add_argument('--scenario', choices=('legacy','direct'), default='legacy')
+    args=parser.parse_args()
     require(300<=args.timeout_seconds<=2400,'Total timeout must be between 300 and 2400 seconds')
     # Guard before creating evidence or touching configuration on any local machine.
     require(os.environ.get('GITHUB_ACTIONS')=='true' and sys.platform=='linux','GitHub Linux runner required; no local server/build will be started')
-    Controller(args.timeout_seconds).run()
+    Controller(args.timeout_seconds).run(args.scenario)
 
 if __name__=='__main__':main()

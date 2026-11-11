@@ -1,0 +1,6 @@
+{
+  "type": "cuupsidedown:command_dungeon",
+  "biomes": [],
+  "step": "surface_structures",
+  "spawn_overrides": {}
+}

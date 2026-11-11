@@ -13,7 +13,14 @@ The deepest inverted-pagoda chest guarantees **one curated high-end reward per p
 
 Lootr chests use native per-player inventories and remain upright. Custom tables and planters can face any of six directions; pagoda stairs are mirrored for inverted traversal. Dungeon regions protect the builds, furniture, chests and spawners from ordinary editing and damage.
 
-Nothing spawns naturally. Administrators preview an area, inspect its bounds, then confirm placement. Placement saves the original blocks and supports a separately confirmed undo.
+Administrators can place either dungeon at their position with one command. The dungeon replaces the blocks inside its bounds, including fluids, modded terrain and containers. Rooms clear to air as the build is placed.
+
+```mcfunction
+/place structure cuupsidedown:sakura_labyrinth
+/place structure cuupsidedown:mirror_pagoda
+```
+
+Append coordinates to choose a different anchor. Placement starts immediately and writes the build over successive server ticks. Use `/dungeon status` for progress. The dungeons spawn only by command. The older `/dungeon preview` and confirmation flow is still available.
 
 ## Install and use
 
@@ -28,7 +35,7 @@ Required pack mods: Lootr, Cobblemon and SimplySwords, with their normal depende
 ```text
 ./gradlew build
 python tools/make_loot_tables.py --check
-python tools/validate_content.py --mods "PATH/TO/CLIENT/mods" --jar build/libs/upsidedown-1.2.0-beta.1.jar
+python tools/validate_content.py --mods "PATH/TO/CLIENT/mods" --jar build/libs/upsidedown-1.2.0-beta.3.jar
 ```
 
 `make_loot_tables.py` regenerates the four loot tables; `--check` checks for differences without writing. `validate_content.py` checks the loot guarantee, template bounds and runs, chest identities, spawner settings, room routes and packaged resources. When template JSON sidecars are present, it also checks room graphs, reward pockets and accessible walkways.

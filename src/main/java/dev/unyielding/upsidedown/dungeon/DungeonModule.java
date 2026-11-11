@@ -51,6 +51,7 @@ public final class DungeonModule {
     }
     public static void init(IEventBus modBus) {
         DungeonBlocks.init(modBus);
+        CommandDungeonStructure.register(modBus);
         IEventBus bus=NeoForge.EVENT_BUS;
         bus.addListener(ServerAboutToStartEvent.class,e->{
             try{SERVICES.put(e.getServer(),new DungeonService(e.getServer()));}

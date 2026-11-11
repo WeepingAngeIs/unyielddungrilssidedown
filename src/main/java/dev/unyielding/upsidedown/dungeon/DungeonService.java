@@ -17,6 +17,7 @@ import net.minecraft.network.chat.*;
 import net.minecraft.resources.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.*;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.ChunkPos;
@@ -25,7 +26,7 @@ import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 
-/** Preview -> terrain scan -> owner-bound confirmation -> revalidation -> backed-up, tick-budgeted placement. */
+/** Direct and previewed placement share region protection, authored block entities, gravity, and restoration. */
 public final class DungeonService {
     private static final UUID CONSOLE=new UUID(0,0);
     private static final TicketType<String> TICKET=TicketType.create("cu_dungeon_work",Comparator.<String>naturalOrder());
@@ -42,10 +43,14 @@ public final class DungeonService {
         DungeonTemplate template;DungeonStore.Entry entry;
         BlockPos min;int sx,sy,sz,volume,cursor;boolean terrain,undo,locked,journaled;
         Phase phase;long expires;int[] before;
+        DungeonPasteBackup directBackup;
+        DungeonPasteBackup.Capture capture;
+        DungeonPasteBackup.Part restorePart;
         List<BlockState> palette=new ArrayList<>();Map<BlockState,Integer> paletteMap=new HashMap<>();
         Set<ChunkPos> tickets=new HashSet<>();
         AABB box(){return new AABB(min.getX(),min.getY(),min.getZ(),min.getX()+sx,min.getY()+sy,min.getZ()+sz);}
         BlockPos at(int i){return min.offset(i%sx,i/(sx*sz),(i/sx)%sz);}
+        int workLimit(){return undo&&directBackup!=null?directBackup.covered():volume;}
     }
 
     public DungeonService(MinecraftServer server)throws IOException {this.server=server;store=new DungeonStore(server);}
@@ -89,21 +94,56 @@ public final class DungeonService {
 
     int help(CommandSourceStack s){say(s,"Dungeon commands: list; preview <template> <x y z> [terrain]; confirm <token>; status; cancel; undo <instance>; entrance <instance>; verifyloot. Preview places NO blocks. Default accepts empty space/vegetation only. Terrain mode explicitly permits natural stone/dirt/bedrock, never containers or arbitrary blocks.");return 1;}
     int list(CommandSourceStack s){say(s,"Templates: sakura_labyrinth — 100 themed gravity chambers; mirror_pagoda — upright and inverted Japanese Mimic towers. No natural spawning. Existing instances:");store.entries.values().forEach(e->say(s,e.id()+" "+e.template()+" "+e.dimension()+" "+e.status()+" "+e.min().toShortString()));return 1;}
-    int status(CommandSourceStack s){if(job==null)say(s,"No placement job. /dungeon list shows saved instances, including interrupted ones that can be restored with undo.");else say(s,job.phase+" "+job.instance+" "+(100L*job.cursor/Math.max(1,job.volume))+"%; bounds "+bounds(job)+"; preview token "+job.token);return 1;}
+    int status(CommandSourceStack s){if(job==null)say(s,"No placement job. /dungeon list shows saved instances, including interrupted ones that can be restored with undo.");else say(s,job.phase+" "+job.instance+" "+(100L*job.cursor/Math.max(1,job.workLimit()))+"%; bounds "+bounds(job)+(job.phase==Phase.READY?"; preview token "+job.token:""));return 1;}
     private String bounds(Job j){return j.min.toShortString()+" through "+j.min.offset(j.sx-1,j.sy-1,j.sz-1).toShortString();}
+
+    private Job placement(CommandSourceStack s,String id,BlockPos anchor) throws Exception {
+        List<String> problems=DungeonLootChecks.problems(s.getLevel());
+        if(!problems.isEmpty())throw new IOException("Dungeon dependencies/loot not ready: "+String.join("; ",problems));
+        DungeonTemplate t=DungeonTemplate.load(id);
+        Job j=new Job();
+        j.template=t;j.source=s;j.owner=owner(s);j.level=s.getLevel();j.instance=shortId();
+        j.min=anchor.offset(t.offset);j.sx=t.sx;j.sy=t.sy;j.sz=t.sz;j.volume=t.volume;
+        if(j.min.getY()<j.level.getMinBuildHeight()||(long)j.min.getY()+j.sy>j.level.getMaxBuildHeight())throw new IOException("Does not fit this dimension: dungeon Y "+j.min.getY()+".."+(j.min.getY()+j.sy-1)+", world Y "+j.level.getMinBuildHeight()+".."+(j.level.getMaxBuildHeight()-1)+". The twin pagoda needs expanded height; no blocks changed.");
+        if(!j.level.getWorldBorder().isWithinBounds(j.min)||!j.level.getWorldBorder().isWithinBounds(j.min.offset(j.sx-1,0,j.sz-1)))throw new IOException("Dungeon would cross the world border.");
+        for(var e:store.entries.values())if(e.dimension().equals(j.level.dimension().location().toString())&&e.box().intersects(j.box()))throw new IOException("Overlaps saved dungeon "+e.id()+". Choose another location.");
+        for(var z:Flip.SERVER)if(z.dim().equals(j.level.dimension())&&z.box().intersects(j.box()))throw new IOException("Overlaps existing gravity zone "+z.name()+". Choose another location or review that zone first.");
+        return j;
+    }
+
+    public static int placeDirect(CommandSourceStack source,String templateId,BlockPos anchor) {
+        return get(source).startDirect(source,templateId,anchor);
+    }
+
+    private int startDirect(CommandSourceStack source,String templateId,BlockPos anchor) {
+        if(job!=null)return error(source,"Finish or cancel the current job first. /dungeon status");
+        try {
+            Job j=placement(source,templateId,anchor);
+            j.entry=buildingEntry(j,true);
+            j.directBackup=DungeonPasteBackup.create(store,j.entry);
+            // The protection journal and an empty, restorable manifest exist before the first block edit.
+            store.put(j.entry);
+            j.journaled=true;
+            j.locked=true;
+            j.phase=Phase.PLACE;
+            job=j;
+            say(source,"Direct placement started: "+j.instance+". Replacing all blocks inside "+bounds(j)+", including template air. /dungeon status tracks progress.");
+            return 1;
+        } catch(Exception ex) {
+            return error(source,"Cannot place dungeon: "+ex.getMessage());
+        }
+    }
+
+    private DungeonStore.Entry buildingEntry(Job j,boolean direct) {
+        return new DungeonStore.Entry(j.instance,j.template.id,j.level.dimension().location().toString(),j.min,j.sx,j.sy,j.sz,j.min.offset(j.template.spawn),"BUILDING",direct);
+    }
 
     int preview(CommandSourceStack s,String id,BlockPos anchor,boolean terrain) {
         if(job!=null)return error(s,"Finish or cancel the current preview/job first. /dungeon status");
         try {
-            List<String> problems=DungeonLootChecks.problems(s.getLevel());
-            if(!problems.isEmpty())return error(s,"Dungeon dependencies/loot not ready: "+String.join("; ",problems));
-            DungeonTemplate t=DungeonTemplate.load(id);Job j=new Job();j.template=t;j.source=s;j.owner=owner(s);j.level=s.getLevel();
-            j.token=shortId();j.instance=shortId();j.min=anchor.offset(t.offset);j.sx=t.sx;j.sy=t.sy;j.sz=t.sz;j.volume=t.volume;j.terrain=terrain;j.phase=Phase.SCAN;j.before=new int[t.volume];
-            if(j.min.getY()<j.level.getMinBuildHeight()||(long)j.min.getY()+j.sy>j.level.getMaxBuildHeight())return error(s,"Does not fit this dimension: dungeon Y "+j.min.getY()+".."+(j.min.getY()+j.sy-1)+", world Y "+j.level.getMinBuildHeight()+".."+(j.level.getMaxBuildHeight()-1)+". The twin pagoda needs expanded height; no blocks changed.");
-            if(!j.level.getWorldBorder().isWithinBounds(j.min)||!j.level.getWorldBorder().isWithinBounds(j.min.offset(j.sx-1,0,j.sz-1)))return error(s,"Dungeon would cross the world border.");
-            for(var e:store.entries.values())if(e.dimension().equals(j.level.dimension().location().toString())&&e.box().intersects(j.box()))return error(s,"Overlaps saved dungeon "+e.id()+". Choose another location.");
-            for(var z:Flip.SERVER)if(z.dim().equals(j.level.dimension())&&z.box().intersects(j.box()))return error(s,"Overlaps existing gravity zone "+z.name()+". Choose another location or review that zone first.");
-            job=j;say(s,"PREVIEW ONLY: "+t.name+". Bounds "+bounds(j)+" ("+j.volume+" cells). Scanning before offering confirmation. "+(terrain?"TERRAIN mode may replace player-built natural stone too; inspect the bounds carefully.":"Empty-space mode: terrain and existing builds are refused."));draw(j);return 1;
+            Job j=placement(s,id,anchor);
+            j.token=shortId();j.terrain=terrain;j.phase=Phase.SCAN;j.before=new int[j.volume];
+            job=j;say(s,"PREVIEW ONLY: "+j.template.name+". Bounds "+bounds(j)+" ("+j.volume+" cells). Scanning before offering confirmation. "+(terrain?"TERRAIN mode may replace player-built natural stone too; inspect the bounds carefully.":"Empty-space mode: terrain and existing builds are refused."));draw(j);return 1;
         }catch(Exception e){UpsideDown.LOG.error("Dungeon preview failed",e);return error(s,"Cannot preview dungeon: "+e.getMessage());}
     }
 
@@ -132,11 +172,15 @@ public final class DungeonService {
         var e=store.entries.get(instance);if(e==null)return error(s,"Unknown dungeon instance. Use /dungeon list.");
         if(!e.dimension().equals(s.getLevel().dimension().location().toString()))return error(s,"Run undo in "+e.dimension());
         try {
-            CompoundTag backup=DungeonStore.read(store.backup(instance));
             Job j=new Job();j.instance=instance;j.entry=e;j.owner=owner(s);j.source=s;j.level=s.getLevel();j.token=shortId();j.undo=true;j.phase=Phase.READY;j.expires=System.currentTimeMillis()+180_000;
             j.min=e.min();j.sx=e.sx();j.sy=e.sy();j.sz=e.sz();j.volume=Math.multiplyExact(Math.multiplyExact(j.sx,j.sy),j.sz);
-            if(!Arrays.equals(backup.getIntArray("Size"),new int[]{j.sx,j.sy,j.sz})||!Arrays.equals(backup.getIntArray("Min"),DungeonStore.vec(j.min))||!backup.getString("Dimension").equals(e.dimension()))throw new IOException("Backup bounds/dimension do not match journal");
-            j.palette=new ArrayList<>(DungeonTemplate.parsePalette(backup.getList("Palette",Tag.TAG_STRING)));j.before=DungeonTemplate.decodeRuns(backup.getIntArray("Runs"),j.volume,j.palette.size());
+            if(e.direct()) {
+                j.directBackup=DungeonPasteBackup.open(store,e);
+            } else {
+                CompoundTag backup=DungeonStore.read(store.backup(instance));
+                if(!Arrays.equals(backup.getIntArray("Size"),new int[]{j.sx,j.sy,j.sz})||!Arrays.equals(backup.getIntArray("Min"),DungeonStore.vec(j.min))||!backup.getString("Dimension").equals(e.dimension()))throw new IOException("Backup bounds/dimension do not match journal");
+                j.palette=new ArrayList<>(DungeonTemplate.parsePalette(backup.getList("Palette",Tag.TAG_STRING)));j.before=DungeonTemplate.decodeRuns(backup.getIntArray("Runs"),j.volume,j.palette.size());
+            }
             job=j;say(s,"UNDO PREVIEW: this removes dungeon "+instance+" and restores its original blocks, including any later admin edits inside "+bounds(j)+". Move everyone outside first.");offer(j);draw(j);return 1;
         }catch(Exception ex){return error(s,"Backup cannot be restored: "+ex.getMessage()+". Existing dungeon protection remains active.");}
     }
@@ -150,13 +194,22 @@ public final class DungeonService {
     public void tick() {
         ticks++;Job j=job;if(j==null)return;
         if(j.phase==Phase.READY){if(System.currentTimeMillis()>j.expires){say(j.source,"Dungeon preview expired; no blocks changed.");release(j);job=null;}else if(ticks%20==0)draw(j);return;}
-        if(ticks%100==0)say(j.source,"Dungeon "+j.phase.toString().toLowerCase(Locale.ROOT)+": "+(100L*j.cursor/j.volume)+"%.");
+        int limit=j.workLimit();
+        if(ticks%100==0)say(j.source,"Dungeon "+j.phase.toString().toLowerCase(Locale.ROOT)+": "+(100L*j.cursor/Math.max(1,limit))+"%.");
         try {
-            if((j.phase==Phase.PLACE||j.phase==Phase.RESTORE)&&occupied(j))throw new IOException("An entity entered the work area. Move it out before restoring/retrying");
+            if((j.phase==Phase.RESTORE||(j.phase==Phase.PLACE&&j.directBackup==null))&&occupied(j))throw new IOException("An entity entered the work area. Move it out before restoring/retrying");
             long deadline=System.nanoTime()+6_000_000L;
-            for(int n=0;n<BATCH&&j.cursor<j.volume&&System.nanoTime()<deadline;n++) {
-                BlockPos p=j.at(j.cursor);ChunkPos cp=new ChunkPos(p);
+            for(int n=0;n<BATCH&&j.cursor<limit&&System.nanoTime()<deadline;n++) {
+                // On direct placement only the next band is backed up, immediately before writing it.
+                boolean capturing=j.phase==Phase.PLACE&&j.directBackup!=null&&j.cursor==j.directBackup.covered();
+                if(capturing&&j.capture==null)j.capture=j.directBackup.new Capture();
+                BlockPos p=j.at(capturing?j.cursor+j.capture.count:j.cursor);ChunkPos cp=new ChunkPos(p);
                 if(j.tickets.add(cp)){j.level.getChunkSource().addRegionTicket(TICKET,cp,2,j.instance);j.level.getChunk(cp.x,cp.z);break;}
+                if(capturing) {
+                    j.capture.add(j.level,p);
+                    if(j.capture.full()){j.capture.commit();j.capture=null;}
+                    continue;
+                }
                 switch(j.phase) {
                     case SCAN -> {
                         BlockState old=j.level.getBlockState(p);
@@ -166,13 +219,16 @@ public final class DungeonService {
                     case VERIFY -> {
                         if(j.level.getBlockEntity(p)!=null||!j.level.getBlockState(p).equals(j.palette.get(j.before[j.cursor])))throw new IOException("World changed after preview at "+p.toShortString()+". Preview again; no blocks were placed.");
                     }
-                    case PLACE -> set(j,p,j.template.palette.get(j.template.blocks[j.cursor]));
-                    case RESTORE -> {j.level.removeBlockEntity(p);set(j,p,j.palette.get(j.before[j.cursor]));}
+                    case PLACE -> {
+                        if(j.directBackup!=null)removeOriginalBlockEntity(j,p);
+                        set(j,p,j.template.palette.get(j.template.blocks[j.cursor]));
+                    }
+                    case RESTORE -> restoreBlock(j,p);
                     default -> throw new IllegalStateException("Unexpected phase");
                 }
                 j.cursor++;
             }
-            if(j.cursor==j.volume)finishPhase(j);
+            if(j.cursor==limit)finishPhase(j);
         }catch(Exception e){fail(j,e);}
     }
 
@@ -183,9 +239,44 @@ public final class DungeonService {
         ResourceLocation id=net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(state.getBlock());
         return id.getNamespace().equals("minecraft")&&(TERRAIN.contains(id.getPath())||id.getPath().endsWith("_ore"));
     }
-    private void set(Job j,BlockPos p,BlockState state)throws IOException {
+    private void removeOriginalBlockEntity(Job j,BlockPos p)throws IOException {
+        if(!j.level.getBlockState(p).hasBlockEntity())return;
+        // Vanilla structure placement clears the inventory and inserts a temporary barrier. Also detach
+        // the old entity so removal callbacks cannot drop contents or reuse a previous Lootr identity.
+        Clearable.tryClear(j.level.getBlockEntity(p));
+        j.level.removeBlockEntity(p);
+        writeState(j,p,Blocks.BARRIER.defaultBlockState());
+    }
+
+    private void restoreBlock(Job j,BlockPos p)throws Exception {
+        if(j.directBackup==null) {
+            removeOriginalBlockEntity(j,p);
+            set(j,p,j.palette.get(j.before[j.cursor]));
+            return;
+        }
+        if(j.restorePart==null||j.cursor==j.restorePart.end())j.restorePart=j.directBackup.readPart(j.cursor);
+        CompoundTag original=j.restorePart.entities().get(p);
+        removeOriginalBlockEntity(j,p);
+        set(j,p,j.restorePart.state(j.cursor));
+        if(original!=null)loadBlockEntity(j,p,original);
+    }
+
+    private void loadBlockEntity(Job j,BlockPos p,CompoundTag data)throws IOException {
+        BlockEntity be=j.level.getBlockEntity(p);
+        if(be==null)throw new IOException("Missing block entity after placement at "+p);
+        be.loadWithComponents(data,j.level.registryAccess());
+        be.setChanged();
+        BlockState state=j.level.getBlockState(p);
+        j.level.sendBlockUpdated(p,state,state,Block.UPDATE_CLIENTS);
+    }
+
+    private void writeState(Job j,BlockPos p,BlockState state)throws IOException {
         if(!j.level.getBlockState(p).equals(state)&&!DungeonModule.withEdits(()->j.level.setBlock(p,state,FLAGS)))throw new IOException("World rejected block at "+p.toShortString());
-        if(j.phase==Phase.PLACE&&j.level.getBlockEntity(p) instanceof SpawnerBlockEntity spawner){
+    }
+
+    private void set(Job j,BlockPos p,BlockState state)throws IOException {
+        writeState(j,p,state);
+        if(j.phase==Phase.PLACE&&state.is(Blocks.SPAWNER)&&j.level.getBlockEntity(p) instanceof SpawnerBlockEntity spawner){
             CompoundTag sleeping=new CompoundTag();sleeping.putShort("Delay",(short)32767);sleeping.putShort("RequiredPlayerRange",(short)0);
             spawner.loadWithComponents(sleeping,j.level.registryAccess());spawner.setChanged();
         }
@@ -200,15 +291,14 @@ public final class DungeonService {
                 CompoundTag backup=new CompoundTag();backup.putIntArray("Size",new int[]{j.sx,j.sy,j.sz});backup.putIntArray("Min",DungeonStore.vec(j.min));backup.putString("Dimension",j.level.dimension().location().toString());
                 ListTag pal=new ListTag();j.palette.forEach(state->pal.add(StringTag.valueOf(DungeonTemplate.stateString(state))));backup.put("Palette",pal);backup.putIntArray("Runs",DungeonTemplate.encodeRuns(j.before));
                 DungeonStore.write(store.backup(j.instance),backup);
-                j.entry=new DungeonStore.Entry(j.instance,j.template.id,j.level.dimension().location().toString(),j.min,j.sx,j.sy,j.sz,j.min.offset(j.template.spawn),"BUILDING");store.put(j.entry);j.journaled=true;
+                j.entry=buildingEntry(j,false);store.put(j.entry);j.journaled=true;
                 j.phase=Phase.PLACE;j.cursor=0;say(j.source,"Original terrain backed up. Placing "+j.template.name+"; keep players outside until complete. Instance "+j.instance);
             }
             case PLACE -> {
                 for(CompoundTag original:j.template.blockEntities){
                     CompoundTag data=original.copy();BlockPos p=j.min.offset(data.getInt("x"),data.getInt("y"),data.getInt("z"));data.putInt("x",p.getX());data.putInt("y",p.getY());data.putInt("z",p.getZ());
                     data.remove("LootrId");data.remove("lootrid");data.remove("Openers");data.remove("openers");
-                    BlockEntity be=j.level.getBlockEntity(p);if(be==null)throw new IOException("Missing block entity after placement at "+p);
-                    be.loadWithComponents(data,j.level.registryAccess());be.setChanged();j.level.sendBlockUpdated(p,j.level.getBlockState(p),j.level.getBlockState(p),Block.UPDATE_CLIENTS);
+                    loadBlockEntity(j,p,data);
                 }
                 List<Flip.Zone> zones=new ArrayList<>();String prefix="dungeon/"+j.instance;
                 for(var z:j.template.zones){BlockPos a=j.min.offset(z.min()),b=j.min.offset(z.max());zones.add(new Flip.Zone(prefix+"/"+z.name(),j.level.dimension(),new AABB(a.getX(),a.getY(),a.getZ(),b.getX()+1,b.getY()+1,b.getZ()+1),z.gravity()));}

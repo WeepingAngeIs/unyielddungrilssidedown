@@ -15,7 +15,7 @@ Recovery used Vineflower 1.10.1. Original binary metadata declared the MIT licen
 
 ## Build and verification
 
-The source targets Java 21, Gradle 9.2.1, ModDevGradle 2.0.148 and NeoForge 21.1.249. The current output name is `build/libs/upsidedown-1.2.0-beta.1.jar`. Version and mod metadata must be updated together for later releases. Archives use stable entry ordering without preserved file timestamps.
+The source targets Java 21, Gradle 9.2.1, ModDevGradle 2.0.148 and NeoForge 21.1.249. The current output name is `build/libs/upsidedown-1.2.0-beta.3.jar`. Version and mod metadata must be updated together for later releases. Archives use stable entry ordering without preserved file timestamps.
 
 Heavy builds and server/client tests for this project belong on GitHub-hosted Actions runners. See [the README](README.md) for commands and the current verification record. Compilation alone does not establish gameplay correctness. External runtime dependencies are downloaded from the pinned official URLs in [the runtime manifest](ci/runtime-mods.json), rather than redistributed with this source.
 
