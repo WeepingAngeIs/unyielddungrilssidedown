@@ -44,6 +44,8 @@ The administrator command `/dungeon verifyloot` checks the running server's regi
 
 ## Beta verification status
 
+The [beta.3 hosted direct placement check](https://github.com/WeepingAngeIs/unyielddungrilssidedown/actions/runs/42936094015/job/130246817990) placed the maze at the command source and the pagoda at explicit coordinates. It checked all 8,239,404 saved block positions and all 747 dungeon block entities. After restart, both dungeons retained their gravity and loot. Undo restored the original lava, mod blocks and stocked chest in each footprint, including the custom data on the items.
+
 Static content checks passed: 600 fresh Lootr chests; 147 enclosed fast spawners; 100 connected maze rooms; 80 normal-gravity reward pockets excluded from gravity zones; both 25-floor wings; and one guaranteed final reward chest at the deepest chest level. The packaged templates and loot tables match the validated source.
 
 [GitHub-hosted build and integration run 42410149580 passed](https://github.com/WeepingAngeIs/unyielddungrilssidedown/actions/runs/42410149580) for source commit `dc4b3e62fdfe6dbc6aee3bf81c411516b45ae2a8`. It placed both complete dungeons, checked all 8,239,404 saved block positions and 747 block entities, verified live gravity directions before and after restart, preserved high-end rewards in all 512 final-chest samples, and confirmed protection and fast spawner data. Confirmed undo restored every tested position to its original air and removed both journal entries and all dungeon zones.
