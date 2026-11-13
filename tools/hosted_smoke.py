@@ -250,6 +250,16 @@ class Controller:
             report=EVIDENCE/(name+'-runtime.json');require(report.exists(),'Runtime report missing')
             (EVIDENCE/f'{stage}-{name}-runtime.json').write_bytes(report.read_bytes())
             self.event('runtime_checks_passed',stage=stage,template=name)
+            # A real NeoForge fake player clicks the wall and builds a short
+            # exterior bridge, then probes protected walls, trees and old masks.
+            t=self.loaded[name];mx,my,mz=t['Minimum'];maze=name=='sakura_labyrinth'
+            for x,z in [(mx+(2 if maze else 21),mz+(50 if maze else 48)),
+                        (mx+(6 if maze else 10),mz+(10 if maze else 12))]:
+                self.command(f'forceload add {x} {z}')
+                self.wait_success(f'execute if loaded {x} {my+(9 if maze else 327)} {z}','exterior/tree probe chunk '+name)
+            result=self.command('cu_ci_protection '+name+' '+' '.join(map(str,anchor)),timeout=90)
+            require('CI exterior and tree checks passed: '+name in result,'Fake-player protection check failed: '+result)
+            self.event('fake_player_exterior_and_tree_verified',stage=stage,template=name)
         # Probe the live in-memory gravity index, including after reload. Markers
         # have no collision/physics; remove them before any placement or undo.
         for name,t in self.loaded.items():

@@ -142,6 +142,8 @@ def template_checks(path):
  final=[t for t in chests if t['LootTable']=='cuupsidedown:chests/pagoda_final']
  geometry={}
  if 'labyrinth' in path.stem:
+  assert_true(all(state_at((x,5,z)) not in AIR for x in range(2,203) for z in (219,220)), 'Maze outer floor strip has a gap')
+  assert_true(all(state_at((x,y,220)) not in AIR for x in range(2,203) for y in range(6,13)), 'Maze south perimeter wall has a gap')
   assert_true(len(chests)>=400,'100-room maze needs at least four chests per room')
   assert_true(not final,'Maze must not contain final pagoda reward')
   assert_true(len(zones)>=100,'100-room maze needs at least 100 room gravity zones')

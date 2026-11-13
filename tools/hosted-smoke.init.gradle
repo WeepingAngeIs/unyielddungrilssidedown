@@ -1,5 +1,12 @@
 // GitHub-only controller fixture; never an installed Minecraft profile.
 gradle.beforeProject { target ->
+    // The fake-player probes are compiled only into the disposable hosted
+    // server run, never into the published mod jar.
+    target.pluginManager.withPlugin('java') {
+        target.extensions.getByName('sourceSets').named('main') {
+            java.srcDir(target.layout.projectDirectory.dir('ci/hosted-java'))
+        }
+    }
     target.pluginManager.withPlugin('net.neoforged.moddev') {
         target.extensions.getByName('neoForge').runs.configureEach {
             if (name == 'server') {

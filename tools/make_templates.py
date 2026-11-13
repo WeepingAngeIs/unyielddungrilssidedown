@@ -64,6 +64,30 @@ class Build:
   spawn={'entity':ent,'custom_spawn_rules':rules}
   self.tiles.append({'id':'minecraft:mob_spawner','x':x,'y':y,'z':z,'Delay':20,'MinSpawnDelay':40,'MaxSpawnDelay':100,'SpawnCount':3,'MaxNearbyEntities':12,'RequiredPlayerRange':16,'SpawnRange':4,'SpawnData':spawn,'SpawnPotentials':[{'weight':1,'data':copy.deepcopy(spawn)}]})
  def zone(self,name,lo,hi,g):self.zones.append({'Name':name,'Min':arr(lo),'Max':arr(hi),'Gravity':g})
+ def tree(self,x,ground,z,radius,seed):
+  # Layered, irregular cherry canopy with a trunk and short branches. Keep
+  # existing buildings and decorations intact when trees overlap them.
+  rng=random.Random(seed);tall=radius>3;trunk=8 if tall else 6
+  def place_tree(xx,yy,zz,state):
+   if not (0<=xx<self.size[0] and 0<=yy<self.size[1] and 0<=zz<self.size[2]):return
+   old=self.pal[self.a[yy,zz,xx]]
+   if old==AIR or old.startswith('minecraft:cherry_leaves'):
+    self.put(xx,yy,zz,state)
+  log='minecraft:cherry_log[axis=y]';leaves='minecraft:cherry_leaves[distance=7,persistent=true,waterlogged=false]'
+  for yy in range(ground+1,ground+trunk+1):place_tree(x,yy,z,log)
+  for dx,dz,axis in [(1,0,'x'),(-1,0,'x'),(0,1,'z'),(0,-1,'z')]:
+   for step in range(1,3 if tall else 2):
+    place_tree(x+dx*step,ground+trunk-1+(step//2),z+dz*step,f'minecraft:cherry_log[axis={axis}]')
+  bottom=ground+(6 if tall else 5);height=8 if tall else 6
+  for layer in range(height):
+   # Different offsets and rounded layer outlines keep the canopy from becoming a box.
+   shiftx=(1 if layer>=height//2 else 0);shiftz=(-1 if layer==height-1 else 0)
+   layer_radius=max(1, radius-(abs(2*layer-(height-1))*radius//(height+2)))
+   for dx in range(-radius,radius+1):
+    for dz in range(-radius,radius+1):
+     dist=((dx-shiftx)**2+(dz-shiftz)**2)**0.5
+     if dist<=layer_radius-0.6 or (dist<=layer_radius+0.35 and rng.random()<0.63):
+      place_tree(x+dx,bottom+layer,z+dz,leaves)
  def save(self,title):
   flat=self.a.ravel(); starts=np.r_[0,np.flatnonzero(flat[1:]!=flat[:-1])+1]; lens=np.diff(np.r_[starts,flat.size]);runs=np.column_stack([lens,flat[starts]]).astype(np.int32).ravel()
   assert int(runs[::2].sum())==flat.size
@@ -87,7 +111,7 @@ def build_maze():
  b.box(3,6,3,201,14,218,AIR)
  # Ten by ten pavilions. Every room has a three-wide, normal-gravity promenade.
  ox=12;oz=12;stride=18;fy=5;cy=14
- b.box(3,0,3,201,3,218,'minecraft:stone');b.box(3,4,3,201,4,218,'minecraft:dirt');b.box(3,fy,3,201,fy,218,CUSTOM+'blossom_floor')
+ b.box(2,0,2,202,3,220,'minecraft:stone');b.box(2,4,2,202,4,220,'minecraft:dirt');b.box(2,fy,2,202,fy,220,CUSTOM+'blossom_floor')
  # Deterministic DFS spanning tree + 17 loops, retaining true dead ends.
  graph={i:set() for i in range(100)};seen={90};stack=[90]
  while stack:
@@ -182,8 +206,11 @@ def build_maze():
  b.box(entx-7,fy+9,210,entx+7,fy+9,210,CUSTOM+'dark_wall');b.box(entx-8,fy+11,210,entx+8,fy+11,210,'minecraft:cherry_planks')
  for xx in [6,198]:
   for zz in range(10,211,20):
-   b.box(xx,fy+1,zz,xx,fy+5,zz,'minecraft:cherry_log[axis=y]')
-   b.box(max(1,xx-3),fy+5,zz-3,min(203,xx+3),fy+7,zz+3,'minecraft:cherry_leaves[distance=7,persistent=true,waterlogged=false]')
+   b.tree(xx,fy,zz,3,10000+xx*300+zz)
+ # The entire garden edge is supported, including the formerly open strip
+ # between the last row of floor and the south perimeter wall.
+ assert all(b.a[fy,219,x]!=0 and b.a[fy,220,x]!=0 for x in range(2,203))
+ assert all(b.a[y,220,x]!=0 for y in range(fy+1,fy+8) for x in range(2,203))
  b.spawn=[entx,fy+1,216]
  # Exact 2-high normal-gravity traversal validation of every promenade.
  blocked_zone=np.zeros((b.size[2],b.size[0]),bool)
@@ -336,7 +363,7 @@ def build_pagoda():
  for xx in [cx-8,cx+8]:b.box(xx,Y+1,97,xx,Y+10,97,CUSTOM+'sakura_wall')
  b.box(cx-11,Y+10,97,cx+11,Y+10,97,CUSTOM+'dark_wall');b.box(cx-12,Y+12,97,cx+12,Y+12,97,'minecraft:cherry_planks')
  for x,z in [(10,12),(86,12),(10,90),(86,90)]:
-  b.box(x,Y+1,z,x,Y+7,z,'minecraft:cherry_log[axis=y]');b.box(x-5,Y+6,z-5,x+5,Y+10,z+5,'minecraft:cherry_leaves[distance=7,persistent=true,waterlogged=false]')
+  b.tree(x,Y,z,5,20000+x*300+z)
  b.spawn=[cx,Y+1,103]
  # Discrete conservative walk graph across upright floor surfaces and stair high edges.
  solid=b.a!=0

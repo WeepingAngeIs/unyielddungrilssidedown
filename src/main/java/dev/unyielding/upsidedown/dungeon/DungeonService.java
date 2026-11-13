@@ -348,14 +348,28 @@ public final class DungeonService {
     public boolean protectedAt(ServerLevel level,BlockPos p){
         if(isWriting(level,p))return true;
         String dim=level.dimension().location().toString();
-        for(var e:store.entries.values())if(e.dimension().equals(dim)&&e.box().intersects(new AABB(p))&&(!e.status().equals("PLACED")||protection.contains(e,p)))return true;
+        for(var e:store.entries.values())if(e.dimension().equals(dim)&&e.box().intersects(new AABB(p))&&protection.contains(e,p))return true;
         return false;
     }
-    public boolean isWriting(ServerLevel level,BlockPos p){return job!=null&&job.locked&&job.level==level&&job.box().intersects(new AABB(p));}
+    public boolean isWriting(ServerLevel level,BlockPos p){
+        Job j=job;
+        if(j==null||!j.locked||j.level!=level||j.mask==null)return false;
+        int x=p.getX()-j.min.getX(),y=p.getY()-j.min.getY(),z=p.getZ()-j.min.getZ();
+        return x>=0&&x<j.sx&&y>=0&&y<j.sy&&z>=0&&z<j.sz&&j.mask.get((y*j.sz+z)*j.sx+x);
+    }
     public boolean protectedBox(ServerLevel level,AABB box) {
         String dim=level.dimension().location().toString();
-        if(job!=null&&job.locked&&job.level==level&&job.box().intersects(box))return true;
-        for(var e:store.entries.values())if(e.dimension().equals(dim)&&e.box().intersects(box)&&(!e.status().equals("PLACED")||protection.intersects(e,box)))return true;
+        Job j=job;
+        if(j!=null&&j.locked&&j.level==level&&j.mask!=null&&j.box().intersects(box)) {
+            int x0=Math.max(0,(int)Math.floor(box.minX)-j.min.getX()),x1=Math.min(j.sx-1,(int)Math.ceil(box.maxX)-1-j.min.getX());
+            int y0=Math.max(0,(int)Math.floor(box.minY)-j.min.getY()),y1=Math.min(j.sy-1,(int)Math.ceil(box.maxY)-1-j.min.getY());
+            int z0=Math.max(0,(int)Math.floor(box.minZ)-j.min.getZ()),z1=Math.min(j.sz-1,(int)Math.ceil(box.maxZ)-1-j.min.getZ());
+            for(int y=y0;y<=y1;y++)for(int z=z0;z<=z1;z++) {
+                int start=(y*j.sz+z)*j.sx+x0,found=j.mask.nextSetBit(start);
+                if(found>=start&&found<=start+x1-x0)return true;
+            }
+        }
+        for(var e:store.entries.values())if(e.dimension().equals(dim)&&e.box().intersects(box)&&protection.intersects(e,box))return true;
         return false;
     }
 }

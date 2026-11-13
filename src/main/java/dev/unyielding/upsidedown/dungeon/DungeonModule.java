@@ -12,11 +12,11 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
-import net.neoforged.neoforge.event.entity.EntityMobGriefingEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDestroyBlockEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.*;
@@ -67,19 +67,32 @@ public final class DungeonModule {
         bus.addListener(BlockEvent.FarmlandTrampleEvent.class,e->{if(e.getLevel() instanceof ServerLevel l&&service(l.getServer()).protectedAt(l,e.getPos()))e.setCanceled(true);});
         bus.addListener(BlockEvent.BlockToolModificationEvent.class,e->{if(e.getLevel() instanceof ServerLevel l&&service(l.getServer()).protectedAt(l,e.getPos()))e.setCanceled(true);});
         bus.addListener(PistonEvent.Pre.class,e->{
-            if(e.getLevel() instanceof ServerLevel l&&service(l.getServer()).protectedBox(l,new AABB(e.getPos()).inflate(13)))e.setCanceled(true);
+            if(!(e.getLevel() instanceof ServerLevel l))return;
+            DungeonService service=service(l.getServer());
+            var helper=e.getStructureHelper();
+            if(service.protectedAt(l,e.getPos())||service.protectedAt(l,e.getFaceOffsetPos())){e.setCanceled(true);return;}
+            if(helper!=null&&helper.resolve()) {
+                var move=e.getPistonMoveType().isExtend?e.getDirection():e.getDirection().getOpposite();
+                if(helper.getToPush().stream().anyMatch(p->service.protectedAt(l,p)||service.protectedAt(l,p.relative(move)))
+                        ||helper.getToDestroy().stream().anyMatch(p->service.protectedAt(l,p))) e.setCanceled(true);
+            }
         });
         bus.addListener(ExplosionEvent.Detonate.class,e->{if(e.getLevel() instanceof ServerLevel l)e.getAffectedBlocks().removeIf(p->service(l.getServer()).protectedAt(l,p));});
-        bus.addListener(EntityMobGriefingEvent.class,e->{if(e.getEntity().level() instanceof ServerLevel l&&service(l.getServer()).protectedBox(l,e.getEntity().getBoundingBox().inflate(4)))e.setCanGrief(false);});
         bus.addListener(LivingDestroyBlockEvent.class,e->{if(e.getEntity().level() instanceof ServerLevel l&&service(l.getServer()).protectedAt(l,e.getPos()))e.setCanceled(true);});
         bus.addListener(PlayerInteractEvent.RightClickBlock.class,e->{
             if(!(e.getLevel() instanceof ServerLevel l))return;
             DungeonService service=service(l.getServer());
-            boolean within=service.protectedAt(l,e.getPos())||(e.getFace()!=null&&service.protectedAt(l,e.getPos().relative(e.getFace())));
-            if(!within)return;
+            BlockPos clicked=e.getPos(),target=e.getFace()==null?clicked:clicked.relative(e.getFace());
+            boolean clickedProtected=service.protectedAt(l,clicked),targetProtected=service.protectedAt(l,target);
             String item=BuiltInRegistries.ITEM.getKey(e.getItemStack().getItem()).getPath();
-            // Native Lootr opening is deliberately not cancelled. Placement/tool/block-break hooks handle other edits.
-            if(service.isWriting(l,e.getPos())||item.endsWith("bucket")||item.equals("flint_and_steel")||item.equals("fire_charge")||item.equals("bone_meal")){
+            // A protected block can support a new block or fluid on its exterior face.
+            // The affected destination, not merely the clicked support, determines protection.
+            boolean addsBeside=e.getItemStack().getItem() instanceof BlockItem
+                    ||(item.endsWith("bucket")&&!item.equals("bucket"))||item.equals("flint_and_steel")||item.equals("fire_charge");
+            boolean writing=service.isWriting(l,target)||(service.isWriting(l,clicked)&&!addsBeside);
+            boolean targeting=item.equals("bucket")?clickedProtected:
+                    (item.endsWith("bucket")||item.equals("flint_and_steel")||item.equals("fire_charge"))&&targetProtected;
+            if(writing||targeting||(item.equals("bone_meal")&&clickedProtected)){
                 e.setCancellationResult(InteractionResult.FAIL);e.setCanceled(true);
             }
         });

@@ -113,7 +113,7 @@ jobs:
       - name: Prepare compiled server classes before the memory-limited game process
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon classes --console=plain 2>&1 | tee test-evidence/runtime-compile.log
+          ./gradlew --no-daemon -I tools/hosted-smoke.init.gradle classes --console=plain 2>&1 | tee test-evidence/runtime-compile.log
       - name: Exercise placement, restart recovery, protection and undo
         timeout-minutes: 41
         run: python tools/hosted_smoke.py --scenario ${{ matrix.scenario }} --timeout-seconds 2400
