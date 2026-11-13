@@ -11,9 +11,9 @@ The maze includes 300 supply chests on connected walkways and 100 chamber reward
 
 The deepest inverted-pagoda chest guarantees **one curated high-end reward per player's first loot generation**: a Master Ball, Ancient Origin Ball, or one of six verified SimplySwords unique weapons. Additional supplies accompany it. Ordinary rare chests have a small optional unique-weapon chance; they do not use the final guaranteed pool.
 
-Lootr chests use native per-player inventories and remain upright. Custom tables and planters can face any of six directions; pagoda stairs are mirrored for inverted traversal. Dungeon regions protect the builds, furniture, chests and spawners from ordinary editing and damage.
+Lootr chests use native per-player inventories and remain upright. Custom tables and planters can face any of six directions; pagoda stairs are mirrored for inverted traversal. Protection follows the built blocks, furniture, chests and spawners. Outside air remains buildable, and the decorative cherry trees can be removed.
 
-Administrators can place either dungeon at their position with one command. The dungeon replaces the blocks inside its bounds, including fluids, modded terrain and containers. Rooms clear to air as the build is placed.
+Administrators can place either dungeon at their position with one command. Placement replaces authored block positions and room interiors, including fluids, modded terrain and containers there; surrounding terrain outside the authored footprint is preserved.
 
 ```mcfunction
 /place structure cuupsidedown:sakura_labyrinth
@@ -35,7 +35,7 @@ Required pack mods: Lootr, Cobblemon and SimplySwords, with their normal depende
 ```text
 ./gradlew build
 python tools/make_loot_tables.py --check
-python tools/validate_content.py --mods "PATH/TO/CLIENT/mods" --jar build/libs/upsidedown-1.2.0-beta.3.jar
+python tools/validate_content.py --mods "PATH/TO/CLIENT/mods" --jar build/libs/upsidedown-1.2.0-beta.5.jar
 ```
 
 `make_loot_tables.py` regenerates the four loot tables; `--check` checks for differences without writing. `validate_content.py` checks the loot guarantee, template bounds and runs, chest identities, spawner settings, room routes and packaged resources. When template JSON sidecars are present, it also checks room graphs, reward pockets and accessible walkways.

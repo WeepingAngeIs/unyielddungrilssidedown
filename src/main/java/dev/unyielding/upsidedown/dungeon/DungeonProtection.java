@@ -26,6 +26,16 @@ final class DungeonProtection {
         for (int i = 0; i < template.volume; i++)
             if (!template.palette.get(template.blocks[i]).isAir()
                     && !treeBlock(entry, i, template.palette.get(template.blocks[i]))) mask.set(i);
+        persist(entry,mask);
+    }
+
+    void include(DungeonStore.Entry entry,BitSet added) throws IOException {
+        BitSet result=(BitSet)mask(entry).clone();
+        result.or(added);
+        persist(entry,result);
+    }
+
+    private void persist(DungeonStore.Entry entry,BitSet mask) throws IOException {
         CompoundTag tag = new CompoundTag();
         tag.putInt("Version", 2);
         tag.putIntArray("Size", new int[]{entry.sx(), entry.sy(), entry.sz()});

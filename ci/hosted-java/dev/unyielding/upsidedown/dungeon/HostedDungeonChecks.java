@@ -41,6 +41,15 @@ public final class HostedDungeonChecks {
                         return 1;
                     } catch(Exception ex) { throw new IllegalStateException("CI exterior test failed for "+id,ex); }
                 }))));
+        event.getDispatcher().register(Commands.literal("cu_ci_gap").requires(s->s.hasPermission(4))
+            .then(Commands.argument("mode",StringArgumentType.word())
+                .then(Commands.argument("anchor",BlockPosArgument.blockPos()).executes(ctx->{
+                    String mode=StringArgumentType.getString(ctx,"mode");
+                    try {
+                        gap(ctx.getSource().getLevel(),BlockPosArgument.getBlockPos(ctx,"anchor"),mode);
+                        ctx.getSource().sendSuccess(()->Component.literal("CI maze gap fixture: "+mode),false);return 1;
+                    } catch(Exception ex) { throw new IllegalStateException("Could not prepare CI maze gap",ex); }
+                }))));
     }
     private static void require(boolean ok,String message) {
         if(!ok)throw new IllegalStateException(message);
@@ -106,5 +115,31 @@ public final class HostedDungeonChecks {
             DungeonProtection beta4=new DungeonProtection(store);
             require(beta4.contains(e,wall)&&!beta4.contains(e,tree),"beta.4 migration did not free old tree or protect wall");
         } finally { Files.deleteIfExists(path); }
+    }
+    private static void gap(ServerLevel level,BlockPos anchor,String mode)throws Exception {
+        DungeonTemplate t=DungeonTemplate.load("sakura_labyrinth");BlockPos min=anchor.offset(t.offset);
+        if(mode.equals("prepare")) {
+            DungeonStore store=new DungeonStore(level.getServer());
+            var e=store.entries.values().stream().filter(v->v.template().equals("sakura_labyrinth")&&v.min().equals(min)).findFirst().orElseThrow();
+            // Simulate beta.4's direct backup mask, which did not include the gap.
+            // Direct backup segments already contain these original cells.
+            if(e.direct()) {
+                var path=store.backup(e.id());CompoundTag tag=DungeonStore.read(path);
+                BitSet mask=BitSet.valueOf(tag.getLongArray("PlacementMask"));
+                for(int z=219;z<=220;z++)for(int x=2;x<=202;x++)mask.clear((5*t.sz+z)*t.sx+x);
+                tag.putLongArray("PlacementMask",mask.toLongArray());DungeonStore.write(path,tag);
+            }
+            for(int z=219;z<=220;z++)for(int x=2;x<=202;x++) {
+                BlockPos p=min.offset(x,5,z);
+                require(level.getBlockState(p).is(dev.unyielding.upsidedown.dungeon.block.DungeonBlocks.BLOSSOM_FLOOR.get()),"expected intact maze strip");
+                require(DungeonModule.withEdits(()->level.setBlock(p,Blocks.AIR.defaultBlockState(),2)),"could not make gap");
+            }
+            BlockPos obstacle=min.offset(2,5,219);
+            require(DungeonModule.withEdits(()->level.setBlock(obstacle,Blocks.DIAMOND_BLOCK.defaultBlockState(),2)),"could not seed obstruction");
+        } else if(mode.equals("clear")) {
+            BlockPos obstacle=min.offset(2,5,219);
+            require(level.getBlockState(obstacle).is(Blocks.DIAMOND_BLOCK),"missing repair obstruction");
+            require(DungeonModule.withEdits(()->level.setBlock(obstacle,Blocks.AIR.defaultBlockState(),2)),"could not clear repair obstruction");
+        } else throw new IllegalArgumentException("Unknown CI gap mode");
     }
 }

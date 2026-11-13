@@ -470,6 +470,29 @@ class Controller:
             if default_position:
                 self.command('kill '+marker)
 
+    def repair_maze_fixture(self):
+        name='sakura_labyrinth';anchor=ANCHORS[name];instance=self.instances[name]
+        coords=' '.join(map(str,anchor));t=self.loaded[name];mx,my,mz=t['Minimum']
+        result=self.command('cu_ci_gap prepare '+coords,timeout=90)
+        require('CI maze gap fixture: prepare' in result,'Could not prepare maze repair fixture: '+result)
+        result=self.command('dungeon repair '+instance,timeout=90)
+        require('no blocks changed' in result.lower(),'Repair should reject occupied strip: '+result)
+        obstacle=f'{mx+2} {my+5} {mz+219}';other=f'{mx+3} {my+5} {mz+219}'
+        self.wait_success('execute if block '+obstacle+' minecraft:diamond_block','repair preserves obstruction')
+        self.wait_success('execute if block '+other+' minecraft:air','repair is all-or-nothing on obstruction')
+        result=self.command('cu_ci_gap clear '+coords,timeout=90)
+        require('CI maze gap fixture: clear' in result,'Could not clear fixture obstruction: '+result)
+        result=self.command('dungeon repair '+instance,timeout=90)
+        require('Maze edge repaired: 402 missing floor blocks filled' in result,'Repair failed: '+result)
+        for x,z in ((2,219),(202,219),(2,220),(202,220)):
+            xyz=f'{mx+x} {my+5} {mz+z}'
+            self.wait_success('execute if block '+xyz+' cuupsidedown:blossom_floor','repaired floor endpoint')
+        self.command('setblock '+other+' minecraft:air')
+        self.wait_success('execute if block '+other+' cuupsidedown:blossom_floor','repaired floor is protected')
+        result=self.command('dungeon repair '+instance,timeout=90)
+        require('Maze edge repaired: 0 missing floor blocks filled' in result,'Repair should be repeatable: '+result)
+        self.event('maze_gap_repair_verified',instance=instance,cells=402,obstruction_preserved=True,protected=True)
+
     def direct_scenario(self):
         self.boot()
         result = self.command('dungeon verifyloot', timeout=90)
@@ -477,6 +500,7 @@ class Controller:
         originals = self.seed_obstructions()
         for name in ANCHORS:
             self.place_direct(name)
+            if name=='sakura_labyrinth':self.repair_maze_fixture()
             self.verify_no_item_drops(name, originals)
         self.command('save-all flush')
         self.stop()
@@ -497,7 +521,9 @@ class Controller:
     def legacy_scenario(self):
         self.boot()
         result=self.command('dungeon verifyloot',timeout=90);require('Dungeon loot verified:' in result and 'all 512 final rolls' in result,'Runtime loot verification failed')
-        for name in ANCHORS:self.place(name)
+        for name in ANCHORS:
+            self.place(name)
+            if name=='sakura_labyrinth':self.repair_maze_fixture()
         self.runtime('before-restart');self.command('save-all flush');self.stop()
         self.assert_state('before-restart',self.instances);self.audit_disk('placed')
         self.boot();self.assert_state('after-restart',self.instances);self.runtime('after-restart')

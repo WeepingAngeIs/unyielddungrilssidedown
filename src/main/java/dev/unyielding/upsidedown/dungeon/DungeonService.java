@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import dev.unyielding.upsidedown.DungeonZoneBridge;
 import dev.unyielding.upsidedown.Flip;
 import dev.unyielding.upsidedown.UpsideDown;
+import dev.unyielding.upsidedown.dungeon.block.DungeonBlocks;
 import java.io.IOException;
 import java.util.*;
 import net.minecraft.commands.*;
@@ -81,6 +82,7 @@ public final class DungeonService {
           .then(Commands.literal("verifyloot").executes(c->DungeonLootChecks.run(c.getSource())))
           .then(Commands.literal("confirm").then(Commands.argument("token",StringArgumentType.word()).executes(c->get(c.getSource()).confirm(c.getSource(),StringArgumentType.getString(c,"token")))))
           .then(Commands.literal("undo").then(Commands.argument("instance",StringArgumentType.word()).executes(c->get(c.getSource()).undo(c.getSource(),StringArgumentType.getString(c,"instance")))))
+          .then(Commands.literal("repair").then(Commands.argument("instance",StringArgumentType.word()).executes(c->get(c.getSource()).repair(c.getSource(),StringArgumentType.getString(c,"instance")))))
           .then(Commands.literal("entrance").then(Commands.argument("instance",StringArgumentType.word()).executes(c->get(c.getSource()).entrance(c.getSource(),StringArgumentType.getString(c,"instance")))))
           .then(Commands.literal("preview").then(Commands.argument("template",StringArgumentType.word()).suggests((c,b)->SharedSuggestionProvider.suggest(DungeonTemplate.IDS,b))
              .then(Commands.argument("anchor",BlockPosArgument.blockPos())
@@ -94,7 +96,7 @@ public final class DungeonService {
     private static int error(CommandSourceStack s,String text){s.sendFailure(Component.literal(text));return 0;}
     private static String shortId(){return UUID.randomUUID().toString().replace("-","").substring(0,12);}
 
-    int help(CommandSourceStack s){say(s,"Dungeon commands: list; preview <template> <x y z> [terrain]; confirm <token>; status; cancel; undo <instance>; entrance <instance>; verifyloot. Preview places NO blocks. Default accepts empty space/vegetation only. Terrain mode explicitly permits natural stone/dirt/bedrock, never containers or arbitrary blocks.");return 1;}
+    int help(CommandSourceStack s){say(s,"Dungeon commands: list; preview <template> <x y z> [terrain]; confirm <token>; status; cancel; undo <instance>; repair <maze-instance>; entrance <instance>; verifyloot. Preview places NO blocks. Default accepts empty space/vegetation only. Terrain mode explicitly permits natural stone/dirt/bedrock, never containers or arbitrary blocks.");return 1;}
     int list(CommandSourceStack s){say(s,"Templates: sakura_labyrinth — 100 themed gravity chambers; mirror_pagoda — upright and inverted Japanese Mimic towers. No natural spawning. Existing instances:");store.entries.values().forEach(e->say(s,e.id()+" "+e.template()+" "+e.dimension()+" "+e.status()+" "+e.min().toShortString()));return 1;}
     int status(CommandSourceStack s){if(job==null)say(s,"No placement job. /dungeon list shows saved instances, including interrupted ones that can be restored with undo.");else say(s,job.phase+" "+job.instance+" "+(100L*job.cursor/Math.max(1,job.workLimit()))+"%; bounds "+bounds(job)+(job.phase==Phase.READY?"; preview token "+job.token:""));return 1;}
     private String bounds(Job j){return j.min.toShortString()+" through "+j.min.offset(j.sx-1,j.sy-1,j.sz-1).toShortString();}
@@ -197,6 +199,38 @@ public final class DungeonService {
         var e=store.entries.get(id);if(e==null||!e.status().equals("PLACED"))return error(s,"No completed dungeon with that ID.");
         if(!s.getLevel().dimension().location().toString().equals(e.dimension()))return error(s,"Entrance is in "+e.dimension());
         BlockPos p=e.spawn();say(s,"Entrance: "+p.toShortString()+" in "+e.dimension()+". Teleport manually if desired; this command does not move you.");return 1;
+    }
+
+    /** Repairs only the missing south floor strip; it never replaces existing blocks or loot. */
+    int repair(CommandSourceStack s,String id) {
+        if(job!=null)return error(s,"Finish the active dungeon job before repairing.");
+        var e=store.entries.get(id);
+        if(e==null||!e.status().equals("PLACED")||!e.template().equals("sakura_labyrinth"))return error(s,"Choose a completed Sakura Labyrinth instance from /dungeon list.");
+        if(!e.dimension().equals(s.getLevel().dimension().location().toString()))return error(s,"Run repair in "+e.dimension()+".");
+        if(e.sx()!=205||e.sy()!=36||e.sz()!=222)return error(s,"This maze has unfamiliar dimensions; no blocks were changed.");
+        try {
+            ServerLevel level=s.getLevel();BlockState floor=DungeonBlocks.BLOSSOM_FLOOR.get().defaultBlockState();
+            BitSet cells=new BitSet(e.sx()*e.sy()*e.sz());List<BlockPos> fill=new ArrayList<>();
+            for(int z=219;z<=220;z++)for(int x=2;x<=202;x++) {
+                int index=(5*e.sz()+z)*e.sx()+x;cells.set(index);
+                BlockPos pos=e.min().offset(x,5,z);BlockState current=level.getBlockState(pos);
+                if(!current.isAir()&&!current.equals(floor))throw new IOException("Floor strip contains "+DungeonTemplate.stateString(current)+" at "+pos.toShortString()+"; no blocks changed.");
+                if(current.isAir())fill.add(pos);
+            }
+            if(e.direct()) DungeonPasteBackup.open(store,e).include(cells);
+            else {
+                CompoundTag backup=DungeonStore.read(store.backup(id));
+                if(!Arrays.equals(backup.getIntArray("Size"),new int[]{e.sx(),e.sy(),e.sz()})||!Arrays.equals(backup.getIntArray("Min"),DungeonStore.vec(e.min()))||!backup.getString("Dimension").equals(e.dimension()))throw new IOException("Backup does not match this maze.");
+                if(backup.contains("PlacementMask",Tag.TAG_LONG_ARRAY)) {
+                    BitSet saved=BitSet.valueOf(backup.getLongArray("PlacementMask"));BitSet missing=(BitSet)cells.clone();missing.andNot(saved);
+                    if(!missing.isEmpty())throw new IOException("This older preview backup does not include the strip; use a newly placed maze or restore from your world backup.");
+                }
+            }
+            // Persist undo coverage and exact protection before touching the world.
+            protection.include(e,cells);
+            for(BlockPos pos:fill)if(!DungeonModule.withEdits(()->level.setBlock(pos,floor,FLAGS)))throw new IOException("World rejected floor at "+pos.toShortString()+"; some earlier cells may have been repaired.");
+            say(s,"Maze edge repaired: "+fill.size()+" missing floor blocks filled and protected. Existing blocks were preserved.");return 1;
+        } catch(Exception ex) {return error(s,"Cannot complete maze repair: "+ex.getMessage());}
     }
 
     public void tick() {

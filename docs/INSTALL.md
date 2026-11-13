@@ -16,7 +16,7 @@ Use a copy of the world to try this beta first. Keep a world backup before chang
 
 1. Stop Minecraft and the server.
 2. In each relevant `mods` folder, move any earlier combined dungeon jar (including beta.2) and any standalone Upside Down or Mimic Dungeon jars to a backup folder **outside `mods`**. Examples are `upsidedown-1.1.0.jar`, `cuupsidedown-1.1.0.jar`, and `cu-mimic-dungeon-1.0.1.jar`; identify the module, not only its filename.
-3. Put **`upsidedown-1.2.0-beta.3.jar`** in the server's `mods` folder and every participating client's `mods` folder.
+3. Put **`upsidedown-1.2.0-beta.5.jar`** in the server's `mods` folder and every participating client's `mods` folder.
 4. Keep Lootr, Cobblemon, SimplySwords, their dependencies and the separate CU Build Height mod where already required. Do not replace unrelated pack mods.
 5. Start the server and clients. A duplicate `cuupsidedown` or `cumimic` error means an old standalone jar is still loading.
 
@@ -31,7 +31,7 @@ As an operator, run one command in the intended dimension.
 /place structure cuupsidedown:mirror_pagoda
 ```
 
-Each command starts placing its dungeon at your current block position. You can append three coordinates for a different loaded anchor. For example, `/place structure cuupsidedown:mirror_pagoda -744 70 -169` uses the indicated X, Y and Z. Direct placement overwrites the entire template volume, including water, lava, modded terrain and containers. The placement must fit the dimension and world border and must be clear of existing protected dungeon instances and gravity zones. The pagoda still requires expanded world height. Use `/dungeon status` while the server places the blocks and `/dungeon list` for the finished instance ID.
+Each command starts placing its dungeon at your current block position. You can append three coordinates for a different loaded anchor. For example, `/place structure cuupsidedown:mirror_pagoda -744 70 -169` uses the indicated X, Y and Z. Direct placement overwrites authored blocks and room spaces, including water, lava, modded terrain and containers in those positions; terrain outside the authored footprint is preserved. The placement must fit the dimension and world border and must be clear of existing protected dungeon instances and gravity zones. The pagoda still requires expanded world height. Use `/dungeon status` while the server places the blocks and `/dungeon list` for the finished instance ID.
 
 ## Optional preview and confirmation
 
@@ -63,9 +63,11 @@ After completion:
 
 `entrance` reports the entrance coordinates of a completed instance. It does not teleport anyone.
 
+To fill the missing southern floor strip in an existing Sakura Labyrinth, run `/dungeon repair <instance-id>` in that dungeon's dimension. The command fills and protects only the strip. It refuses to replace other blocks, and checks the original backup before extending undo coverage. Existing trees keep their old appearance but can be removed; the redesigned trees appear in newly placed dungeons.
+
 ## Protection, undo and interrupted work
 
-The saved region is protected, including its air space. Ordinary breaking/placing, explosion damage, nearby piston interference and block replacement through `/setblock` are blocked. Changes to properties of the **same block type** remain possible so normal block behavior can work. Chest opening remains available; the native Lootr chests are upright even in inverted sections.
+Authored structural and decorative blocks are protected at their actual positions. Surrounding air remains available for building, and the dungeon's cherry trees can be broken. During an active placement or undo, the positions being written are also protected. Changes to properties of the **same block type** remain possible so normal block behavior can work. Chest opening remains available; the native Lootr chests are upright even in inverted sections. Existing dungeons gain the updated protection when the server loads the new jar; their geometry and trees do not automatically rebuild.
 
 To remove a dungeon and restore the original blocks:
 
@@ -74,7 +76,7 @@ To remove a dungeon and restore the original blocks:
 /dungeon confirm <new-token>
 ```
 
-Undo first shows a separate confirmation. It restores the saved original volume, so it also removes later admin edits within that volume. Run it in the instance's dimension and move entities outside first. The saved original-block backup is retained after successful restoration.
+Undo first shows a separate confirmation. For dungeons placed since beta.4, it restores original blocks at the positions that placement changed; later edits at those positions are lost. Older backups restore their original full saved volume. Run it in the instance's dimension and move entities outside first. The saved original-block backup is retained after successful restoration.
 
 After a crash or interrupted placement/restoration, use `/dungeon list` to find the persisted instance ID, then use the same confirmed undo process. **Do not manually delete the journal or backup files** under the world's `data/cu_dungeons` folder: they retain the restoration information and region protection. An interrupted operation is not automatically resumed as a fresh placement.
 

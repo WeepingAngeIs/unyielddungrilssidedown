@@ -8,6 +8,7 @@ import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -68,6 +69,32 @@ final class DungeonPasteBackup {
     }
 
     BitSet mask() { return (BitSet) mask.clone(); }
+
+    /** Direct backups capture every cell, even when the original placement skipped it. */
+    void include(BitSet added) throws Exception {
+        if(covered!=volume)throw new IOException("Cannot extend an incomplete direct backup");
+        BitSet newlyIncluded=(BitSet)added.clone();newlyIncluded.andNot(mask);
+        if(!newlyIncluded.isEmpty()) {
+            // A skipped cell may have been edited after the original dungeon placement.
+            // Only extend undo coverage when the saved original is air, matching the
+            // air required by the repair. This avoids resurrecting old containers/items.
+            TreeSet<Integer> starts=new TreeSet<>();
+            try(var files=Files.list(directory)) {
+                files.map(p->p.getFileName().toString()).filter(n->n.matches("[0-9]+\\.nbt"))
+                    .forEach(n->starts.add(Integer.parseInt(n.substring(0,n.length()-4))));
+            }
+            Part part=null;
+            for(int i=newlyIncluded.nextSetBit(0);i>=0;i=newlyIncluded.nextSetBit(i+1)) {
+                Integer start=starts.floor(i);
+                if(start==null)throw new IOException("Missing backup segment for repaired floor");
+                if(part==null||part.start()!=start)part=readPart(start);
+                if(i>=part.end()||!part.state(i).isAir())throw new IOException("Original terrain in the skipped floor strip was not empty; undo cannot safely cover this repair.");
+            }
+        }
+        BitSet previous=(BitSet)mask.clone();
+        mask.or(added);
+        try { saveManifest(covered); } catch(IOException failure) { mask=previous;throw failure; }
+    }
 
     int covered() {
         return covered;

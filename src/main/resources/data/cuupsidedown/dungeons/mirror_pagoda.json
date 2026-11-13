@@ -17,7 +17,7 @@
     103
   ],
   "volume": 6601044,
-  "non_air": 283554,
+  "non_air": 282542,
   "palette": [
     "minecraft:air",
     "cuupsidedown:blossom_floor",
@@ -52,9 +52,11 @@
     "minecraft:ladder[facing=west,waterlogged=false]",
     "minecraft:cherry_planks",
     "minecraft:cherry_log[axis=y]",
+    "minecraft:cherry_log[axis=x]",
+    "minecraft:cherry_log[axis=z]",
     "minecraft:cherry_leaves[distance=7,persistent=true,waterlogged=false]"
   ],
-  "runs": 159947,
+  "runs": 160155,
   "block_entities": {
     "lootr:lootr_chest": 200,
     "minecraft:mob_spawner": 130
