@@ -473,6 +473,9 @@ class Controller:
     def repair_maze_fixture(self):
         name='sakura_labyrinth';anchor=ANCHORS[name];instance=self.instances[name]
         coords=' '.join(map(str,anchor));t=self.loaded[name];mx,my,mz=t['Minimum']
+        self.command(f'forceload add {mx+2} {mz+219} {mx+202} {mz+220}')
+        for x,z in ((mx+2,mz+219),(mx+202,mz+220)):
+            self.wait_success(f'execute if loaded {x} {my+5} {z}','maze repair strip chunk')
         result=self.command('cu_ci_gap prepare '+coords,timeout=90)
         require('CI maze gap fixture: prepare' in result,'Could not prepare maze repair fixture: '+result)
         result=self.command('dungeon repair '+instance,timeout=90)
